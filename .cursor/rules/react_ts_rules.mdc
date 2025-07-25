@@ -1,0 +1,168 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Cursor Rules: React with TypeScript
+
+## Component Structure
+
+- Use functional components with hooks instead of class components
+- Keep components small and focused on a single responsibility
+- Extract reusable logic into custom hooks
+- Initialize components with a dedicated `initialize()` function called in `useEffect`
+- Use bootstrap 5 classes for GRID and position elements
+
+```tsx
+// ✅ Good example
+const MyComponent: React.FC = () => {
+  const [data, setData] = useState<DataType[]>([]);
+  const [loading, setLoading] = useState(false);
+
+  useEffect(() => {
+    initialize();
+  }, []);
+
+  const initialize = async () => {
+    setLoading(true);
+    try {
+      const result = await fetchData();
+      setData(result);
+    } catch (error) {
+      console.error("Failed to fetch data:", error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (/* component JSX */);
+};
+```
+
+## TypeScript Usage
+
+- Define interfaces and types in separate files within the `/src/types` directory
+- Use explicit typing for props, state, and function parameters
+- Avoid `any` type unless absolutely necessary
+- Use React's built-in types like `React.FC<Props>`, `React.ReactNode`, etc.
+
+```tsx
+// ✅ Good example - in /src/types/user.ts
+export interface User {
+  id: string;
+  name: string;
+  email: string;
+  role: 'admin' | 'user';
+}
+
+// In component file
+import { User } from '../types/user';
+
+interface UserListProps {
+  users: User[];
+  onSelect: (user: User) => void;
+}
+
+const UserList: React.FC<UserListProps> = ({ users, onSelect }) => {
+  // ...
+};
+```
+
+## State Management
+
+- Use `useState` for simple component state
+- Use `useReducer` for complex state logic
+- Use `useContext` for sharing state between components
+- Consider dedicated state management libraries for large applications
+
+## Performance Optimization
+
+- Use `React.memo` to prevent unnecessary re-renders
+- Use `useMemo` for expensive calculations
+- Use `useCallback` for functions passed as props
+- Use virtualization for large lists (react-window, react-virtualized)
+
+```tsx
+// ✅ Good example
+const expensiveComputation = useMemo(() => {
+  return data.filter(item => item.active).map(complexTransform);
+}, [data]);
+
+const handleClick = useCallback(() => {
+  // Handle click logic
+}, [dependencies]);
+```
+
+## Styling
+
+- Template has its native styles in [globalStyles.ts](mdc:src/assets/css/globalStyles.ts)
+- Keep component styling close to component definition
+- Use consistent naming conventions
+- CSS Modules
+- Global styles for general use must be putted in [globalStyles.ts](mdc:src/assets/css/globalStyles.ts)
+
+## Error Handling
+
+- Use try/catch for async operations
+- Implement graceful fallbacks for errors
+- Use error boundaries for capturing React component errors
+
+## Testing
+
+- Write tests for all utility functions
+- Test components for proper rendering and user interactions
+- Consider edge cases in tests
+- Keep tests in the `/tests` directory
+
+## File Organization
+
+- Split large files into smaller, focused modules
+- Group related files together
+- Keep file structure flat when possible
+- Use index files to simplify imports
+
+## Code Quality & Readability
+
+- Use meaningful variable and function names
+- Add comments for complex logic
+- Use consistent code formatting
+- Follow the Single Responsibility Principle
+- Keep functions pure when possible
+
+## Imports & Dependencies
+
+- Order imports consistently (React, third-party, local)
+- Avoid circular dependencies
+- Use absolute imports for better readability
+- Limit third-party dependencies
+
+## Accessibility
+
+- Use semantic HTML elements
+- Provide alt text for images
+- Ensure keyboard navigation works
+- Use ARIA attributes when necessary
+- Test with screen readers
+
+## Internationalization
+
+- Extract all user-facing strings for translation
+- Use a dedicated i18n library
+- Consider right-to-left language support
+
+## Security
+
+- Sanitize user inputs
+- Avoid direct DOM manipulation
+- Be cautious with dangerouslySetInnerHTML
+- Validate data from APIs
+
+## Performance Monitoring
+
+- Add performance monitoring for critical components
+- Track render counts for performance optimization
+- Use React DevTools for profiling
+
+## Paths resolution
+
+- Always use absolute import using alias. Example -> import config from '@/config';
