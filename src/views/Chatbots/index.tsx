@@ -1,24 +1,22 @@
 import React from 'react';
-import { getColumns } from "@/components/data-table/columns";
+import { getColumns } from "./components/ChatbotsTableColumns";
 import { DataTable } from "@/components/data-table/data-table";
 import { Button } from "@/components/ui/button";
-import { Plus, Bot, Sparkles, Brain } from "lucide-react";
+import { Plus } from "lucide-react";
 
 import ViewComponent from '@/components/layout/TheView';
-import { useChatbotStore } from '@/store/chatbotStore';
-import { ChatbotFormModal } from '@/components/chatbot/ChatbotFormModal';
-import { DeleteChatbotDialog } from '@/components/chatbot/DeleteChatbotDialog';
+import { useChatbotStore } from './store/useChatbotStore';
+import { ChatbotFormModal } from './components/ChatbotFormModal';
+import { DeleteChatbotDialog } from './components/DeleteChatbotDialog';
+import { ChatbotsStats } from './components/ChatbotsStats';
 
-const ChatbotsTableView: React.FC = () => {
+const ChatbotsView: React.FC = () => {
   const { chatbots, actions } = useChatbotStore();
 
   const columns = getColumns({
     onEdit: (chatbot) => actions.openModal(chatbot),
     onDelete: (chatbot) => actions.openDeleteDialog(chatbot),
   });
-
-  const totalConversations = chatbots.reduce((sum, bot) => sum + bot.conversations, 0);
-  const activeBots = chatbots.filter(bot => bot.status === 'active').length;
 
   return (
     <ViewComponent
@@ -31,15 +29,12 @@ const ChatbotsTableView: React.FC = () => {
         </Button>
       }
     >
-
+      <ChatbotsStats />
       <DataTable columns={columns} data={chatbots} />
-
-      {/* Modals */}
       <ChatbotFormModal />
       <DeleteChatbotDialog />
-
     </ViewComponent>
   );
 };
 
-export default ChatbotsTableView; 
+export default ChatbotsView; 

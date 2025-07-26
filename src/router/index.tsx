@@ -6,7 +6,7 @@ import {
   useLocation,
 } from 'react-router-dom';
 import { RouterProvider } from 'react-router-dom';
-import { useAuthStore } from '@/store/modules/authModule';
+import { useAuthStore } from '@/store/authStore';
 import { checkForUpdates } from '@/utils/update';
 import config from '@/config';
 
@@ -22,6 +22,7 @@ import PricingView from '@/views/PricingView';
 import DashboardView from '@/views/DashboardView';
 import AnalyticsView from '@/views/AnalyticsView';
 import ErrorView from '@/views/ErrorView';
+import NotFoundView from '@/views/NotFoundView';
 import AssistantsView from '@/views/AssistantsView';
 import ProfileView from '@/views/ProfileView';
 import UIElementsView from '@/views/elements/UIElementsView';
@@ -46,10 +47,9 @@ import NotesView from '@/views/NotesView';
 import ContactsView from '@/views/ContactsView';
 import InvoiceView from '@/views/InvoiceView';
 import ConversationsView from '@/views/ConversationsView';
-import ChatbotsView from '@/views/ChatbotsView';
+import ChatbotsView from '@/views/Chatbots';
 import BotAnalyticsView from '@/views/BotAnalyticsView';
 import BotTrainingView from '@/views/BotTrainingView';
-import ChatbotsTableView from '@/views/ChatbotsTableView';
 
 // Authentication guard for protected routes
 const ProtectedRoute: React.FC = () => {
@@ -168,7 +168,7 @@ const AppRouter: React.FC = () => {
             },
             {
               path: 'chatbots-table',
-              element: <ChatbotsTableView />,
+              element: <ChatbotsView />,
             },
             {
               path: 'docs',
@@ -242,10 +242,15 @@ const AppRouter: React.FC = () => {
       ],
     },
 
+    // 404 Not Found route
+    {
+      path: '/404',
+      element: <NotFoundView />,
+    },
     // Catch-all 404
     {
       path: '*',
-      element: <ErrorView />,
+      element: <NotFoundView />,
     },
   ]);
 

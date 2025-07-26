@@ -17,7 +17,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select';
-import { useChatbotStore } from '@/store/chatbotStore';
+import { useChatbotStore } from '../store/useChatbotStore';
 import { Plus, Edit, Bot, Brain, Sparkles, Zap } from 'lucide-react';
 
 interface Chatbot {

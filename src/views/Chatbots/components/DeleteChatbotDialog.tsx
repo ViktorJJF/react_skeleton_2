@@ -9,7 +9,7 @@ import {
   AlertDialogHeader,
   AlertDialogTitle,
 } from '@/components/ui/alert-dialog';
-import { useChatbotStore } from '@/store/chatbotStore';
+import { useChatbotStore } from '../store/useChatbotStore';
 import { Trash2 } from 'lucide-react';
 
 export const DeleteChatbotDialog: React.FC = () => {

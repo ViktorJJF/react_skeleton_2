@@ -5,6 +5,14 @@ alwaysApply: true
 ---
 # Cursor Rules: React with TypeScript
 
+## Responsive design
+
+- Its very important to always keep responsive design for all components and views.
+
+## Dark mode
+
+- Check dark mode works as expected for all new components views
+
 ## pnpm is prefered
 
 - Always use pnpm to install and all, never npm
@@ -110,13 +118,6 @@ const handleClick = useCallback(() => {
 - Use try/catch for async operations
 - Implement graceful fallbacks for errors
 - Use error boundaries for capturing React component errors
-
-## Testing
-
-- Write tests for all utility functions
-- Test components for proper rendering and user interactions
-- Consider edge cases in tests
-- Keep tests in the `/tests` directory
 
 ## File Organization
 

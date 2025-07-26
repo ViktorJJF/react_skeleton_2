@@ -4,17 +4,20 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Eye, EyeOff, Mail, Lock, Bot, ArrowRight, Github, Chrome } from 'lucide-react';
+import { Checkbox } from '@/components/ui/checkbox';
+import { Eye, EyeOff, Mail, Lock, Bot, ArrowRight, Github, Chrome, Sparkles } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
+import { useAuthStore } from '@/store/authStore';
 
 const LoginView: React.FC = () => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
+  const [email, setEmail] = useState('admin@aipanel.com');
+  const [password, setPassword] = useState('admin123');
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [rememberMe, setRememberMe] = useState(false);
+  const [rememberMe, setRememberMe] = useState(true);
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { login } = useAuthStore();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -36,9 +39,10 @@ const LoginView: React.FC = () => {
       
       // For demo purposes, accept any email/password
       if (email && password) {
+        login('demo-token-123');
         toast({
           title: "Welcome back! 🎉",
-          description: "Successfully logged in to MatDash.",
+          description: "Successfully logged in to AI Panel.",
         });
         navigate('/dashboard');
       } else {
@@ -58,16 +62,27 @@ const LoginView: React.FC = () => {
     });
   };
 
+  const handleDemoLogin = () => {
+    setEmail('admin@aipanel.com');
+    setPassword('admin123');
+    setRememberMe(true);
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-background via-muted/20 to-background flex items-center justify-center p-4">
-      <div className="w-full max-w-md space-y-8">
+    <div className="min-h-screen bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-100 dark:from-slate-900 dark:via-slate-800 dark:to-slate-900 flex items-center justify-center p-4">
+      <div className="w-full max-w-md space-y-6">
         {/* Header */}
-        <div className="text-center space-y-2">
-          <div className="flex items-center justify-center gap-3 mb-6">
-            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary shadow-lg">
-              <Bot className="h-6 w-6 text-primary-foreground" />
+        <div className="text-center space-y-3">
+          <div className="flex items-center justify-center gap-3 mb-4">
+            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-primary/80 shadow-xl">
+              <Bot className="h-7 w-7 text-primary-foreground" />
             </div>
-            <span className="text-2xl font-bold text-foreground">MatDash</span>
+            <div className="flex flex-col items-start">
+              <span className="text-2xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
+                AI Panel
+              </span>
+              <span className="text-xs text-muted-foreground -mt-1">Intelligent Dashboard</span>
+            </div>
           </div>
           <h1 className="text-3xl font-bold tracking-tight">Welcome back</h1>
           <p className="text-muted-foreground">
@@ -75,8 +90,30 @@ const LoginView: React.FC = () => {
           </p>
         </div>
 
+        {/* Demo Credentials Card */}
+        <Card className="border-2 border-dashed border-primary/20 bg-primary/5">
+          <CardContent className="pt-4">
+            <div className="flex items-center gap-2 mb-2">
+              <Sparkles className="h-4 w-4 text-primary" />
+              <span className="text-sm font-medium text-primary">Demo Credentials</span>
+            </div>
+            <div className="text-xs text-muted-foreground space-y-1">
+              <p><strong>Email:</strong> admin@aipanel.com</p>
+              <p><strong>Password:</strong> admin123</p>
+            </div>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={handleDemoLogin}
+              className="mt-2 h-7 text-xs text-primary hover:text-primary/80"
+            >
+              Use Demo Credentials
+            </Button>
+          </CardContent>
+        </Card>
+
         {/* Login Card */}
-        <Card className="border-0 shadow-lg bg-card/50 backdrop-blur-sm">
+        <Card className="border-0 shadow-2xl bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl">
           <CardHeader className="space-y-1 pb-4">
             <CardTitle className="text-xl font-semibold">Sign in</CardTitle>
             <CardDescription>
@@ -89,7 +126,7 @@ const LoginView: React.FC = () => {
               <Button
                 variant="outline"
                 onClick={() => handleSocialLogin('Google')}
-                className="gap-2"
+                className="gap-2 hover:bg-blue-50 dark:hover:bg-blue-950/20"
               >
                 <Chrome className="h-4 w-4" />
                 Google
@@ -97,7 +134,7 @@ const LoginView: React.FC = () => {
               <Button
                 variant="outline"
                 onClick={() => handleSocialLogin('GitHub')}
-                className="gap-2"
+                className="gap-2 hover:bg-gray-50 dark:hover:bg-gray-950/20"
               >
                 <Github className="h-4 w-4" />
                 GitHub
@@ -109,41 +146,43 @@ const LoginView: React.FC = () => {
                 <span className="w-full border-t" />
               </div>
               <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-card px-2 text-muted-foreground">Or continue with</span>
+                <span className="bg-white dark:bg-slate-900 px-2 text-muted-foreground">Or continue with</span>
               </div>
             </div>
 
             {/* Login Form */}
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="email" className="flex items-center gap-2">
-                  <Mail className="h-4 w-4" />
+                <Label htmlFor="email" className="text-sm font-medium">
                   Email address
                 </Label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="Enter your email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="h-11"
-                  required
-                />
+                <div className="relative">
+                  <Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                  <Input
+                    id="email"
+                    type="email"
+                    placeholder="Enter your email"
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="h-11 pl-10 border-0 bg-muted/50 focus:bg-white dark:focus:bg-slate-800"
+                    required
+                  />
+                </div>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="password" className="flex items-center gap-2">
-                  <Lock className="h-4 w-4" />
+                <Label htmlFor="password" className="text-sm font-medium">
                   Password
                 </Label>
                 <div className="relative">
+                  <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                   <Input
                     id="password"
                     type={showPassword ? 'text' : 'password'}
                     placeholder="Enter your password"
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="h-11 pr-10"
+                    className="h-11 pl-10 pr-10 border-0 bg-muted/50 focus:bg-white dark:focus:bg-slate-800"
                     required
                   />
                   <Button
@@ -167,12 +206,10 @@ const LoginView: React.FC = () => {
 
               <div className="flex items-center justify-between">
                 <div className="flex items-center space-x-2">
-                  <input
+                  <Checkbox
                     id="remember"
-                    type="checkbox"
                     checked={rememberMe}
-                    onChange={(e) => setRememberMe(e.target.checked)}
-                    className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+                    onCheckedChange={(checked) => setRememberMe(checked as boolean)}
                   />
                   <Label htmlFor="remember" className="text-sm text-muted-foreground">
                     Remember me
@@ -188,7 +225,7 @@ const LoginView: React.FC = () => {
 
               <Button
                 type="submit"
-                className="w-full h-11 gap-2"
+                className="w-full h-11 gap-2 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70"
                 disabled={isLoading}
               >
                 {isLoading ? (
