@@ -5,6 +5,10 @@ alwaysApply: true
 ---
 # Cursor Rules: React with TypeScript
 
+## pnpm is prefered
+
+- Always use pnpm to install and all, never npm
+
 ## Component Structure
 
 - Use functional components with hooks instead of class components

@@ -15,6 +15,10 @@ import AdminLayout from '@/layouts/AdminLayout';
 
 // Views
 import LoginView from '@/views/LoginView';
+import RegisterView from '@/views/RegisterView';
+import ForgotPasswordView from '@/views/ForgotPasswordView';
+import DocsView from '@/views/DocsView';
+import PricingView from '@/views/PricingView';
 import DashboardView from '@/views/DashboardView';
 import AnalyticsView from '@/views/AnalyticsView';
 import ErrorView from '@/views/ErrorView';
@@ -41,6 +45,11 @@ import EmailView from '@/views/EmailView';
 import NotesView from '@/views/NotesView';
 import ContactsView from '@/views/ContactsView';
 import InvoiceView from '@/views/InvoiceView';
+import ConversationsView from '@/views/ConversationsView';
+import ChatbotsView from '@/views/ChatbotsView';
+import BotAnalyticsView from '@/views/BotAnalyticsView';
+import BotTrainingView from '@/views/BotTrainingView';
+import ChatbotsTableView from '@/views/ChatbotsTableView';
 
 // Authentication guard for protected routes
 const ProtectedRoute: React.FC = () => {
@@ -101,6 +110,14 @@ const AppRouter: React.FC = () => {
       path: '/login',
       element: <LoginView />,
     },
+    {
+      path: '/register',
+      element: <RegisterView />,
+    },
+    {
+      path: '/forgot-password',
+      element: <ForgotPasswordView />,
+    },
 
     // Protected Routes with Admin Layout
     {
@@ -132,6 +149,34 @@ const AppRouter: React.FC = () => {
             {
               path: 'agents',
               element: <AgentsView />,
+            },
+            {
+              path: 'chatbots',
+              element: <ChatbotsView />,
+            },
+            {
+              path: 'conversations',
+              element: <ConversationsView />,
+            },
+            {
+              path: 'bot-analytics',
+              element: <BotAnalyticsView />,
+            },
+            {
+              path: 'bot-training',
+              element: <BotTrainingView />,
+            },
+            {
+              path: 'chatbots-table',
+              element: <ChatbotsTableView />,
+            },
+            {
+              path: 'docs',
+              element: <DocsView />,
+            },
+            {
+              path: 'pricing',
+              element: <PricingView />,
             },
             {
               path: 'profile',
@@ -207,4 +252,4 @@ const AppRouter: React.FC = () => {
   return <RouterProvider router={router} />;
 };
 
-export default AppRouter; 
+export default AppRouter;
