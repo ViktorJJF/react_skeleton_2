@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -11,6 +12,7 @@ import { useAuthStore } from '@/store/authStore';
 import GoogleLoginButton from '@/components/auth/GoogleLoginButton';
 
 const LoginView: React.FC = () => {
+  const { t } = useTranslation();
   const [email, setEmail] = useState('admin@aipanel.com');
   const [password, setPassword] = useState('admin123');
   const [showPassword, setShowPassword] = useState(false);
@@ -25,8 +27,8 @@ const LoginView: React.FC = () => {
     
     if (!email || !password) {
       toast({
-        title: "Missing information",
-        description: "Please fill in all required fields.",
+        title: t('auth.missingInformation'),
+        description: t('auth.fillAllFields'),
         variant: "destructive",
       });
       return;
@@ -46,14 +48,14 @@ const LoginView: React.FC = () => {
           token: 'demo-token-123',
         });
         toast({
-          title: "Welcome back! 🎉",
-          description: "Successfully logged in to AI Panel.",
+          title: t('auth.welcomeBack'),
+          description: t('auth.loginSuccess'),
         });
         navigate('/dashboard');
       } else {
         toast({
-          title: "Login failed",
-          description: "Invalid email or password. Please try again.",
+          title: t('auth.loginFailed'),
+          description: t('auth.invalidCredentials'),
           variant: "destructive",
         });
       }
@@ -82,9 +84,9 @@ const LoginView: React.FC = () => {
               <span className="text-xs text-muted-foreground -mt-1">Intelligent Dashboard</span>
             </div>
           </div>
-          <h1 className="text-3xl font-bold tracking-tight">Welcome back</h1>
+          <h1 className="text-3xl font-bold tracking-tight">{t('auth.welcomeBack')}</h1>
           <p className="text-muted-foreground">
-            Sign in to your account to continue
+            {t('auth.signInToContinue')}
           </p>
         </div>
 
@@ -93,103 +95,74 @@ const LoginView: React.FC = () => {
           <CardContent className="pt-4">
             <div className="flex items-center gap-2 mb-2">
               <Sparkles className="h-4 w-4 text-primary" />
-              <span className="text-sm font-medium text-primary">Demo Credentials</span>
+              <span className="text-sm font-medium text-primary">{t('auth.demoCredentials')}</span>
             </div>
             <div className="text-xs text-muted-foreground space-y-1">
-              <p><strong>Email:</strong> admin@aipanel.com</p>
-              <p><strong>Password:</strong> admin123</p>
+              <p><strong>{t('common.email')}:</strong> admin@aipanel.com</p>
+              <p><strong>{t('common.password')}:</strong> admin123</p>
             </div>
             <Button
-              variant="ghost"
+              variant="outline"
               size="sm"
               onClick={handleDemoLogin}
-              className="mt-2 h-7 text-xs text-primary hover:text-primary/80"
+              className="w-full mt-3"
             >
-              Use Demo Credentials
+              {t('auth.useDemoCredentials')}
             </Button>
           </CardContent>
         </Card>
 
-        {/* Login Card */}
-        <Card className="border-0 shadow-2xl bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl">
-          <CardHeader className="space-y-1 pb-4">
-            <CardTitle className="text-xl font-semibold">Sign in</CardTitle>
+        {/* Login Form */}
+        <Card>
+          <CardHeader className="space-y-1">
+            <CardTitle className="text-2xl">{t('auth.login')}</CardTitle>
             <CardDescription>
-              Enter your credentials to access your dashboard
+              {t('auth.enterCredentials')}
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
-            {/* Social Login Buttons */}
-            <div className="grid grid-cols-2 gap-3">
-              <GoogleLoginButton />
-              <Button
-                variant="outline"
-                className="gap-2 hover:bg-gray-50 dark:hover:bg-gray-950/20"
-              >
-                <Github className="h-4 w-4" />
-                GitHub
-              </Button>
-            </div>
-
-            <div className="relative">
-              <div className="absolute inset-0 flex items-center">
-                <span className="w-full border-t" />
-              </div>
-              <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-white dark:bg-slate-900 px-2 text-muted-foreground">Or continue with</span>
-              </div>
-            </div>
-
-            {/* Login Form */}
+          <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="email" className="text-sm font-medium">
-                  Email address
-                </Label>
+                <Label htmlFor="email">{t('common.email')}</Label>
                 <div className="relative">
-                  <Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
                   <Input
                     id="email"
                     type="email"
-                    placeholder="Enter your email"
+                    placeholder={t('auth.emailPlaceholder')}
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
-                    className="h-11 pl-10 border-0 bg-muted/50 focus:bg-white dark:focus:bg-slate-800"
+                    className="pl-10"
                     required
                   />
                 </div>
               </div>
-
+              
               <div className="space-y-2">
-                <Label htmlFor="password" className="text-sm font-medium">
-                  Password
-                </Label>
+                <Label htmlFor="password">{t('common.password')}</Label>
                 <div className="relative">
-                  <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                  <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
                   <Input
                     id="password"
-                    type={showPassword ? 'text' : 'password'}
-                    placeholder="Enter your password"
+                    type={showPassword ? "text" : "password"}
+                    placeholder={t('auth.passwordPlaceholder')}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
-                    className="h-11 pl-10 pr-10 border-0 bg-muted/50 focus:bg-white dark:focus:bg-slate-800"
+                    className="pl-10 pr-10"
                     required
                   />
                   <Button
                     type="button"
                     variant="ghost"
                     size="icon"
-                    className="absolute right-0 top-0 h-11 w-10 hover:bg-transparent"
+                    className="absolute right-0 top-0 h-full px-3 py-2 hover:bg-transparent"
                     onClick={() => setShowPassword(!showPassword)}
                   >
                     {showPassword ? (
-                      <EyeOff className="h-4 w-4 text-muted-foreground" />
+                      <EyeOff className="h-4 w-4 text-gray-400" />
                     ) : (
-                      <Eye className="h-4 w-4 text-muted-foreground" />
+                      <Eye className="h-4 w-4 text-gray-400" />
                     )}
-                    <span className="sr-only">
-                      {showPassword ? 'Hide password' : 'Show password'}
-                    </span>
                   </Button>
                 </div>
               </div>
@@ -201,54 +174,62 @@ const LoginView: React.FC = () => {
                     checked={rememberMe}
                     onCheckedChange={(checked) => setRememberMe(checked as boolean)}
                   />
-                  <Label htmlFor="remember" className="text-sm text-muted-foreground">
-                    Remember me
+                  <Label htmlFor="remember" className="text-sm">
+                    {t('auth.rememberMe')}
                   </Label>
                 </div>
                 <Link
                   to="/forgot-password"
                   className="text-sm text-primary hover:underline"
                 >
-                  Forgot password?
+                  {t('auth.forgotPasswordLink')}
                 </Link>
               </div>
 
-              <Button
-                type="submit"
-                className="w-full h-11 gap-2 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70"
-                disabled={isLoading}
-              >
+              <Button type="submit" className="w-full" disabled={isLoading}>
                 {isLoading ? (
-                  <>
+                  <div className="flex items-center gap-2">
                     <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
-                    Signing in...
-                  </>
+                    {t('common.loading')}
+                  </div>
                 ) : (
-                  <>
-                    Sign in
+                  <div className="flex items-center gap-2">
+                    {t('auth.login')}
                     <ArrowRight className="h-4 w-4" />
-                  </>
+                  </div>
                 )}
               </Button>
             </form>
 
-            {/* Sign Up Link */}
-            <div className="text-center text-sm text-muted-foreground">
-              Don't have an account?{' '}
-              <Link
-                to="/register"
-                className="text-primary hover:underline font-medium"
-              >
-                Sign up
+            <div className="mt-6">
+              <div className="relative">
+                <div className="absolute inset-0 flex items-center">
+                  <span className="w-full border-t" />
+                </div>
+                <div className="relative flex justify-center text-xs uppercase">
+                  <span className="bg-background px-2 text-muted-foreground">
+                    {t('auth.orContinueWith')}
+                  </span>
+                </div>
+              </div>
+
+              <div className="grid grid-cols-2 gap-3 mt-4">
+                <GoogleLoginButton />
+                <Button variant="outline" className="gap-2 hover:bg-gray-50 dark:hover:bg-gray-950/20">
+                  <Github className="h-4 w-4" />
+                  {t('auth.loginWithGithub')}
+                </Button>
+              </div>
+            </div>
+
+            <div className="mt-6 text-center text-sm">
+              <span className="text-muted-foreground">{t('auth.dontHaveAccount')} </span>
+              <Link to="/register" className="text-primary hover:underline font-medium">
+                {t('auth.signUp')}
               </Link>
             </div>
           </CardContent>
         </Card>
-
-        {/* Footer */}
-        <div className="text-center text-xs text-muted-foreground">
-          <p>By signing in, you agree to our Terms of Service and Privacy Policy.</p>
-        </div>
       </div>
     </div>
   );

@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
@@ -37,6 +38,7 @@ const topIntents = [
 ];
 
 const DashboardView = () => {
+  const { t } = useTranslation();
   const { sendToast, sendBanner, sendNotification } = useNotifications();
   const { trackCustomEvent } = useAnalytics();
 
@@ -73,8 +75,8 @@ const DashboardView = () => {
 
   return (
     <ViewComponent
-      title="Dashboard"
-      description="Monitor your AI chatbot performance and business metrics"
+      title={t('dashboard.title')}
+      description={t('dashboard.description')}
       actionButton={
         <div className="flex items-center gap-3">
           <DropdownMenu>
@@ -92,7 +94,7 @@ const DashboardView = () => {
           </DropdownMenu>
           <Button onClick={handleCreateBotClick}>
             <Bot className="w-4 h-4 mr-2" />
-            Create New Bot
+            {t('dashboard.createNewBot')}
           </Button>
         </div>
       }

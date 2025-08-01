@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -43,6 +44,7 @@ interface Chatbot {
 const modelOptions = ["GPT-4", "GPT-3.5", "Claude-3", "Gemini-Pro"];
 
 const ChatbotsView = () => {
+  const { t } = useTranslation();
   const [chatbots, setChatbots] = useState<Chatbot[]>([
     {
       id: 1,
@@ -76,8 +78,8 @@ const ChatbotsView = () => {
   const handleSave = () => {
     if (!editingChatbot?.name || !editingChatbot?.description || !editingChatbot?.model) {
         toast({
-            title: "Missing Information",
-            description: "Please fill out all fields.",
+            title: t('chatbots.missingInformation'),
+            description: t('chatbots.fillAllFields'),
             variant: "destructive",
         });
         return;
@@ -86,8 +88,8 @@ const ChatbotsView = () => {
     if (editingChatbot.id) {
       setChatbots(chatbots.map(bot => bot.id === editingChatbot.id ? editingChatbot : bot));
       toast({
-        title: "Chatbot Updated",
-        description: `"${editingChatbot.name}" has been successfully updated.`,
+        title: t('chatbots.chatbotUpdated'),
+        description: t('chatbots.updateSuccess', { name: editingChatbot.name }),
       });
     } else {
       const newChatbot = {
@@ -97,8 +99,8 @@ const ChatbotsView = () => {
       };
       setChatbots([...chatbots, newChatbot]);
       toast({
-        title: "Chatbot Created",
-        description: `"${editingChatbot.name}" has been successfully created.`,
+        title: t('chatbots.chatbotCreated'),
+        description: t('chatbots.createSuccess', { name: editingChatbot.name }),
       });
     }
     setIsModalOpen(false);
@@ -110,8 +112,8 @@ const ChatbotsView = () => {
       const chatbotToDelete = chatbots.find(bot => bot.id === deletingChatbotId);
       setChatbots(chatbots.filter(bot => bot.id !== deletingChatbotId));
       toast({
-        title: "Chatbot Deleted",
-        description: `"${chatbotToDelete?.name}" has been deleted.`,
+        title: t('chatbots.chatbotDeleted'),
+        description: t('chatbots.deleteSuccess', { name: chatbotToDelete?.name }),
       });
       setIsDeleteDialogOpen(false);
       setDeletingChatbotId(null);
@@ -152,19 +154,19 @@ const ChatbotsView = () => {
 
   return (
     <ViewComponent
-      title="Chatbots"
-      description="Manage your AI chatbots and their configurations"
+      title={t('chatbots.title')}
+      description={t('chatbots.description')}
       actionButton={
         <Button onClick={openCreateModal}>
           <Plus className="w-4 h-4 mr-2" />
-          Create Chatbot
+          {t('chatbots.createChatbot')}
         </Button>
       }
       filters={
         <div className="relative flex-1">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
           <Input
-            placeholder="Search chatbots..."
+            placeholder={t('chatbots.searchPlaceholder')}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             className="pl-10"
@@ -196,14 +198,14 @@ const ChatbotsView = () => {
                   <DropdownMenuContent align="end">
                     <DropdownMenuItem onClick={() => openEditModal(bot)}>
                       <Settings className="w-4 h-4 mr-2" />
-                      Edit
+                      {t('common.edit')}
                     </DropdownMenuItem>
                     <DropdownMenuItem
                       className="text-red-600"
                       onClick={() => openDeleteDialog(bot.id)}
                     >
                       <Trash2 className="w-4 h-4 mr-2" />
-                      Delete
+                      {t('common.delete')}
                     </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
@@ -211,7 +213,7 @@ const ChatbotsView = () => {
             </CardHeader>
             <CardContent className="flex-grow flex flex-col justify-end">
                 <div className="flex justify-between items-center text-sm">
-                  <span className="text-muted-foreground">Model</span>
+                  <span className="text-muted-foreground">{t('common.model')}</span>
                   <span className="font-medium bg-primary/10 text-primary px-2 py-1 rounded-md">{bot.model}</span>
                 </div>
             </CardContent>
@@ -224,13 +226,13 @@ const ChatbotsView = () => {
         <Card className="col-span-full">
           <CardContent className="flex flex-col items-center justify-center py-12">
             <Bot className="w-12 h-12 text-gray-400 mb-4" />
-            <h3 className="text-lg font-medium mb-2">No chatbots found</h3>
+            <h3 className="text-lg font-medium mb-2">{t('chatbots.noChatbotsFound')}</h3>
             <p className="text-sm text-muted-foreground mb-4">
-              {searchQuery ? `No chatbots match "${searchQuery}"` : "Get started by creating your first chatbot"}
+              {searchQuery ? t('chatbots.noChatbotsMatch', { query: searchQuery }) : t('chatbots.getStartedMessage')}
             </p>
             <Button onClick={openCreateModal}>
               <Plus className="w-4 h-4 mr-2" />
-              Create Chatbot
+              {t('chatbots.createChatbot')}
             </Button>
           </CardContent>
         </Card>
@@ -240,31 +242,31 @@ const ChatbotsView = () => {
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>{editingChatbot?.id ? "Edit Chatbot" : "Create Chatbot"}</DialogTitle>
+            <DialogTitle>{editingChatbot?.id ? t('chatbots.editChatbot') : t('chatbots.createChatbot')}</DialogTitle>
             <DialogDescription>
-              {editingChatbot?.id ? "Edit the details of your chatbot." : "Create a new chatbot to engage with your users."}
+              {editingChatbot?.id ? t('chatbots.editDescription') : t('chatbots.createDescription')}
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
             <div className="grid grid-cols-4 items-center gap-4">
               <label htmlFor="name" className="text-right">
-                Name
+                {t('common.name')}
               </label>
               <Input id="name" value={editingChatbot?.name || ""} onChange={handleInputChange} className="col-span-3" />
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
               <label htmlFor="description" className="text-right">
-                Description
+                {t('common.description')}
               </label>
               <Input id="description" value={editingChatbot?.description || ""} onChange={handleInputChange} className="col-span-3" />
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
               <label htmlFor="model" className="text-right">
-                Model
+                {t('common.model')}
               </label>
               <Select value={editingChatbot?.model} onValueChange={handleModelChange}>
                   <SelectTrigger className="col-span-3">
-                      <SelectValue placeholder="Select a model" />
+                      <SelectValue placeholder={t('chatbots.modelSelection')} />
                   </SelectTrigger>
                   <SelectContent>
                       {modelOptions.map(model => (
@@ -275,8 +277,8 @@ const ChatbotsView = () => {
             </div>
           </div>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setIsModalOpen(false)}>Cancel</Button>
-            <Button type="submit" onClick={handleSave}>Save changes</Button>
+            <Button variant="outline" onClick={() => setIsModalOpen(false)}>{t('common.cancel')}</Button>
+            <Button type="submit" onClick={handleSave}>{t('common.save')}</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
@@ -285,14 +287,14 @@ const ChatbotsView = () => {
       <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
-            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+            <AlertDialogTitle>{t('chatbots.deleteConfirmation')}</AlertDialogTitle>
             <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete the chatbot.
+              {t('chatbots.deleteWarning')}
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={handleDeleteConfirm}>Continue</AlertDialogAction>
+            <AlertDialogCancel>{t('common.cancel')}</AlertDialogCancel>
+            <AlertDialogAction onClick={handleDeleteConfirm}>{t('common.continue')}</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

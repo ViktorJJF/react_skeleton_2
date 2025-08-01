@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -8,6 +9,7 @@ import { Mail, Bot, ArrowLeft, ArrowRight, CheckCircle } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 const ForgotPasswordView: React.FC = () => {
+  const { t } = useTranslation();
   const [email, setEmail] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
@@ -18,8 +20,8 @@ const ForgotPasswordView: React.FC = () => {
     
     if (!email) {
       toast({
-        title: "Email required",
-        description: "Please enter your email address.",
+        title: t('auth.emailRequired'),
+        description: t('auth.pleaseEnterEmail'),
         variant: "destructive",
       });
       return;
@@ -32,8 +34,8 @@ const ForgotPasswordView: React.FC = () => {
       setIsLoading(false);
       setIsSubmitted(true);
       toast({
-        title: "Reset email sent! 📧",
-        description: "Check your email for password reset instructions.",
+        title: t('auth.resetEmailSent'),
+        description: t('auth.checkEmailForReset'),
       });
     }, 1500);
   };
@@ -48,7 +50,7 @@ const ForgotPasswordView: React.FC = () => {
               <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary shadow-lg">
                 <Bot className="h-6 w-6 text-primary-foreground" />
               </div>
-              <span className="text-2xl font-bold text-foreground">MatDash</span>
+              <span className="text-2xl font-bold text-foreground">AI Panel</span>
             </div>
           </div>
 
@@ -62,26 +64,26 @@ const ForgotPasswordView: React.FC = () => {
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <h2 className="text-2xl font-bold">Check your email</h2>
+                  <h2 className="text-2xl font-bold">{t('auth.checkYourEmail')}</h2>
                   <p className="text-muted-foreground">
-                    We've sent a password reset link to <strong>{email}</strong>
+                    {t('auth.resetLinkSent', { email })}
                   </p>
                 </div>
                 <div className="space-y-3 pt-4">
                   <p className="text-sm text-muted-foreground">
-                    Didn't receive the email? Check your spam folder or try again.
+                    {t('auth.didntReceiveEmail')}
                   </p>
                   <Button
                     variant="outline"
                     onClick={() => setIsSubmitted(false)}
                     className="w-full"
                   >
-                    Try again
+                    {t('auth.tryAgain')}
                   </Button>
                   <Link to="/login">
                     <Button variant="ghost" className="w-full">
                       <ArrowLeft className="mr-2 h-4 w-4" />
-                      Back to login
+                      {t('auth.backToLogin')}
                     </Button>
                   </Link>
                 </div>
@@ -102,76 +104,63 @@ const ForgotPasswordView: React.FC = () => {
             <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary shadow-lg">
               <Bot className="h-6 w-6 text-primary-foreground" />
             </div>
-            <span className="text-2xl font-bold text-foreground">MatDash</span>
+            <span className="text-2xl font-bold text-foreground">AI Panel</span>
           </div>
-          <h1 className="text-3xl font-bold tracking-tight">Forgot password?</h1>
+          <h1 className="text-3xl font-bold tracking-tight">{t('auth.forgotPassword')}</h1>
           <p className="text-muted-foreground">
-            No worries, we'll send you reset instructions.
+            {t('auth.resetPasswordEmail')}
           </p>
         </div>
 
-        {/* Forgot Password Card */}
+        {/* Form Card */}
         <Card className="border-0 shadow-lg bg-card/50 backdrop-blur-sm">
-          <CardHeader className="space-y-1 pb-4">
-            <CardTitle className="text-xl font-semibold">Reset password</CardTitle>
+          <CardHeader className="space-y-1">
+            <CardTitle className="text-2xl">{t('auth.resetPassword')}</CardTitle>
             <CardDescription>
-              Enter your email address and we'll send you a link to reset your password.
+              {t('auth.enterEmailForReset')}
             </CardDescription>
           </CardHeader>
-          <CardContent className="space-y-4">
+          <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
               <div className="space-y-2">
-                <Label htmlFor="email" className="flex items-center gap-2">
-                  <Mail className="h-4 w-4" />
-                  Email address
-                </Label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="Enter your email"
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  className="h-11"
-                  required
-                />
+                <Label htmlFor="email">{t('common.email')}</Label>
+                <div className="relative">
+                  <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+                  <Input
+                    id="email"
+                    type="email"
+                    placeholder={t('auth.emailPlaceholder')}
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    className="pl-10"
+                    required
+                  />
+                </div>
               </div>
 
-              <Button
-                type="submit"
-                className="w-full h-11 gap-2"
-                disabled={isLoading}
-              >
+              <Button type="submit" className="w-full" disabled={isLoading}>
                 {isLoading ? (
-                  <>
+                  <div className="flex items-center gap-2">
                     <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
-                    Sending...
-                  </>
+                    {t('common.loading')}
+                  </div>
                 ) : (
-                  <>
-                    Send reset link
+                  <div className="flex items-center gap-2">
+                    {t('auth.sendResetLink')}
                     <ArrowRight className="h-4 w-4" />
-                  </>
+                  </div>
                 )}
               </Button>
             </form>
 
-            {/* Back to Login Link */}
-            <div className="text-center">
-              <Link
-                to="/login"
-                className="text-sm text-primary hover:underline font-medium flex items-center justify-center gap-2"
-              >
-                <ArrowLeft className="h-4 w-4" />
-                Back to login
+            <div className="mt-6 text-center">
+              <Link to="/login" className="text-sm text-primary hover:underline">
+                <ArrowLeft className="inline mr-1 h-4 w-4" />
+                {t('auth.backToLogin')}
               </Link>
             </div>
           </CardContent>
         </Card>
-
-        {/* Footer */}
-        <div className="text-center text-xs text-muted-foreground">
-          <p>Remember your password? <Link to="/login" className="text-primary hover:underline">Sign in</Link></p>
-        </div>
       </div>
     </div>
   );

@@ -8,6 +8,7 @@ import ErrorBoundary from '@/components/ErrorBoundary'
 import { PWAUpdateHandler } from '@/components/PWAUpdateHandler'
 import { GoogleOAuthProvider } from '@react-oauth/google';
 import config from './config';
+import './i18n';
 
 // Set document title
 document.title = 'AI Panel - Intelligent Dashboard'

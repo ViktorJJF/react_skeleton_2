@@ -1,3 +1,4 @@
+import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router-dom';
 import {
   Home,
@@ -22,33 +23,35 @@ import {
 import { Button } from '@/components/ui/button';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 
-const homeNav = [{ name: 'Dashboard', href: '/dashboard', icon: Home }];
-const saasNav = [
-  { name: 'Chatbots', href: '/chatbots', icon: Bot },
-  { name: 'Conversations', href: '/conversations', icon: MessageCircle },
-  { name: 'Bot Analytics', href: '/bot-analytics', icon: BarChart },
-  { name: 'Bot Training', href: '/bot-training', icon: BrainCircuit },
-  { name: 'Chatbots Table', href: '/chatbots-table', icon: Table },
-  { name: 'Documentation', href: '/docs', icon: BookOpen },
-  { name: 'Pricing', href: '/pricing', icon: DollarSign },
-];
-const appsNav = [
-  { name: 'eCommerce', href: '/ecommerce', icon: ShoppingCart, sub: true },
-  { name: 'Front Pages', href: '/front-pages', icon: LayoutTemplate, sub: true },
-  { name: 'Calendar', href: '/calendar', icon: Calendar },
-  { name: 'Kanban', href: '/kanban', icon: KanbanSquare },
-  { name: 'Chats', href: '/chats', icon: MessageSquare },
-  { name: 'Email', href: '/email', icon: Mail },
-  { name: 'Notes', href: '/notes', icon: StickyNote },
-  { name: 'Contacts', href: '/contacts', icon: User },
-  { name: 'Invoice', href: '/invoice', icon: LayoutTemplate, sub: true },
-];
-
 const Sidebar = () => {
-    const activeLinkClass = "flex items-center gap-3 rounded-lg bg-primary text-primary-foreground px-3 py-2 transition-all shadow-lg";
-    const inactiveLinkClass = "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:bg-primary/10 hover:text-primary";
+  const { t } = useTranslation();
   
-    const getNavLinkClass = ({ isActive }: { isActive: boolean }) => isActive ? activeLinkClass : inactiveLinkClass;
+  const homeNav = [{ name: t('sidebar.dashboard'), href: '/dashboard', icon: Home }];
+  const saasNav = [
+    { name: t('sidebar.chatbots'), href: '/chatbots', icon: Bot },
+    { name: t('sidebar.conversations'), href: '/conversations', icon: MessageCircle },
+    { name: t('sidebar.botAnalytics'), href: '/bot-analytics', icon: BarChart },
+    { name: t('sidebar.botTraining'), href: '/bot-training', icon: BrainCircuit },
+    { name: t('sidebar.chatbotsTable'), href: '/chatbots-table', icon: Table },
+    { name: t('sidebar.docs'), href: '/docs', icon: BookOpen },
+    { name: t('sidebar.pricing'), href: '/pricing', icon: DollarSign },
+  ];
+  const appsNav = [
+    { name: t('sidebar.ecommerce'), href: '/ecommerce', icon: ShoppingCart, sub: true },
+    { name: t('sidebar.frontPages'), href: '/front-pages', icon: LayoutTemplate, sub: true },
+    { name: t('sidebar.calendar'), href: '/calendar', icon: Calendar },
+    { name: t('sidebar.kanban'), href: '/kanban', icon: KanbanSquare },
+    { name: t('sidebar.chats'), href: '/chats', icon: MessageSquare },
+    { name: t('sidebar.email'), href: '/email', icon: Mail },
+    { name: t('sidebar.notes'), href: '/notes', icon: StickyNote },
+    { name: t('sidebar.contacts'), href: '/contacts', icon: User },
+    { name: t('sidebar.invoice'), href: '/invoice', icon: LayoutTemplate, sub: true },
+  ];
+
+  const activeLinkClass = "flex items-center gap-3 rounded-lg bg-primary text-primary-foreground px-3 py-2 transition-all shadow-lg";
+  const inactiveLinkClass = "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:bg-primary/10 hover:text-primary";
+  
+  const getNavLinkClass = ({ isActive }: { isActive: boolean }) => isActive ? activeLinkClass : inactiveLinkClass;
 
   return (
     <div className="hidden border-r bg-card text-card-foreground md:block sticky top-0 h-screen">
@@ -62,13 +65,13 @@ const Sidebar = () => {
               <span className="text-lg font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
                 AI Panel
               </span>
-              <span className="text-xs text-muted-foreground -mt-1">Dashboard</span>
+              <span className="text-xs text-muted-foreground -mt-1">{t('sidebar.dashboard')}</span>
             </div>
           </NavLink>
         </div>
         <div className="flex-1 overflow-auto py-4">
           <nav className="grid items-start px-4 text-sm font-medium">
-            <h3 className="mb-2 px-2 text-xs font-semibold uppercase text-muted-foreground tracking-wider">Home</h3>
+            <h3 className="mb-2 px-2 text-xs font-semibold uppercase text-muted-foreground tracking-wider">{t('sidebar.home')}</h3>
             {homeNav.map((item) => (
               <NavLink key={item.name} to={item.href} className={getNavLinkClass}>
                 <item.icon className="h-4 w-4" />
@@ -76,7 +79,7 @@ const Sidebar = () => {
               </NavLink>
             ))}
             
-            <h3 className="my-4 px-2 text-xs font-semibold uppercase text-muted-foreground tracking-wider">SaaS</h3>
+            <h3 className="my-4 px-2 text-xs font-semibold uppercase text-muted-foreground tracking-wider">{t('sidebar.saas')}</h3>
             {saasNav.map((item) => (
               <NavLink key={item.name} to={item.href} className={getNavLinkClass}>
                 <item.icon className="h-4 w-4" />
@@ -84,7 +87,7 @@ const Sidebar = () => {
               </NavLink>
             ))}
             
-            <h3 className="my-4 px-2 text-xs font-semibold uppercase text-muted-foreground tracking-wider">Apps</h3>
+            <h3 className="my-4 px-2 text-xs font-semibold uppercase text-muted-foreground tracking-wider">{t('sidebar.apps')}</h3>
             {appsNav.map((item) =>
               item.sub ? (
                 <DropdownMenu key={item.name}>
@@ -98,8 +101,12 @@ const Sidebar = () => {
                     </div>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent className="w-56">
-                    <DropdownMenuItem>Sub Item 1</DropdownMenuItem>
-                    <DropdownMenuItem>Sub Item 2</DropdownMenuItem>
+                    <DropdownMenuItem>
+                      <NavLink to={item.href} className="flex items-center gap-2 w-full">
+                        <item.icon className="h-4 w-4" />
+                        <span>{item.name}</span>
+                      </NavLink>
+                    </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
               ) : (
@@ -111,17 +118,15 @@ const Sidebar = () => {
             )}
           </nav>
         </div>
-        <div className="mt-auto p-4 border-t">
-          <div className="flex items-center gap-3">
-            <img src="/avatars/mathew.png" alt="User" className="h-10 w-10 rounded-full" />
-            <div className="flex-1">
-              <p className="font-semibold">Mathew</p>
-              <p className="text-xs text-muted-foreground">Designer</p>
-            </div>
-            <Button variant="ghost" size="icon">
-              <Power className="h-4 w-4" />
-            </Button>
-          </div>
+        <div className="border-t p-4">
+          <Button variant="ghost" className="w-full justify-start gap-3">
+            <User className="h-4 w-4" />
+            <span>{t('sidebar.profile')}</span>
+          </Button>
+          <Button variant="ghost" className="w-full justify-start gap-3 mt-2">
+            <Power className="h-4 w-4" />
+            <span>{t('common.logout')}</span>
+          </Button>
         </div>
       </div>
     </div>

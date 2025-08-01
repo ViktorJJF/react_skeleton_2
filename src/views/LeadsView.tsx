@@ -1,4 +1,5 @@
 import React from 'react';
+import { useTranslation } from 'react-i18next';
 import {
   Table,
   TableBody,
@@ -40,14 +41,16 @@ const leads: Lead[] = [
 ];
 
 const LeadsView = () => {
+  const { t } = useTranslation();
+
   return (
     <div className="flex flex-col gap-4 h-full">
       <header className="flex items-center justify-between">
-        <h1 className="text-2xl font-bold">Inbox</h1>
+        <h1 className="text-2xl font-bold">{t('leads.title')}</h1>
         <div className="flex items-center gap-2">
-            <Button variant="outline">Conectado</Button>
-            <Button variant="outline">Previsualizar</Button>
-            <Button>Chat</Button>
+            <Button variant="outline">{t('leads.connected')}</Button>
+            <Button variant="outline">{t('leads.preview')}</Button>
+            <Button>{t('leads.chat')}</Button>
         </div>
       </header>
 
@@ -57,19 +60,19 @@ const LeadsView = () => {
             <DropdownMenuTrigger asChild>
               <Button variant="outline" className="flex items-center gap-2">
                 <Filter className="h-4 w-4" />
-                Filtrar por Tags
+                {t('leads.filterByTags')}
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
-              <DropdownMenuItem>Tag 1</DropdownMenuItem>
-              <DropdownMenuItem>Tag 2</DropdownMenuItem>
+              <DropdownMenuItem>{t('leads.tag1')}</DropdownMenuItem>
+              <DropdownMenuItem>{t('leads.tag2')}</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
           <div className="relative w-full max-w-sm">
             <Search className="absolute left-2 top-2.5 h-4 w-4 text-muted-foreground" />
-            <Input placeholder="Buscar correo, nc" className="pl-8" />
+            <Input placeholder={t('leads.searchPlaceholder')} className="pl-8" />
           </div>
-          <Button variant="outline">Enviar plantilla</Button>
+          <Button variant="outline">{t('leads.sendTemplate')}</Button>
         </div>
 
         <div className="flex-1 overflow-auto">
@@ -79,11 +82,11 @@ const LeadsView = () => {
                     <TableHead className="w-[40px]">
                         <Checkbox />
                     </TableHead>
-                    <TableHead>Correo</TableHead>
-                    <TableHead>Teléfono</TableHead>
-                    <TableHead>Pregunta inicial</TableHead>
-                    <TableHead>Canal</TableHead>
-                    <TableHead className="w-[100px]">Actions</TableHead>
+                    <TableHead>{t('common.email')}</TableHead>
+                    <TableHead>{t('leads.phone')}</TableHead>
+                    <TableHead>{t('leads.initialQuestion')}</TableHead>
+                    <TableHead>{t('leads.channel')}</TableHead>
+                    <TableHead className="w-[100px]">{t('common.actions')}</TableHead>
                     </TableRow>
                 </TableHeader>
                 <TableBody>
@@ -99,18 +102,20 @@ const LeadsView = () => {
                                 <img src={`https://flagsapi.com/${lead.country}/flat/16.png`} alt={lead.country} />
                             </div>
                         </TableCell>
-                        <TableCell>{lead.initialQuestion}</TableCell>
+                        <TableCell className="max-w-xs truncate">{lead.initialQuestion}</TableCell>
                         <TableCell>{lead.channel}</TableCell>
                         <TableCell>
                             <DropdownMenu>
                                 <DropdownMenuTrigger asChild>
-                                <Button variant="ghost" size="icon">
-                                    <MoreHorizontal className="h-4 w-4" />
-                                </Button>
+                                    <Button variant="ghost" className="h-8 w-8 p-0">
+                                        <span className="sr-only">{t('common.openMenu')}</span>
+                                        <MoreHorizontal className="h-4 w-4" />
+                                    </Button>
                                 </DropdownMenuTrigger>
-                                <DropdownMenuContent>
-                                <DropdownMenuItem>View</DropdownMenuItem>
-                                <DropdownMenuItem>Delete</DropdownMenuItem>
+                                <DropdownMenuContent align="end">
+                                    <DropdownMenuItem>{t('common.edit')}</DropdownMenuItem>
+                                    <DropdownMenuItem>{t('leads.viewDetails')}</DropdownMenuItem>
+                                    <DropdownMenuItem>{t('leads.sendMessage')}</DropdownMenuItem>
                                 </DropdownMenuContent>
                             </DropdownMenu>
                         </TableCell>
@@ -120,26 +125,24 @@ const LeadsView = () => {
             </Table>
         </div>
 
-        <div className="flex items-center justify-between mt-4">
+        <div className="flex items-center justify-between">
             <div className="text-sm text-muted-foreground">
-                19682 leads en total. 15 leads por página
+                {t('leads.showingResults', { count: leads.length })}
             </div>
-            <div className="flex items-center gap-2">
-                <Button variant="outline" size="icon">
+            <div className="flex items-center space-x-2">
+                <Button variant="outline" size="sm">
                     <ChevronLeft className="h-4 w-4" />
+                    {t('common.previous')}
                 </Button>
-                <Input type="number" defaultValue={1} className="w-16 text-center" />
-                <Button variant="outline" size="icon">
+                <Button variant="outline" size="sm">
+                    {t('common.next')}
                     <ChevronRight className="h-4 w-4" />
                 </Button>
-                <div className="text-sm text-muted-foreground">
-                    de 1313
-                </div>
             </div>
         </div>
       </div>
     </div>
-  )
-}
+  );
+};
 
 export default LeadsView; 

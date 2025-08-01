@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Eye, EyeOff, Mail, Lock, User, Bot, ArrowRight, Github, Chrome, Check } from 'lucide-react';
+import { Eye, EyeOff, Mail, Lock, User, Bot, ArrowRight, Github, Check, Chrome } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 
 const RegisterView: React.FC = () => {
+  const { t } = useTranslation();
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -29,8 +31,8 @@ const RegisterView: React.FC = () => {
   const validateForm = () => {
     if (!formData.firstName || !formData.lastName || !formData.email || !formData.password) {
       toast({
-        title: "Missing information",
-        description: "Please fill in all required fields.",
+        title: t('auth.missingInformation'),
+        description: t('auth.fillAllFields'),
         variant: "destructive",
       });
       return false;
@@ -38,8 +40,8 @@ const RegisterView: React.FC = () => {
 
     if (formData.password !== formData.confirmPassword) {
       toast({
-        title: "Passwords don't match",
-        description: "Please make sure your passwords match.",
+        title: t('auth.passwordsDontMatch'),
+        description: t('auth.passwordsDoNotMatch'),
         variant: "destructive",
       });
       return false;
@@ -47,8 +49,8 @@ const RegisterView: React.FC = () => {
 
     if (formData.password.length < 8) {
       toast({
-        title: "Password too short",
-        description: "Password must be at least 8 characters long.",
+        title: t('auth.passwordTooShort'),
+        description: t('auth.passwordMinLength'),
         variant: "destructive",
       });
       return false;
@@ -56,8 +58,8 @@ const RegisterView: React.FC = () => {
 
     if (!agreedToTerms) {
       toast({
-        title: "Terms and conditions",
-        description: "Please agree to the terms and conditions.",
+        title: t('auth.termsAndConditions'),
+        description: t('auth.agreeToTerms'),
         variant: "destructive",
       });
       return false;
@@ -78,8 +80,8 @@ const RegisterView: React.FC = () => {
       setIsLoading(false);
       
       toast({
-        title: "Account created! 🎉",
-        description: "Welcome to MatDash! Please check your email to verify your account.",
+        title: t('auth.accountCreated'),
+        description: t('auth.welcomeToAI'),
       });
       navigate('/login');
     }, 2000);
@@ -87,8 +89,8 @@ const RegisterView: React.FC = () => {
 
   const handleSocialRegister = (provider: string) => {
     toast({
-      title: `${provider} registration`,
-      description: `${provider} registration functionality would be implemented here.`,
+      title: t('auth.socialRegistration', { provider }),
+      description: t('auth.socialRegistrationDescription', { provider }),
     });
   };
 
@@ -98,43 +100,48 @@ const RegisterView: React.FC = () => {
         {/* Header */}
         <div className="text-center space-y-2">
           <div className="flex items-center justify-center gap-3 mb-6">
-            <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary shadow-lg">
-              <Bot className="h-6 w-6 text-primary-foreground" />
+            <div className="flex h-14 w-14 items-center justify-center rounded-2xl bg-gradient-to-br from-primary to-primary/80 shadow-xl">
+              <Bot className="h-7 w-7 text-primary-foreground" />
             </div>
-            <span className="text-2xl font-bold text-foreground">MatDash</span>
+            <div className="flex flex-col items-start">
+              <span className="text-2xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
+                AI Panel
+              </span>
+              <span className="text-xs text-muted-foreground -mt-1">Intelligent Dashboard</span>
+            </div>
           </div>
-          <h1 className="text-3xl font-bold tracking-tight">Create account</h1>
+          <h1 className="text-3xl font-bold tracking-tight">{t('auth.createAccount')}</h1>
           <p className="text-muted-foreground">
-            Join MatDash and start building amazing chatbots
+            {t('auth.createAccountDescription')}
           </p>
         </div>
 
-        {/* Register Card */}
-        <Card className="border-0 shadow-lg bg-card/50 backdrop-blur-sm">
+        {/* Registration Form */}
+        <Card className="border-0 shadow-2xl bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl">
           <CardHeader className="space-y-1 pb-4">
-            <CardTitle className="text-xl font-semibold">Sign up</CardTitle>
+            <CardTitle className="text-xl font-semibold">{t('auth.signUp')}</CardTitle>
             <CardDescription>
-              Create your account to get started
+              {t('auth.enterDetailsToCreate')}
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            {/* Social Register Buttons */}
+            {/* Social Registration Buttons */}
             <div className="grid grid-cols-2 gap-3">
               <Button
                 variant="outline"
                 onClick={() => handleSocialRegister('Google')}
-                className="gap-2"
+                className="gap-2 hover:bg-gray-50 dark:hover:bg-gray-950/20"
               >
                 <Chrome className="h-4 w-4" />
-                Google
+                {t('auth.loginWithGoogle')}
               </Button>
               <Button
                 variant="outline"
                 onClick={() => handleSocialRegister('GitHub')}
-                className="gap-2"
+                className="gap-2 hover:bg-gray-50 dark:hover:bg-gray-950/20"
               >
                 <Github className="h-4 w-4" />
-                GitHub
+                {t('auth.loginWithGithub')}
               </Button>
             </div>
 
@@ -143,74 +150,83 @@ const RegisterView: React.FC = () => {
                 <span className="w-full border-t" />
               </div>
               <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-card px-2 text-muted-foreground">Or continue with</span>
+                <span className="bg-white dark:bg-slate-900 px-2 text-muted-foreground">
+                  {t('auth.orContinueWith')}
+                </span>
               </div>
             </div>
 
-            {/* Register Form */}
+            {/* Registration Form */}
             <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="grid grid-cols-2 gap-3">
+              <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label htmlFor="firstName" className="flex items-center gap-2">
-                    <User className="h-4 w-4" />
-                    First name
+                  <Label htmlFor="firstName" className="text-sm font-medium">
+                    {t('profile.firstName')}
                   </Label>
-                  <Input
-                    id="firstName"
-                    type="text"
-                    placeholder="John"
-                    value={formData.firstName}
-                    onChange={(e) => handleInputChange('firstName', e.target.value)}
-                    className="h-11"
-                    required
-                  />
+                  <div className="relative">
+                    <User className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                    <Input
+                      id="firstName"
+                      type="text"
+                      placeholder={t('profile.firstName')}
+                      value={formData.firstName}
+                      onChange={(e) => handleInputChange('firstName', e.target.value)}
+                      className="h-11 pl-10 border-0 bg-muted/50 focus:bg-white dark:focus:bg-slate-800"
+                      required
+                    />
+                  </div>
                 </div>
+                
                 <div className="space-y-2">
-                  <Label htmlFor="lastName" className="flex items-center gap-2">
-                    <User className="h-4 w-4" />
-                    Last name
+                  <Label htmlFor="lastName" className="text-sm font-medium">
+                    {t('profile.lastName')}
                   </Label>
-                  <Input
-                    id="lastName"
-                    type="text"
-                    placeholder="Doe"
-                    value={formData.lastName}
-                    onChange={(e) => handleInputChange('lastName', e.target.value)}
-                    className="h-11"
-                    required
-                  />
+                  <div className="relative">
+                    <User className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                    <Input
+                      id="lastName"
+                      type="text"
+                      placeholder={t('profile.lastName')}
+                      value={formData.lastName}
+                      onChange={(e) => handleInputChange('lastName', e.target.value)}
+                      className="h-11 pl-10 border-0 bg-muted/50 focus:bg-white dark:focus:bg-slate-800"
+                      required
+                    />
+                  </div>
                 </div>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="email" className="flex items-center gap-2">
-                  <Mail className="h-4 w-4" />
-                  Email address
-                </Label>
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="john@example.com"
-                  value={formData.email}
-                  onChange={(e) => handleInputChange('email', e.target.value)}
-                  className="h-11"
-                  required
-                />
-              </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="password" className="flex items-center gap-2">
-                  <Lock className="h-4 w-4" />
-                  Password
+                <Label htmlFor="email" className="text-sm font-medium">
+                  {t('common.email')}
                 </Label>
                 <div className="relative">
+                  <Mail className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
+                  <Input
+                    id="email"
+                    type="email"
+                    placeholder={t('auth.emailPlaceholder')}
+                    value={formData.email}
+                    onChange={(e) => handleInputChange('email', e.target.value)}
+                    className="h-11 pl-10 border-0 bg-muted/50 focus:bg-white dark:focus:bg-slate-800"
+                    required
+                  />
+                </div>
+              </div>
+              
+              <div className="space-y-2">
+                <Label htmlFor="password" className="text-sm font-medium">
+                  {t('common.password')}
+                </Label>
+                <div className="relative">
+                  <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                   <Input
                     id="password"
                     type={showPassword ? 'text' : 'password'}
-                    placeholder="Create a password"
+                    placeholder={t('auth.passwordPlaceholder')}
                     value={formData.password}
                     onChange={(e) => handleInputChange('password', e.target.value)}
-                    className="h-11 pr-10"
+                    className="h-11 pl-10 pr-10 border-0 bg-muted/50 focus:bg-white dark:focus:bg-slate-800"
                     required
                   />
                   <Button
@@ -226,25 +242,25 @@ const RegisterView: React.FC = () => {
                       <Eye className="h-4 w-4 text-muted-foreground" />
                     )}
                     <span className="sr-only">
-                      {showPassword ? 'Hide password' : 'Show password'}
+                      {showPassword ? t('auth.hidePassword') : t('auth.showPassword')}
                     </span>
                   </Button>
                 </div>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="confirmPassword" className="flex items-center gap-2">
-                  <Lock className="h-4 w-4" />
-                  Confirm password
+                <Label htmlFor="confirmPassword" className="text-sm font-medium">
+                  {t('auth.confirmPasswordPlaceholder')}
                 </Label>
                 <div className="relative">
+                  <Lock className="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
                   <Input
                     id="confirmPassword"
                     type={showConfirmPassword ? 'text' : 'password'}
-                    placeholder="Confirm your password"
+                    placeholder={t('auth.confirmPasswordPlaceholder')}
                     value={formData.confirmPassword}
                     onChange={(e) => handleInputChange('confirmPassword', e.target.value)}
-                    className="h-11 pr-10"
+                    className="h-11 pl-10 pr-10 border-0 bg-muted/50 focus:bg-white dark:focus:bg-slate-800"
                     required
                   />
                   <Button
@@ -260,7 +276,7 @@ const RegisterView: React.FC = () => {
                       <Eye className="h-4 w-4 text-muted-foreground" />
                     )}
                     <span className="sr-only">
-                      {showConfirmPassword ? 'Hide password' : 'Show password'}
+                      {showConfirmPassword ? t('auth.hidePassword') : t('auth.showPassword')}
                     </span>
                   </Button>
                 </div>
@@ -268,37 +284,30 @@ const RegisterView: React.FC = () => {
 
               <div className="flex items-center space-x-2">
                 <input
-                  id="terms"
                   type="checkbox"
+                  id="terms"
                   checked={agreedToTerms}
                   onChange={(e) => setAgreedToTerms(e.target.checked)}
-                  className="h-4 w-4 rounded border-gray-300 text-primary focus:ring-primary"
+                  className="rounded border-gray-300"
                 />
                 <Label htmlFor="terms" className="text-sm text-muted-foreground">
-                  I agree to the{' '}
-                  <Link to="/terms" className="text-primary hover:underline">
-                    Terms of Service
-                  </Link>{' '}
-                  and{' '}
-                  <Link to="/privacy" className="text-primary hover:underline">
-                    Privacy Policy
-                  </Link>
+                  {t('auth.agreeToTermsText')}
                 </Label>
               </div>
 
               <Button
                 type="submit"
-                className="w-full h-11 gap-2"
+                className="w-full h-11 gap-2 bg-gradient-to-r from-primary to-primary/80 hover:from-primary/90 hover:to-primary/70"
                 disabled={isLoading}
               >
                 {isLoading ? (
                   <>
                     <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent" />
-                    Creating account...
+                    {t('auth.creatingAccount')}
                   </>
                 ) : (
                   <>
-                    Create account
+                    {t('auth.createAccount')}
                     <ArrowRight className="h-4 w-4" />
                   </>
                 )}
@@ -307,12 +316,12 @@ const RegisterView: React.FC = () => {
 
             {/* Sign In Link */}
             <div className="text-center text-sm text-muted-foreground">
-              Already have an account?{' '}
+              {t('auth.alreadyHaveAccount')}{' '}
               <Link
                 to="/login"
                 className="text-primary hover:underline font-medium"
               >
-                Sign in
+                {t('auth.signIn')}
               </Link>
             </div>
           </CardContent>
@@ -320,7 +329,7 @@ const RegisterView: React.FC = () => {
 
         {/* Footer */}
         <div className="text-center text-xs text-muted-foreground">
-          <p>By creating an account, you agree to our Terms of Service and Privacy Policy.</p>
+          <p>{t('auth.bySigningUp')}</p>
         </div>
       </div>
     </div>

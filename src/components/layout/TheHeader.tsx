@@ -3,7 +3,6 @@ import {
   Menu,
   Search,
   Grid3X3,
-  Globe,
   Bot,
   Settings,
   CreditCard,
@@ -26,6 +25,7 @@ import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { ThemeToggle } from './ThemeToggle';
 import TheSidebar from './TheSidebar';
 import NotificationCenter from '../notifications/NotificationCenter';
+import LanguageSwitcher from './LanguageSwitcher';
 
 const TheHeader = () => {
   return (
@@ -86,27 +86,7 @@ const TheHeader = () => {
         <NotificationCenter />
 
         {/* Language Selector */}
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon" className="hover:bg-muted/50">
-              <Globe className="h-5 w-5" />
-              <span className="sr-only">Language</span>
-            </Button>
-          </DropdownMenuTrigger>
-          <DropdownMenuContent align="end">
-            <DropdownMenuLabel>Language</DropdownMenuLabel>
-            <DropdownMenuSeparator />
-            <DropdownMenuItem className="flex items-center gap-2">
-              🇺🇸 English
-            </DropdownMenuItem>
-            <DropdownMenuItem className="flex items-center gap-2">
-              🇪🇸 Español
-            </DropdownMenuItem>
-            <DropdownMenuItem className="flex items-center gap-2">
-              🇫🇷 Français
-            </DropdownMenuItem>
-          </DropdownMenuContent>
-        </DropdownMenu>
+        <LanguageSwitcher />
 
         {/* User Profile */}
         <DropdownMenu>
