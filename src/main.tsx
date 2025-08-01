@@ -5,17 +5,23 @@ import './index.css'
 import { ThemeProvider } from './components/theme-provider'
 import { Toaster } from "@/components/ui/toaster"
 import ErrorBoundary from '@/components/ErrorBoundary'
+import { PWAUpdateHandler } from '@/components/PWAUpdateHandler'
+import { GoogleOAuthProvider } from '@react-oauth/google';
+import config from './config';
 
 // Set document title
 document.title = 'AI Panel - Intelligent Dashboard'
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <ErrorBoundary>
-      <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-        <AppRouter />
-        <Toaster />
-      </ThemeProvider>
-    </ErrorBoundary>
+    <GoogleOAuthProvider clientId={config.GOOGLE_CLIENT_ID}>
+      <ErrorBoundary>
+    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+      <AppRouter />
+      <Toaster />
+          <PWAUpdateHandler />
+    </ThemeProvider>
+      </ErrorBoundary>
+    </GoogleOAuthProvider>
   </React.StrictMode>,
 )

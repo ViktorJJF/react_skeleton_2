@@ -1,11 +1,16 @@
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { Badge } from "@/components/ui/badge";
-import { Switch } from "@/components/ui/switch";
 import { Input } from "@/components/ui/input";
+import { 
+  Select, 
+  SelectContent, 
+  SelectItem, 
+  SelectTrigger, 
+  SelectValue 
+} from "@/components/ui/select";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { Bot, Play, Pause, Settings, Trash2, Copy, Plus, Search, MoreVertical } from 'lucide-react';
+import { Bot, Settings, Trash2, Plus, Search, MoreVertical } from 'lucide-react';
 import {
   Dialog,
   DialogContent,
@@ -13,7 +18,7 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog"
+} from "@/components/ui/dialog";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -23,20 +28,19 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog"
-import { useToast } from "@/hooks/use-toast"
+} from "@/components/ui/alert-dialog";
+import { useToast } from "@/hooks/use-toast";
 import ViewComponent from '@/components/layout/TheView';
 
 interface Chatbot {
   id: number;
   name: string;
   description: string;
-  status: string;
-  conversations: number;
-  lastActive: string;
   model: string;
   color: string;
 }
+
+const modelOptions = ["GPT-4", "GPT-3.5", "Claude-3", "Gemini-Pro"];
 
 const ChatbotsView = () => {
   const [chatbots, setChatbots] = useState<Chatbot[]>([
@@ -44,9 +48,6 @@ const ChatbotsView = () => {
       id: 1,
       name: "Customer Support Bot",
       description: "Handles customer inquiries and support tickets",
-      status: "active",
-      conversations: 1234,
-      lastActive: "2 hours ago",
       model: "GPT-4",
       color: "bg-blue-500"
     },
@@ -54,9 +55,6 @@ const ChatbotsView = () => {
       id: 2,
       name: "Sales Assistant",
       description: "Qualifies leads and books demos",
-      status: "active",
-      conversations: 856,
-      lastActive: "5 minutes ago",
       model: "Claude-3",
       color: "bg-green-500"
     },
@@ -64,126 +62,120 @@ const ChatbotsView = () => {
       id: 3,
       name: "FAQ Bot",
       description: "Answers frequently asked questions",
-      status: "paused",
-      conversations: 2341,
-      lastActive: "1 day ago",
       model: "GPT-3.5",
       color: "bg-purple-500"
     },
-    {
-      id: 4,
-      name: "Onboarding Bot",
-      description: "Guides new users through setup",
-      status: "active",
-      conversations: 567,
-      lastActive: "30 minutes ago",
-      model: "GPT-4",
-      color: "bg-orange-500"
-    },
-    {
-      id: 5,
-      name: "Feedback Collector",
-      description: "Gathers user feedback and reviews",
-      status: "draft",
-      conversations: 0,
-      lastActive: "Never",
-      model: "GPT-3.5",
-      color: "bg-gray-500"
-    }
   ]);
   const [searchQuery, setSearchQuery] = useState("");
-  const [filterStatus, setFilterStatus] = useState("all");
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingChatbot, setEditingChatbot] = useState<Chatbot | null>(null);
   const [isDeleteDialogOpen, setIsDeleteDialogOpen] = useState(false);
-  const [deletingChatbot, setDeletingChatbot] = useState<Chatbot | null>(null);
+  const [deletingChatbotId, setDeletingChatbotId] = useState<number | null>(null);
   const { toast } = useToast();
 
   const handleSave = () => {
-    if (editingChatbot?.id) {
+    if (!editingChatbot?.name || !editingChatbot?.description || !editingChatbot?.model) {
+        toast({
+            title: "Missing Information",
+            description: "Please fill out all fields.",
+            variant: "destructive",
+        });
+        return;
+    }
+
+    if (editingChatbot.id) {
       setChatbots(chatbots.map(bot => bot.id === editingChatbot.id ? editingChatbot : bot));
       toast({
-        title: "Chatbot updated",
-        description: `Chatbot "${editingChatbot.name}" has been updated.`,
+        title: "Chatbot Updated",
+        description: `"${editingChatbot.name}" has been successfully updated.`,
       });
     } else {
-      setChatbots([...chatbots, { ...editingChatbot!, id: chatbots.length + 1, color: "bg-gray-500" }]);
+      const newChatbot = {
+        ...editingChatbot,
+        id: chatbots.length > 0 ? Math.max(...chatbots.map(b => b.id)) + 1 : 1,
+        color: `bg-gray-500`, // Assign a default color
+      };
+      setChatbots([...chatbots, newChatbot]);
       toast({
-        title: "Chatbot created",
-        description: `Chatbot "${editingChatbot?.name}" has been created.`,
+        title: "Chatbot Created",
+        description: `"${editingChatbot.name}" has been successfully created.`,
       });
     }
     setIsModalOpen(false);
+    setEditingChatbot(null);
   };
 
-  const handleDelete = () => {
-    if (deletingChatbot) {
-      setChatbots(chatbots.filter(bot => bot.id !== deletingChatbot.id));
+  const handleDeleteConfirm = () => {
+    if (deletingChatbotId) {
+      const chatbotToDelete = chatbots.find(bot => bot.id === deletingChatbotId);
+      setChatbots(chatbots.filter(bot => bot.id !== deletingChatbotId));
       toast({
-        title: "Chatbot deleted",
-        description: `Chatbot "${deletingChatbot.name}" has been deleted.`,
+        title: "Chatbot Deleted",
+        description: `"${chatbotToDelete?.name}" has been deleted.`,
       });
-    }
-    setIsDeleteDialogOpen(false);
-  };
-
-  const filteredChatbots = chatbots.filter(bot => {
-    const matchesSearch = bot.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
-                         bot.description.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesFilter = filterStatus === "all" || bot.status === filterStatus;
-    return matchesSearch && matchesFilter;
-  });
-
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case "active": return "bg-green-100 text-green-800";
-      case "paused": return "bg-yellow-100 text-yellow-800";
-      case "draft": return "bg-gray-100 text-gray-800";
-      default: return "bg-gray-100 text-gray-800";
+      setIsDeleteDialogOpen(false);
+      setDeletingChatbotId(null);
     }
   };
+
+  const openDeleteDialog = (id: number) => {
+    setDeletingChatbotId(id);
+    setIsDeleteDialogOpen(true);
+  };
+
+  const openEditModal = (bot: Chatbot) => {
+    setEditingChatbot(bot);
+    setIsModalOpen(true);
+  };
+  
+  const openCreateModal = () => {
+    setEditingChatbot({ id: 0, name: '', description: '', model: modelOptions[0], color: '' });
+    setIsModalOpen(true);
+  };
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (editingChatbot) {
+      setEditingChatbot({ ...editingChatbot, [e.target.id]: e.target.value });
+    }
+  };
+
+  const handleModelChange = (value: string) => {
+    if (editingChatbot) {
+      setEditingChatbot({ ...editingChatbot, model: value });
+    }
+  };
+
+  const filteredChatbots = chatbots.filter(bot =>
+    bot.name.toLowerCase().includes(searchQuery.toLowerCase()) ||
+    bot.description.toLowerCase().includes(searchQuery.toLowerCase())
+  );
 
   return (
     <ViewComponent
       title="Chatbots"
       description="Manage your AI chatbots and their configurations"
       actionButton={
-        <Button onClick={() => { setEditingChatbot(null); setIsModalOpen(true); }}>
+        <Button onClick={openCreateModal}>
           <Plus className="w-4 h-4 mr-2" />
           Create Chatbot
         </Button>
       }
       filters={
-        <div className="flex flex-col sm:flex-row gap-4">
-          <div className="relative flex-1">
-            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-            <Input
-              placeholder="Search chatbots..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="pl-10"
-            />
-          </div>
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline">
-                {filterStatus === "all" ? "All Status" : filterStatus}
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent>
-              <DropdownMenuItem onClick={() => setFilterStatus("all")}>All Status</DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setFilterStatus("active")}>Active</DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setFilterStatus("paused")}>Paused</DropdownMenuItem>
-              <DropdownMenuItem onClick={() => setFilterStatus("draft")}>Draft</DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
+        <div className="relative flex-1">
+          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
+          <Input
+            placeholder="Search chatbots..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="pl-10"
+          />
         </div>
       }
     >
       {/* Chatbots Grid */}
       <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
         {filteredChatbots.map((bot) => (
-          <Card key={bot.id} className="group hover:shadow-lg transition-shadow duration-300">
+          <Card key={bot.id} className="group hover:shadow-lg transition-shadow duration-300 flex flex-col">
             <CardHeader>
               <div className="flex items-start justify-between">
                 <div className="flex items-center gap-3">
@@ -202,20 +194,13 @@ const ChatbotsView = () => {
                     </Button>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="end">
-                    <DropdownMenuItem>
+                    <DropdownMenuItem onClick={() => openEditModal(bot)}>
                       <Settings className="w-4 h-4 mr-2" />
-                      Configure
-                    </DropdownMenuItem>
-                    <DropdownMenuItem>
-                      <Copy className="w-4 h-4 mr-2" />
-                      Duplicate
+                      Edit
                     </DropdownMenuItem>
                     <DropdownMenuItem
                       className="text-red-600"
-                      onClick={() => {
-                        setDeletingChatbot(bot);
-                        setIsDeleteDialogOpen(true);
-                      }}
+                      onClick={() => openDeleteDialog(bot.id)}
                     >
                       <Trash2 className="w-4 h-4 mr-2" />
                       Delete
@@ -224,41 +209,11 @@ const ChatbotsView = () => {
                 </DropdownMenu>
               </div>
             </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                <div className="flex items-center justify-between">
-                  <Badge className={getStatusColor(bot.status)}>
-                    {bot.status}
-                  </Badge>
-                  <Switch checked={bot.status === "active"} />
+            <CardContent className="flex-grow flex flex-col justify-end">
+                <div className="flex justify-between items-center text-sm">
+                  <span className="text-muted-foreground">Model</span>
+                  <span className="font-medium bg-primary/10 text-primary px-2 py-1 rounded-md">{bot.model}</span>
                 </div>
-
-                <div className="space-y-2">
-                  <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">Model</span>
-                    <span className="font-medium">{bot.model}</span>
-                  </div>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">Conversations</span>
-                    <span className="font-medium">{bot.conversations.toLocaleString()}</span>
-                  </div>
-                  <div className="flex justify-between text-sm">
-                    <span className="text-muted-foreground">Last Active</span>
-                    <span className="font-medium">{bot.lastActive}</span>
-                  </div>
-                </div>
-
-                <div className="flex gap-2">
-                  <Button size="sm" variant="secondary" className="flex-1">
-                    {bot.status === "active" ? <Pause className="w-4 h-4 mr-1" /> : <Play className="w-4 h-4 mr-1" />}
-                    {bot.status === "active" ? "Pause" : "Start"}
-                  </Button>
-                  <Button size="sm" variant="secondary" className="flex-1" onClick={() => { setEditingChatbot(bot); setIsModalOpen(true); }}>
-                    <Settings className="w-4 h-4 mr-1" />
-                    Edit
-                  </Button>
-                </div>
-              </div>
             </CardContent>
           </Card>
         ))}
@@ -273,7 +228,7 @@ const ChatbotsView = () => {
             <p className="text-sm text-muted-foreground mb-4">
               {searchQuery ? `No chatbots match "${searchQuery}"` : "Get started by creating your first chatbot"}
             </p>
-            <Button>
+            <Button onClick={openCreateModal}>
               <Plus className="w-4 h-4 mr-2" />
               Create Chatbot
             </Button>
@@ -281,12 +236,13 @@ const ChatbotsView = () => {
         </Card>
       )}
 
+      {/* Edit/Create Dialog */}
       <Dialog open={isModalOpen} onOpenChange={setIsModalOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>{editingChatbot ? "Edit Chatbot" : "Create Chatbot"}</DialogTitle>
+            <DialogTitle>{editingChatbot?.id ? "Edit Chatbot" : "Create Chatbot"}</DialogTitle>
             <DialogDescription>
-              {editingChatbot ? "Edit the details of your chatbot." : "Create a new chatbot to engage with your users."}
+              {editingChatbot?.id ? "Edit the details of your chatbot." : "Create a new chatbot to engage with your users."}
             </DialogDescription>
           </DialogHeader>
           <div className="grid gap-4 py-4">
@@ -294,38 +250,49 @@ const ChatbotsView = () => {
               <label htmlFor="name" className="text-right">
                 Name
               </label>
-              <Input id="name" value={editingChatbot?.name || ""} className="col-span-3" />
+              <Input id="name" value={editingChatbot?.name || ""} onChange={handleInputChange} className="col-span-3" />
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
               <label htmlFor="description" className="text-right">
                 Description
               </label>
-              <Input id="description" value={editingChatbot?.description || ""} className="col-span-3" />
+              <Input id="description" value={editingChatbot?.description || ""} onChange={handleInputChange} className="col-span-3" />
             </div>
             <div className="grid grid-cols-4 items-center gap-4">
               <label htmlFor="model" className="text-right">
                 Model
               </label>
-              <Input id="model" value={editingChatbot?.model || ""} className="col-span-3" />
+              <Select value={editingChatbot?.model} onValueChange={handleModelChange}>
+                  <SelectTrigger className="col-span-3">
+                      <SelectValue placeholder="Select a model" />
+                  </SelectTrigger>
+                  <SelectContent>
+                      {modelOptions.map(model => (
+                          <SelectItem key={model} value={model}>{model}</SelectItem>
+                      ))}
+                  </SelectContent>
+              </Select>
             </div>
           </div>
           <DialogFooter>
+            <Button variant="outline" onClick={() => setIsModalOpen(false)}>Cancel</Button>
             <Button type="submit" onClick={handleSave}>Save changes</Button>
           </DialogFooter>
         </DialogContent>
       </Dialog>
 
+      {/* Delete Confirmation Dialog */}
       <AlertDialog open={isDeleteDialogOpen} onOpenChange={setIsDeleteDialogOpen}>
         <AlertDialogContent>
           <AlertDialogHeader>
             <AlertDialogTitle>Are you sure?</AlertDialogTitle>
             <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete your chatbot and remove your data from our servers.
+              This action cannot be undone. This will permanently delete the chatbot.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>
             <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={handleDelete}>Continue</AlertDialogAction>
+            <AlertDialogAction onClick={handleDeleteConfirm}>Continue</AlertDialogAction>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>

@@ -3,7 +3,6 @@ import {
   Menu,
   Search,
   Grid3X3,
-  Bell,
   Globe,
   Bot,
   Settings,
@@ -26,6 +25,7 @@ import { Input } from '@/components/ui/input';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
 import { ThemeToggle } from './ThemeToggle';
 import TheSidebar from './TheSidebar';
+import NotificationCenter from '../notifications/NotificationCenter';
 
 const TheHeader = () => {
   return (
@@ -83,13 +83,7 @@ const TheHeader = () => {
         </Button>
 
         {/* Notifications */}
-        <Button variant="ghost" size="icon" className="relative hover:bg-muted/50">
-          <Bell className="h-5 w-5" />
-          <span className="absolute -top-1 -right-1 flex h-5 w-5 items-center justify-center rounded-full bg-gradient-to-r from-red-500 to-red-600 text-xs font-medium text-white shadow-sm">
-            5
-          </span>
-          <span className="sr-only">Notifications</span>
-        </Button>
+        <NotificationCenter />
 
         {/* Language Selector */}
         <DropdownMenu>

@@ -9,9 +9,11 @@ import { RouterProvider } from 'react-router-dom';
 import { useAuthStore } from '@/store/authStore';
 import { checkForUpdates } from '@/utils/update';
 import config from '@/config';
+import { initGA } from '@/utils/analytics';
 
 // Layouts
 import AdminLayout from '@/layouts/AdminLayout';
+import RootLayout from '@/layouts/RootLayout';
 
 // Views
 import LoginView from '@/views/LoginView';
@@ -21,7 +23,6 @@ import DocsView from '@/views/DocsView';
 import PricingView from '@/views/PricingView';
 import DashboardView from '@/views/DashboardView';
 import AnalyticsView from '@/views/AnalyticsView';
-import ErrorView from '@/views/ErrorView';
 import NotFoundView from '@/views/NotFoundView';
 import AssistantsView from '@/views/AssistantsView';
 import ProfileView from '@/views/ProfileView';
@@ -97,160 +98,166 @@ const ProtectedRoute: React.FC = () => {
 
 // Define routes
 const AppRouter: React.FC = () => {
-  // Check for updates when router is initialized
-  React.useEffect(() => {
+  // Initialize GA and check for updates when router is initialized
+  useEffect(() => {
+    initGA();
     if(config.APP_VERSION){
         checkForUpdates(config.APP_VERSION);
     }
   }, []);
 
   const router = createBrowserRouter([
-    // Public Routes
     {
-      path: '/login',
-      element: <LoginView />,
-    },
-    {
-      path: '/register',
-      element: <RegisterView />,
-    },
-    {
-      path: '/forgot-password',
-      element: <ForgotPasswordView />,
-    },
-
-    // Protected Routes with Admin Layout
-    {
-      path: '/',
-      element: <ProtectedRoute />,
+      element: <RootLayout />,
       children: [
+        // Public Routes
         {
-          element: <AdminLayout />,
+          path: '/login',
+          element: <LoginView />,
+        },
+        {
+          path: '/register',
+          element: <RegisterView />,
+        },
+        {
+          path: '/forgot-password',
+          element: <ForgotPasswordView />,
+        },
+
+        // Protected Routes with Admin Layout
+        {
+          path: '/',
+          element: <ProtectedRoute />,
           children: [
-            // Default route - redirect to dashboard as home
             {
-              index: true,
-              element: <Navigate to="/dashboard" replace />,
-            },
+              element: <AdminLayout />,
+              children: [
+                // Default route - redirect to dashboard as home
+                {
+                  index: true,
+                  element: <Navigate to="/dashboard" replace />,
+                },
 
-            // Main application routes
-            {
-              path: 'dashboard',
-              element: <DashboardView />,
-            },
-            {
-              path: 'dashboard/analytics',
-              element: <AnalyticsView />,
-            },
-            {
-              path: 'assistants',
-              element: <AssistantsView />,
-            },
-            {
-              path: 'agents',
-              element: <AgentsView />,
-            },
-            {
-              path: 'chatbots',
-              element: <ChatbotsView />,
-            },
-            {
-              path: 'conversations',
-              element: <ConversationsView />,
-            },
-            {
-              path: 'bot-analytics',
-              element: <BotAnalyticsView />,
-            },
-            {
-              path: 'bot-training',
-              element: <BotTrainingView />,
-            },
-            {
-              path: 'chatbots-table',
-              element: <ChatbotsView />,
-            },
-            {
-              path: 'docs',
-              element: <DocsView />,
-            },
-            {
-              path: 'pricing',
-              element: <PricingView />,
-            },
-            {
-              path: 'profile',
-              element: <ProfileView />,
-            },
-            {
-              path: 'settings',
-              element: <SettingsView />,
-            },
-            {
-              path: 'settings/notifications',
-              element: <NotificationSettingsView />,
-            },
-            {
-              path: 'users',
-              element: <UsersView />,
-            },
-            {
-              path: 'billing',
-              element: <BillingView />,
-            },
-            {
-              path: 'api-keys',
-              element: <ApiKeysView />,
-            },
-            {
-              path: 'integrations',
-              element: <IntegrationsView />,
-            },
-            {
-              path: 'live-chat',
-              element: <LiveChatView />,
-            },
-            {
-              path: 'leads',
-              element: <LeadsView />,
-            },
-            { path: 'ecommerce', element: <ECommerceView /> },
-            { path: 'front-pages', element: <FrontPagesView /> },
-            { path: 'calendar', element: <CalendarView /> },
-            { path: 'kanban', element: <KanbanView /> },
-            { path: 'chats', element: <ChatsView /> },
-            { path: 'email', element: <EmailView /> },
-            { path: 'notes', element: <NotesView /> },
-            { path: 'contacts', element: <ContactsView /> },
-            { path: 'invoice', element: <InvoiceView /> },
+                // Main application routes
+                {
+                  path: 'dashboard',
+                  element: <DashboardView />,
+                },
+                {
+                  path: 'dashboard/analytics',
+                  element: <AnalyticsView />,
+                },
+                {
+                  path: 'assistants',
+                  element: <AssistantsView />,
+                },
+                {
+                  path: 'agents',
+                  element: <AgentsView />,
+                },
+                {
+                  path: 'chatbots',
+                  element: <ChatbotsView />,
+                },
+                {
+                  path: 'conversations',
+                  element: <ConversationsView />,
+                },
+                {
+                  path: 'bot-analytics',
+                  element: <BotAnalyticsView />,
+                },
+                {
+                  path: 'bot-training',
+                  element: <BotTrainingView />,
+                },
+                {
+                  path: 'chatbots-table',
+                  element: <ChatbotsView />,
+                },
+                {
+                  path: 'docs',
+                  element: <DocsView />,
+                },
+                {
+                  path: 'pricing',
+                  element: <PricingView />,
+                },
+                {
+                  path: 'profile',
+                  element: <ProfileView />,
+                },
+                {
+                  path: 'settings',
+                  element: <SettingsView />,
+                },
+                {
+                  path: 'settings/notifications',
+                  element: <NotificationSettingsView />,
+                },
+                {
+                  path: 'users',
+                  element: <UsersView />,
+                },
+                {
+                  path: 'billing',
+                  element: <BillingView />,
+                },
+                {
+                  path: 'api-keys',
+                  element: <ApiKeysView />,
+                },
+                {
+                  path: 'integrations',
+                  element: <IntegrationsView />,
+                },
+                {
+                  path: 'live-chat',
+                  element: <LiveChatView />,
+                },
+                {
+                  path: 'leads',
+                  element: <LeadsView />,
+                },
+                { path: 'ecommerce', element: <ECommerceView /> },
+                { path: 'front-pages', element: <FrontPagesView /> },
+                { path: 'calendar', element: <CalendarView /> },
+                { path: 'kanban', element: <KanbanView /> },
+                { path: 'chats', element: <ChatsView /> },
+                { path: 'email', element: <EmailView /> },
+                { path: 'notes', element: <NotesView /> },
+                { path: 'contacts', element: <ContactsView /> },
+                { path: 'invoice', element: <InvoiceView /> },
 
-            // UI Elements routes
-            {
-              path: 'elements/ui',
-              element: <UIElementsView />,
-            },
-            {
-              path: 'elements/tables',
-              element: <TablesView />,
-            },
-            {
-              path: 'elements/icons',
-              element: <UIElementsView />,
+                // UI Elements routes
+                {
+                  path: 'elements/ui',
+                  element: <UIElementsView />,
+                },
+                {
+                  path: 'elements/tables',
+                  element: <TablesView />,
+                },
+                {
+                  path: 'elements/icons',
+                  element: <UIElementsView />,
+                },
+              ],
             },
           ],
         },
-      ],
-    },
 
-    // 404 Not Found route
-    {
-      path: '/404',
-      element: <NotFoundView />,
-    },
-    // Catch-all 404
-    {
-      path: '*',
-      element: <NotFoundView />,
+        // 404 Not Found route
+        {
+          path: '/404',
+          element: <NotFoundView />,
+        },
+        // Catch-all 404
+        {
+          path: '*',
+          element: <NotFoundView />,
+        },
+      ],
     },
   ]);
 

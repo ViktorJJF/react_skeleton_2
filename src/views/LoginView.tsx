@@ -5,9 +5,10 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
-import { Eye, EyeOff, Mail, Lock, Bot, ArrowRight, Github, Chrome, Sparkles } from 'lucide-react';
+import { Eye, EyeOff, Mail, Lock, Bot, ArrowRight, Github, Sparkles } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { useAuthStore } from '@/store/authStore';
+import GoogleLoginButton from '@/components/auth/GoogleLoginButton';
 
 const LoginView: React.FC = () => {
   const [email, setEmail] = useState('admin@aipanel.com');
@@ -39,7 +40,11 @@ const LoginView: React.FC = () => {
       
       // For demo purposes, accept any email/password
       if (email && password) {
-        login('demo-token-123');
+        login({
+          name: 'Demo User',
+          email: email,
+          token: 'demo-token-123',
+        });
         toast({
           title: "Welcome back! 🎉",
           description: "Successfully logged in to AI Panel.",
@@ -53,13 +58,6 @@ const LoginView: React.FC = () => {
         });
       }
     }, 1500);
-  };
-
-  const handleSocialLogin = (provider: string) => {
-    toast({
-      title: `${provider} login`,
-      description: `${provider} login functionality would be implemented here.`,
-    });
   };
 
   const handleDemoLogin = () => {
@@ -123,17 +121,9 @@ const LoginView: React.FC = () => {
           <CardContent className="space-y-4">
             {/* Social Login Buttons */}
             <div className="grid grid-cols-2 gap-3">
+              <GoogleLoginButton />
               <Button
                 variant="outline"
-                onClick={() => handleSocialLogin('Google')}
-                className="gap-2 hover:bg-blue-50 dark:hover:bg-blue-950/20"
-              >
-                <Chrome className="h-4 w-4" />
-                Google
-              </Button>
-              <Button
-                variant="outline"
-                onClick={() => handleSocialLogin('GitHub')}
                 className="gap-2 hover:bg-gray-50 dark:hover:bg-gray-950/20"
               >
                 <Github className="h-4 w-4" />

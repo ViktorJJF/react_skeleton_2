@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { XAxis, YAxis, Tooltip, ResponsiveContainer, AreaChart, Area } from 'recharts';
 import { Bot, MessageCircle, Users, TrendingUp, Activity, Target } from 'lucide-react';
 import ViewComponent from '@/components/layout/TheView';
+import { useNotifications } from '@/hooks/useNotifications';
+import { useAnalytics } from '@/hooks/useAnalytics';
 
 const statCards = [
   { title: "Active Bots", value: "12", icon: Bot, change: "+2", color: "text-primary" },
@@ -35,6 +37,40 @@ const topIntents = [
 ];
 
 const DashboardView = () => {
+  const { sendToast, sendBanner, sendNotification } = useNotifications();
+  const { trackCustomEvent } = useAnalytics();
+
+  useEffect(() => {
+    // This is for demonstration purposes. 
+    // In a real application, these would be triggered by actual events.
+
+    // Send a toast notification
+    sendToast('success', {
+      title: 'Dashboard Loaded',
+      description: 'All your metrics are up-to-date.',
+    });
+
+    // Send some persistent notifications for the center
+    sendNotification({
+      type: 'warning',
+      title: 'High API Usage',
+      description: 'Your GPT-4 API usage is approaching its limit for this month.',
+    });
+
+    sendNotification({
+      type: 'info',
+      title: 'New Integration Available',
+      description: 'You can now connect your account with Slack for real-time alerts.',
+    });
+    
+  }, [sendToast, sendBanner, sendNotification]);
+
+  const handleCreateBotClick = () => {
+    trackCustomEvent('Dashboard', 'Click', 'Create New Bot Button');
+    // Add logic to open the create bot modal here
+  };
+
+
   return (
     <ViewComponent
       title="Dashboard"
@@ -54,7 +90,7 @@ const DashboardView = () => {
               <DropdownMenuItem>Last 90 days</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-          <Button>
+          <Button onClick={handleCreateBotClick}>
             <Bot className="w-4 h-4 mr-2" />
             Create New Bot
           </Button>
