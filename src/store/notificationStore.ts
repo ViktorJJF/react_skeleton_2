@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import type { Banner, Notification } from "@/types/notification";
+import type { Banner, Notification } from "@/types/common/notification";
 import { v4 as uuidv4 } from "uuid";
 
 interface NotificationState {

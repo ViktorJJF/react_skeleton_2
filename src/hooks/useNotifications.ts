@@ -4,7 +4,7 @@ import type {
   Banner,
   Notification,
   NotificationType,
-} from "@/types/notification";
+} from "@/types/common/notification";
 import { useCallback } from "react";
 
 type ToastPayload = {

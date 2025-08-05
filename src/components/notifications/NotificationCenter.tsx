@@ -10,7 +10,7 @@ import {
   DropdownMenuSeparator 
 } from '@/components/ui/dropdown-menu';
 import { Badge } from '@/components/ui/badge';
-import { Notification, NotificationType } from '@/types/notification';
+import { Notification, NotificationType } from '@/types/common/notification';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { formatDistanceToNow } from 'date-fns';
 
