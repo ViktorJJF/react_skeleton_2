@@ -48,7 +48,7 @@ import NotesView from '@/views/NotesView';
 import ContactsView from '@/views/ContactsView';
 import InvoiceView from '@/views/InvoiceView';
 import ConversationsView from '@/views/ConversationsView';
-import ChatbotsView from '@/views/Chatbots';
+import BotsView from '@/views/BotsView';
 import BotAnalyticsView from '@/views/BotAnalyticsView';
 import BotTrainingView from '@/views/BotTrainingView';
 
@@ -157,7 +157,7 @@ const AppRouter: React.FC = () => {
                 },
                 {
                   path: 'chatbots',
-                  element: <ChatbotsView />,
+                  element: <BotsView />,
                 },
                 {
                   path: 'conversations',
@@ -172,8 +172,8 @@ const AppRouter: React.FC = () => {
                   element: <BotTrainingView />,
                 },
                 {
-                  path: 'chatbots-table',
-                  element: <ChatbotsView />,
+                  path: 'bots-table',
+                  element: <BotsView />,
                 },
                 {
                   path: 'docs',

@@ -13,23 +13,23 @@ import type {
 
 export default {
   list(query: IBotListQuery): AxiosPromise<IListBotsResponse> {
-    return axios.get(config.BACKEND_BASE_URL + "/api/bots", {
+    return axios.get(config.BACKEND_BASE_URL + "/api/v1/bots", {
       params: query,
     });
   },
   listOne(id: string): AxiosPromise<IListOneBotResponse> {
-    return axios.get(config.BACKEND_BASE_URL + "/api/bots/" + id);
+    return axios.get(config.BACKEND_BASE_URL + "/api/v1/bots/" + id);
   },
   update(
     id: string,
     payload: IUpdateBotRequest
   ): AxiosPromise<IUpdateBotResponse> {
-    return axios.put(config.BACKEND_BASE_URL + `/api/bots/${id}`, payload);
+    return axios.put(config.BACKEND_BASE_URL + `/api/v1/bots/${id}`, payload);
   },
   create(payload: ICreateBotRequest): AxiosPromise<ICreateBotResponse> {
-    return axios.post(config.BACKEND_BASE_URL + "/api/bots", payload);
+    return axios.post(config.BACKEND_BASE_URL + "/api/v1/bots", payload);
   },
   delete(id: string): AxiosPromise<IDeleteBotResponse> {
-    return axios.delete(config.BACKEND_BASE_URL + `/api/bots/${id}`);
+    return axios.delete(config.BACKEND_BASE_URL + `/api/v1/bots/${id}`);
   },
 };

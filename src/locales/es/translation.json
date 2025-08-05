@@ -39,7 +39,16 @@
     "goBack": "Volver",
     "noData": "No hay datos disponibles",
     "noResults": "No se encontraron resultados",
-    "openMenu": "Abrir menú"
+    "openMenu": "Abrir menú",
+    "active": "Activo",
+    "inactive": "Inactivo",
+    "created": "Creado",
+    "pagination": {
+      "showing": "Mostrando {start} a {end} de {total} resultados",
+      "previous": "Anterior",
+      "next": "Siguiente",
+      "pageOf": "Página {current} de {total}"
+    }
   },
   "dashboard": {
     "title": "Tablero",
@@ -81,6 +90,32 @@
     "notes": "Notas",
     "contacts": "Contactos",
     "invoice": "Factura"
+  },
+  "bots": {
+    "title": "Bots",
+    "description": "Gestiona tus bots de IA y sus configuraciones",
+    "createBot": "Crear Bot",
+    "editBot": "Editar Bot",
+    "deleteBot": "Eliminar Bot",
+    "searchPlaceholder": "Buscar bots...",
+    "namePlaceholder": "Ingresa el nombre del bot",
+    "noBotsFound": "No se encontraron bots",
+    "noBotsMatch": "Ningún bot coincide con \"{query}\"",
+    "getStartedMessage": "Comienza creando tu primer bot",
+    "created": "Bot Creado",
+    "updated": "Bot Actualizado",
+    "deleted": "Bot Eliminado",
+    "createSuccess": "\"{name}\" ha sido creado exitosamente.",
+    "updateSuccess": "\"{name}\" ha sido actualizado exitosamente.",
+    "deleteSuccess": "\"{name}\" ha sido eliminado.",
+    "deleteConfirmation": "¿Estás seguro?",
+    "deleteWarning": "Esta acción no se puede deshacer. Esto eliminará permanentemente el bot y todos sus datos.",
+    "editDescription": "Edita los detalles de tu bot.",
+    "createDescription": "Crea un nuevo bot para interactuar con tus usuarios.",
+    "validation": {
+      "invalid": "Datos Inválidos",
+      "fixErrors": "Por favor corrige los errores e intenta de nuevo."
+    }
   },
   "chatbots": {
     "title": "Chatbots",

@@ -39,7 +39,16 @@
     "goBack": "Go Back",
     "noData": "No data available",
     "noResults": "No results found",
-    "openMenu": "Open menu"
+    "openMenu": "Open menu",
+    "active": "Active",
+    "inactive": "Inactive",
+    "created": "Created",
+    "pagination": {
+      "showing": "Showing {start} to {end} of {total} results",
+      "previous": "Previous",
+      "next": "Next",
+      "pageOf": "Page {current} of {total}"
+    }
   },
   "dashboard": {
     "title": "Dashboard",
@@ -81,6 +90,32 @@
     "notes": "Notes",
     "contacts": "Contacts",
     "invoice": "Invoice"
+  },
+  "bots": {
+    "title": "Bots",
+    "description": "Manage your AI bots and their configurations",
+    "createBot": "Create Bot",
+    "editBot": "Edit Bot",
+    "deleteBot": "Delete Bot",
+    "searchPlaceholder": "Search bots...",
+    "namePlaceholder": "Enter bot name",
+    "noBotsFound": "No bots found",
+    "noBotsMatch": "No bots match \"{query}\"",
+    "getStartedMessage": "Get started by creating your first bot",
+    "created": "Bot Created",
+    "updated": "Bot Updated",
+    "deleted": "Bot Deleted",
+    "createSuccess": "\"{name}\" has been successfully created.",
+    "updateSuccess": "\"{name}\" has been successfully updated.",
+    "deleteSuccess": "\"{name}\" has been deleted.",
+    "deleteConfirmation": "Are you sure?",
+    "deleteWarning": "This action cannot be undone. This will permanently delete the bot and all its data.",
+    "editDescription": "Edit the details of your bot.",
+    "createDescription": "Create a new bot to engage with your users.",
+    "validation": {
+      "invalid": "Invalid Data",
+      "fixErrors": "Please fix the errors and try again."
+    }
   },
   "chatbots": {
     "title": "Chatbots",
