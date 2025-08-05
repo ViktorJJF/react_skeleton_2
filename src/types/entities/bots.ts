@@ -1,5 +1,6 @@
-import type { IApiResponse, IPaginatedResponse } from "@/types/api";
-import type { IBaseQueryParams } from "@/types/api";
+import type { IApiResponse } from "@/types/api/response";
+import type { IPaginatedResponse } from "@/types/api/pagination";
+import type { IBaseQueryParams } from "@/types/api/queryParams";
 
 // Base Bot interface matching the API response
 export interface IBot {
@@ -30,7 +31,7 @@ export type ICreateBotResponse = IApiResponse<IBot>;
 
 export type IUpdateBotResponse = IApiResponse<IBot>;
 
-export type IDeleteBotResponse = IApiResponse<void>;
+export type IDeleteBotResponse = IApiResponse<IBot>;
 
 // Query parameters for list endpoint
 export type IBotListQuery = IBaseQueryParams;
