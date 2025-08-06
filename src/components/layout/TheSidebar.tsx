@@ -28,7 +28,7 @@ const Sidebar = () => {
   
   const homeNav = [{ name: t('sidebar.dashboard'), href: '/dashboard', icon: Home }];
   const saasNav = [
-    { name: t('sidebar.chatbots'), href: '/chatbots', icon: Bot },
+    { name: t('sidebar.bots'), href: '/bots', icon: Bot },
     { name: t('sidebar.conversations'), href: '/conversations', icon: MessageCircle },
     { name: t('sidebar.botAnalytics'), href: '/bot-analytics', icon: BarChart },
     { name: t('sidebar.botTraining'), href: '/bot-training', icon: BrainCircuit },

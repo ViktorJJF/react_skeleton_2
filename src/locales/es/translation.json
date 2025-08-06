@@ -44,10 +44,10 @@
     "inactive": "Inactivo",
     "created": "Creado",
     "pagination": {
-      "showing": "Mostrando {start} a {end} de {total} resultados",
+      "showing": "Mostrando {{start}} a {{end}} de {{total}} resultados",
       "previous": "Anterior",
       "next": "Siguiente",
-      "pageOf": "Página {current} de {total}"
+      "pageOf": "Página {{current}} de {{total}}"
     }
   },
   "dashboard": {
@@ -64,7 +64,7 @@
   },
   "sidebar": {
     "dashboard": "Tablero",
-    "chatbots": "Chatbots",
+    "bots": "Bots",
     "analytics": "Analíticas",
     "conversations": "Conversaciones",
     "users": "Usuarios",

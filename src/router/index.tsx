@@ -156,7 +156,7 @@ const AppRouter: React.FC = () => {
                   element: <AgentsView />,
                 },
                 {
-                  path: 'chatbots',
+                  path: 'bots',
                   element: <BotsView />,
                 },
                 {
