@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useRegisterSW } from 'virtual:pwa-register/react';
-import { useToast } from '@/hooks/use-toast';
+import { useToast } from '@/hooks/ui/use-toast';
 import { Button } from '@/components/ui/button';
 
 export const PWAUpdateHandler = () => {

@@ -32,16 +32,20 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { ChevronDown, Search, Trash2, Settings } from "lucide-react"
+import { ChevronDown, Search, Trash2, Settings, Loader2 } from "lucide-react"
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
+  onRowSelectionChange?: (selectedItems: TData[]) => void
+  isDeleting?: boolean
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
+  onRowSelectionChange,
+  isDeleting = false,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
@@ -68,6 +72,13 @@ export function DataTable<TData, TValue>({
   })
 
   const selectedRows = table.getFilteredSelectedRowModel().rows.length
+  const selectedItems = table.getFilteredSelectedRowModel().rows.map(row => row.original)
+  
+  React.useEffect(() => {
+    if (onRowSelectionChange) {
+      onRowSelectionChange(selectedItems)
+    }
+  }, [rowSelection, onRowSelectionChange])
 
   return (
     <div className="space-y-4">
@@ -87,14 +98,6 @@ export function DataTable<TData, TValue>({
           {selectedRows > 0 && (
             <div className="flex items-center gap-2 text-sm text-muted-foreground">
               <span>{selectedRows} of {table.getFilteredRowModel().rows.length} row(s) selected</span>
-              <Button
-                variant="outline"
-                size="sm"
-                className="h-8 gap-2 text-destructive hover:text-destructive"
-              >
-                <Trash2 className="h-4 w-4" />
-                Delete Selected
-              </Button>
             </div>
           )}
           <DropdownMenu>

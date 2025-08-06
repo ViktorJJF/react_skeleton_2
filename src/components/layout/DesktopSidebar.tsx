@@ -1,5 +1,5 @@
 import React from 'react';
-import TheSidebar from './TheSidebar';
+import TheSidebar from '@/components/layout/TheSidebar';
 
 const DesktopSidebar = () => {
   return (

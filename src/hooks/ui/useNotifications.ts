@@ -1,4 +1,4 @@
-import { useToast } from "@/hooks/use-toast";
+import { useToast } from "@/hooks/ui/use-toast";
 import { useNotificationStore } from "@/store/notificationStore";
 import type {
   Banner,

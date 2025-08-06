@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import config from "@/config";
-import { useNotifications } from "./useNotifications";
+import { useNotifications } from "@/hooks/ui/useNotifications";
 
 const CHECK_INTERVAL = 1000 * 60 * 5; // Check every 5 minutes
 

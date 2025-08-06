@@ -22,8 +22,7 @@ import ForgotPasswordView from '@/views/ForgotPasswordView';
 import DashboardView from '@/views/DashboardView';
 import NotFoundView from '@/views/NotFoundView';
 import ProfileView from '@/views/ProfileView';
-import FrontPagesView from '@/views/FrontPagesView';
-import BotsView from '@/views/BotsView';
+import { BotsView } from '@/views/BotsView/BotsView';
 
 // Authentication guard for protected routes
 const ProtectedRoute: React.FC = () => {
@@ -118,10 +117,6 @@ const AppRouter: React.FC = () => {
                 },
                 {
                   path: 'bots',
-                  element: <BotsView />,
-                },
-                {
-                  path: 'bots-table',
                   element: <BotsView />,
                 },
                 {

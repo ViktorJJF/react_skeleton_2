@@ -2,7 +2,7 @@ import React from 'react';
 import { useGoogleLogin, GoogleLogin } from '@react-oauth/google';
 import { Button } from '@/components/ui/button';
 import { useAuthStore } from '@/store/authStore';
-import { useNotifications } from '@/hooks/useNotifications';
+import { useNotifications } from '@/hooks/ui/useNotifications';
 
 // Define the shape of the user profile from Google
 interface GoogleUserProfile {

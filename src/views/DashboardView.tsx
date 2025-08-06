@@ -6,8 +6,8 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigge
 import { XAxis, YAxis, Tooltip, ResponsiveContainer, AreaChart, Area } from 'recharts';
 import { Bot, MessageCircle, Users, TrendingUp, Activity, Target } from 'lucide-react';
 import ViewComponent from '@/components/layout/TheView';
-import { useNotifications } from '@/hooks/useNotifications';
-import { useAnalytics } from '@/hooks/useAnalytics';
+import { useNotifications } from '@/hooks/ui/useNotifications';
+import { useAnalytics } from '@/hooks/api/useAnalytics';
 
 const statCards = [
   { title: "Active Bots", value: "12", icon: Bot, change: "+2", color: "text-primary" },

@@ -22,10 +22,10 @@ import {
 } from '@/components/ui/dropdown-menu';
 import { Input } from '@/components/ui/input';
 import { Sheet, SheetContent, SheetTrigger } from '@/components/ui/sheet';
-import { ThemeToggle } from './ThemeToggle';
-import TheSidebar from './TheSidebar';
-import NotificationCenter from '../notifications/NotificationCenter';
-import LanguageSwitcher from './LanguageSwitcher';
+import { ThemeToggle } from '@/components/layout/ThemeToggle';
+import TheSidebar from '@/components/layout/TheSidebar';
+import NotificationCenter from '@/components/notifications/NotificationCenter';
+import LanguageSwitcher from '@/components/layout/LanguageSwitcher';
 
 const TheHeader = () => {
   return (

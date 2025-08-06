@@ -9,6 +9,12 @@ import type {
   IListOneBotResponse,
   IUpdateBotRequest,
   IUpdateBotResponse,
+  IBulkCreateBotsRequest,
+  IBulkCreateBotsResponse,
+  IBulkUpdateBotsRequest,
+  IBulkUpdateBotsResponse,
+  IBulkDeleteBotsRequest,
+  IBulkDeleteBotsResponse,
 } from "@/types/entities/bots";
 
 export default {
@@ -31,5 +37,24 @@ export default {
   },
   delete(id: string): AxiosPromise<IDeleteBotResponse> {
     return axios.delete(config.BACKEND_BASE_URL + `/api/v1/bots/${id}`);
+  },
+
+  // Bulk operations
+  bulkCreate(
+    payload: IBulkCreateBotsRequest
+  ): AxiosPromise<IBulkCreateBotsResponse> {
+    return axios.post(config.BACKEND_BASE_URL + "/api/v1/bots/bulk", payload);
+  },
+  bulkUpdate(
+    payload: IBulkUpdateBotsRequest
+  ): AxiosPromise<IBulkUpdateBotsResponse> {
+    return axios.put(config.BACKEND_BASE_URL + "/api/v1/bots/bulk", payload);
+  },
+  bulkDelete(
+    payload: IBulkDeleteBotsRequest
+  ): AxiosPromise<IBulkDeleteBotsResponse> {
+    return axios.delete(config.BACKEND_BASE_URL + "/api/v1/bots/bulk", {
+      data: payload,
+    });
   },
 };
