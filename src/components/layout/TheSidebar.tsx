@@ -29,23 +29,8 @@ const Sidebar = () => {
   const homeNav = [{ name: t('sidebar.dashboard'), href: '/dashboard', icon: Home }];
   const saasNav = [
     { name: t('sidebar.bots'), href: '/bots', icon: Bot },
-    { name: t('sidebar.conversations'), href: '/conversations', icon: MessageCircle },
-    { name: t('sidebar.botAnalytics'), href: '/bot-analytics', icon: BarChart },
-    { name: t('sidebar.botTraining'), href: '/bot-training', icon: BrainCircuit },
-    { name: t('sidebar.chatbotsTable'), href: '/chatbots-table', icon: Table },
-    { name: t('sidebar.docs'), href: '/docs', icon: BookOpen },
-    { name: t('sidebar.pricing'), href: '/pricing', icon: DollarSign },
   ];
   const appsNav = [
-    { name: t('sidebar.ecommerce'), href: '/ecommerce', icon: ShoppingCart, sub: true },
-    { name: t('sidebar.frontPages'), href: '/front-pages', icon: LayoutTemplate, sub: true },
-    { name: t('sidebar.calendar'), href: '/calendar', icon: Calendar },
-    { name: t('sidebar.kanban'), href: '/kanban', icon: KanbanSquare },
-    { name: t('sidebar.chats'), href: '/chats', icon: MessageSquare },
-    { name: t('sidebar.email'), href: '/email', icon: Mail },
-    { name: t('sidebar.notes'), href: '/notes', icon: StickyNote },
-    { name: t('sidebar.contacts'), href: '/contacts', icon: User },
-    { name: t('sidebar.invoice'), href: '/invoice', icon: LayoutTemplate, sub: true },
   ];
 
   const activeLinkClass = "flex items-center gap-3 rounded-lg bg-primary text-primary-foreground px-3 py-2 transition-all shadow-lg";
@@ -79,43 +64,12 @@ const Sidebar = () => {
               </NavLink>
             ))}
             
-            <h3 className="my-4 px-2 text-xs font-semibold uppercase text-muted-foreground tracking-wider">{t('sidebar.saas')}</h3>
             {saasNav.map((item) => (
               <NavLink key={item.name} to={item.href} className={getNavLinkClass}>
                 <item.icon className="h-4 w-4" />
                 <span>{item.name}</span>
               </NavLink>
             ))}
-            
-            <h3 className="my-4 px-2 text-xs font-semibold uppercase text-muted-foreground tracking-wider">{t('sidebar.apps')}</h3>
-            {appsNav.map((item) =>
-              item.sub ? (
-                <DropdownMenu key={item.name}>
-                  <DropdownMenuTrigger asChild>
-                    <div className={`${inactiveLinkClass} justify-between cursor-pointer`}>
-                        <div className="flex items-center gap-3">
-                            <item.icon className="h-4 w-4" />
-                            <span>{item.name}</span>
-                        </div>
-                        <ChevronDown className="h-4 w-4" />
-                    </div>
-                  </DropdownMenuTrigger>
-                  <DropdownMenuContent className="w-56">
-                    <DropdownMenuItem>
-                      <NavLink to={item.href} className="flex items-center gap-2 w-full">
-                        <item.icon className="h-4 w-4" />
-                        <span>{item.name}</span>
-                      </NavLink>
-                    </DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              ) : (
-                <NavLink key={item.name} to={item.href} className={getNavLinkClass}>
-                  <item.icon className="h-4 w-4" />
-                  <span>{item.name}</span>
-                </NavLink>
-              )
-            )}
           </nav>
         </div>
         <div className="border-t p-4">

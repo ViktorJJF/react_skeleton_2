@@ -293,7 +293,7 @@
     "viewConversation": "View Conversation",
     "exportChat": "Export Chat",
     "markAsResolved": "Mark as Resolved",
-    "noConversationsMatch": "No conversations match \"{query}\"",
+    "noConversationsMatch": "No conversations match \"{{query}}\"",
     "noConversationsDescription": "Start engaging with your customers",
     "startFirstConversation": "Start First Conversation"
   },
@@ -329,7 +329,7 @@
     "channel": "Channel",
     "viewDetails": "View Details",
     "sendMessage": "Send Message",
-    "showingResults": "Showing {count} results"
+    "showingResults": "Showing {{count}} results"
   },
   "notifications": {
     "title": "Notifications",
@@ -339,7 +339,7 @@
     "smsNotifications": "SMS Notifications",
     "markAllAsRead": "Mark all as read",
     "clearAll": "Clear all",
-    "unreadCount": "{count} unread",
+    "unreadCount": "{{count}} unread",
     "noNotifications": "No notifications"
   }
 }

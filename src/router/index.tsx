@@ -19,38 +19,11 @@ import RootLayout from '@/layouts/RootLayout';
 import LoginView from '@/views/LoginView';
 import RegisterView from '@/views/RegisterView';
 import ForgotPasswordView from '@/views/ForgotPasswordView';
-import DocsView from '@/views/DocsView';
-import PricingView from '@/views/PricingView';
 import DashboardView from '@/views/DashboardView';
-import AnalyticsView from '@/views/AnalyticsView';
 import NotFoundView from '@/views/NotFoundView';
-import AssistantsView from '@/views/AssistantsView';
 import ProfileView from '@/views/ProfileView';
-import UIElementsView from '@/views/elements/UIElementsView';
-import TablesView from '@/views/elements/TablesView';
-import UsersView from '@/views/UsersView';
-import BillingView from '@/views/BillingView';
-import ApiKeysView from '@/views/ApiKeysView';
-import SettingsView from '@/views/SettingsView';
-import LiveChatView from '@/views/LiveChatView/LiveChatView';
-// Import new views
-import IntegrationsView from '@/views/IntegrationsView/IntegrationsView';
-import AgentsView from '@/views/AgentsView/AgentsView';
-import NotificationSettingsView from '@/views/NotificationSettingsView/NotificationSettingsView';
-import LeadsView from '@/views/LeadsView';
-import ECommerceView from '@/views/ECommerceView';
 import FrontPagesView from '@/views/FrontPagesView';
-import CalendarView from '@/views/CalendarView';
-import KanbanView from '@/views/KanbanView';
-import ChatsView from '@/views/ChatsView';
-import EmailView from '@/views/EmailView';
-import NotesView from '@/views/NotesView';
-import ContactsView from '@/views/ContactsView';
-import InvoiceView from '@/views/InvoiceView';
-import ConversationsView from '@/views/ConversationsView';
 import BotsView from '@/views/BotsView';
-import BotAnalyticsView from '@/views/BotAnalyticsView';
-import BotTrainingView from '@/views/BotTrainingView';
 
 // Authentication guard for protected routes
 const ProtectedRoute: React.FC = () => {
@@ -144,103 +117,16 @@ const AppRouter: React.FC = () => {
                   element: <DashboardView />,
                 },
                 {
-                  path: 'dashboard/analytics',
-                  element: <AnalyticsView />,
-                },
-                {
-                  path: 'assistants',
-                  element: <AssistantsView />,
-                },
-                {
-                  path: 'agents',
-                  element: <AgentsView />,
-                },
-                {
                   path: 'bots',
                   element: <BotsView />,
-                },
-                {
-                  path: 'conversations',
-                  element: <ConversationsView />,
-                },
-                {
-                  path: 'bot-analytics',
-                  element: <BotAnalyticsView />,
-                },
-                {
-                  path: 'bot-training',
-                  element: <BotTrainingView />,
                 },
                 {
                   path: 'bots-table',
                   element: <BotsView />,
                 },
                 {
-                  path: 'docs',
-                  element: <DocsView />,
-                },
-                {
-                  path: 'pricing',
-                  element: <PricingView />,
-                },
-                {
                   path: 'profile',
                   element: <ProfileView />,
-                },
-                {
-                  path: 'settings',
-                  element: <SettingsView />,
-                },
-                {
-                  path: 'settings/notifications',
-                  element: <NotificationSettingsView />,
-                },
-                {
-                  path: 'users',
-                  element: <UsersView />,
-                },
-                {
-                  path: 'billing',
-                  element: <BillingView />,
-                },
-                {
-                  path: 'api-keys',
-                  element: <ApiKeysView />,
-                },
-                {
-                  path: 'integrations',
-                  element: <IntegrationsView />,
-                },
-                {
-                  path: 'live-chat',
-                  element: <LiveChatView />,
-                },
-                {
-                  path: 'leads',
-                  element: <LeadsView />,
-                },
-                { path: 'ecommerce', element: <ECommerceView /> },
-                { path: 'front-pages', element: <FrontPagesView /> },
-                { path: 'calendar', element: <CalendarView /> },
-                { path: 'kanban', element: <KanbanView /> },
-                { path: 'chats', element: <ChatsView /> },
-                { path: 'email', element: <EmailView /> },
-                { path: 'notes', element: <NotesView /> },
-                { path: 'contacts', element: <ContactsView /> },
-                { path: 'invoice', element: <InvoiceView /> },
-
-                // UI Elements routes
-                {
-                  path: 'elements/ui',
-                  element: <UIElementsView />,
-                },
-                {
-                  path: 'elements/tables',
-                  element: <TablesView />,
-                },
-                {
-                  path: 'elements/icons',
-                  element: <UIElementsView />,
                 },
               ],
             },
