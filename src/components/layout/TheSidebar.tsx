@@ -1,27 +1,8 @@
 import { useTranslation } from 'react-i18next';
 import { NavLink } from 'react-router-dom';
-import {
-  Home,
-  ShoppingCart,
-  LayoutTemplate,
-  Calendar,
-  KanbanSquare,
-  Mail,
-  MessageSquare,
-  StickyNote,
-  User,
-  Power,
-  ChevronDown,
-  Bot,
-  MessageCircle,
-  BarChart,
-  BrainCircuit,
-  Table,
-  BookOpen,
-  DollarSign,
-} from 'lucide-react';
+import { Home, User, Power, Bot } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+// import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 
 const Sidebar = () => {
   const { t } = useTranslation();
@@ -30,8 +11,7 @@ const Sidebar = () => {
   const saasNav = [
     { name: t('sidebar.bots'), href: '/bots', icon: Bot },
   ];
-  const appsNav = [
-  ];
+  // const appsNav: Array<{ name: string; href: string; icon: any }> = [];
 
   const activeLinkClass = "flex items-center gap-3 rounded-lg bg-primary text-primary-foreground px-3 py-2 transition-all shadow-lg";
   const inactiveLinkClass = "flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:bg-primary/10 hover:text-primary";

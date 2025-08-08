@@ -1,10 +1,8 @@
 import { useCallback } from "react";
 import { useToast } from "@/hooks/ui/use-toast";
 import { useTranslation } from "react-i18next";
-import {
-  GlobalErrorHandler,
-  IErrorHandlerOptions,
-} from "@/services/errorHandler";
+import { GlobalErrorHandler } from "@/services/errorHandler";
+import type { IErrorHandlerOptions } from "@/types/api/errors";
 
 /**
  * Generic API client hook for handling common API operations

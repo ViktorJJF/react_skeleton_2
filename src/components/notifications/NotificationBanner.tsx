@@ -2,7 +2,7 @@ import React from 'react';
 import { useNotificationStore } from '@/store/notificationStore';
 import { Button } from '@/components/ui/button';
 import { X, Info, AlertTriangle, CheckCircle, Bell } from 'lucide-react';
-import { NotificationType } from '@/types/common/notification';
+import type { NotificationType } from '@/types/common/notification';
 
 const bannerIcons: Record<NotificationType, React.ReactNode> = {
   info: <Info className="w-5 h-5" />,

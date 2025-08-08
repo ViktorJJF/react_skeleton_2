@@ -26,19 +26,21 @@ export const useLogin = () => {
     rememberMe: false,
   });
 
-  const { loading: isLoggingIn, execute: executeLogin } = useApi({
+  const { isLoading: isLoggingIn, execute: executeLogin } = useApi({
     showErrorToast: false, // We handle errors manually
   });
 
   const validateField = useCallback(
-    (field: keyof LoginCredentials, value: any): string | null => {
+    (field: keyof LoginCredentials, value: unknown): string | null => {
       switch (field) {
         case "email":
-          if (!value) return "Email is required";
+          if (typeof value !== "string" || value.length === 0)
+            return "Email is required";
           if (!/\S+@\S+\.\S+/.test(value)) return "Please enter a valid email";
           return null;
         case "password":
-          if (!value) return "Password is required";
+          if (typeof value !== "string" || value.length === 0)
+            return "Password is required";
           if (value.length < 6) return "Password must be at least 6 characters";
           return null;
         default:
@@ -62,11 +64,14 @@ export const useLogin = () => {
   }, [formData, validateField]);
 
   const updateField = useCallback(
-    (field: keyof LoginCredentials, value: any) => {
-      setFormData((prev) => ({ ...prev, [field]: value }));
+    (field: keyof LoginCredentials, value: unknown) => {
+      setFormData((prev) => ({ ...prev, [field]: value as never }));
 
       // Clear field error when user starts typing
-      if (errors[field]) {
+      if (
+        field in errors &&
+        (errors as Record<string, string | undefined>)[field as string]
+      ) {
         setErrors((prev) => ({ ...prev, [field]: undefined }));
       }
     },
@@ -87,10 +92,13 @@ export const useLogin = () => {
       );
 
       return !!result;
-    } catch (error: any) {
+    } catch (error) {
       setErrors((prev) => ({
         ...prev,
-        general: error.message || "Login failed. Please try again.",
+        general:
+          error instanceof Error
+            ? error.message
+            : "Login failed. Please try again.",
       }));
       return false;
     }

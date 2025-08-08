@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useState } from 'react';
+import type { ReactNode } from 'react';
 
 export interface ViewConfig {
   title: string;
@@ -39,5 +40,5 @@ export const useViewConfig = (config: ViewConfig) => {
   React.useEffect(() => {
     setViewConfig(config);
     return () => setViewConfig(null);
-  }, [config.title, config.description, setViewConfig]);
+  }, [config, setViewConfig]);
 };

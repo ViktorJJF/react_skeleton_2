@@ -1,4 +1,4 @@
-import { NavigateFunction } from "react-router-dom";
+import type { NavigateFunction } from "react-router-dom";
 
 /**
  * Validates if a route exists in the application

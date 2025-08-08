@@ -1,5 +1,6 @@
 // Inspired by react-hot-toast library
 import * as React from "react";
+import type { ToastProps } from "@/components/ui/toast";
 
 type ToasterToast = ToastProps & {
   id: string;
@@ -11,15 +12,15 @@ type ToasterToast = ToastProps & {
 const TOAST_LIMIT = 1;
 const TOAST_REMOVE_DELAY = 1000000;
 
-type ToasterT = {
-  toasts: ToasterToast[];
-  toast: (toast: Omit<ToasterToast, "id">) => {
-    id: string;
-    dismiss: () => void;
-    update: (props: ToasterToast) => void;
-  };
-  dismiss: (toastId?: string) => void;
-};
+// type ToasterT = {
+//   toasts: ToasterToast[];
+//   toast: (toast: Omit<ToasterToast, "id">) => {
+//     id: string;
+//     dismiss: () => void;
+//     update: (props: ToasterToast) => void;
+//   };
+//   dismiss: (toastId?: string) => void;
+// };
 
 const actionTypes = {
   ADD_TOAST: "ADD_TOAST",

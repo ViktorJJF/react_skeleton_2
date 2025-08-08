@@ -1,4 +1,4 @@
-import React from 'react';
+// no React import needed
 import TheSidebar from '@/components/layout/TheSidebar';
 
 const DesktopSidebar = () => {

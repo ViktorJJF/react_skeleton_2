@@ -56,20 +56,20 @@ export const useApi = <T = any>(options: UseApiOptions = {}) => {
 
         onSuccess?.(result);
         return result;
-      } catch (error: any) {
+      } catch (error) {
         const errorMsg = handleApiError(error, errorMessage);
 
         setState({
           data: null,
           loading: false,
-          error: errorMsg,
+          error: errorMsg.message,
         });
 
         if (showErrorToast) {
           // Error toast is handled by handleApiError
         }
 
-        onError?.(errorMsg);
+        onError?.(errorMsg.message);
         return null;
       }
     },

@@ -1,7 +1,7 @@
 import React from 'react';
 import { useNotificationStore } from '@/store/notificationStore';
 import { Button } from '@/components/ui/button';
-import { Bell, Check, Trash2, Info, AlertTriangle, CheckCircle } from 'lucide-react';
+import { Bell, Trash2, Info, AlertTriangle, CheckCircle } from 'lucide-react';
 import { 
   DropdownMenu, 
   DropdownMenuContent, 
@@ -10,7 +10,7 @@ import {
   DropdownMenuSeparator 
 } from '@/components/ui/dropdown-menu';
 import { Badge } from '@/components/ui/badge';
-import { Notification, NotificationType } from '@/types/common/notification';
+import type { Notification, NotificationType } from '@/types/common/notification';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { formatDistanceToNow } from 'date-fns';
 

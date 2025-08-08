@@ -1,6 +1,6 @@
 import { AxiosError } from "axios";
 import { toast } from "@/hooks/ui/use-toast";
-import { IServiceError, IErrorHandlerOptions } from "@/types/api/errors";
+import type { IServiceError, IErrorHandlerOptions } from "@/types/api/errors";
 
 /**
  * Global error handler for API services

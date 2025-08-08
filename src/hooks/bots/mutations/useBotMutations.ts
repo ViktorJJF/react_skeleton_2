@@ -11,7 +11,7 @@ import {
   useUpdateEntityMutation,
   useDeleteEntityMutation,
 } from "@/hooks/api/useEntityMutations";
-import Bots from "@/models/bots";
+import Bots from "@/models/Bots";
 
 /**
  * Hook for creating a new bot with optimistic updates

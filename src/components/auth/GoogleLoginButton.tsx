@@ -1,7 +1,6 @@
 import React from 'react';
-import { useGoogleLogin, GoogleLogin } from '@react-oauth/google';
+import { useGoogleLogin } from '@react-oauth/google';
 import { Button } from '@/components/ui/button';
-import { useAuthStore } from '@/store/authStore';
 import { useNotifications } from '@/hooks/ui/useNotifications';
 
 // Define the shape of the user profile from Google
@@ -12,7 +11,6 @@ interface GoogleUserProfile {
 }
 
 const GoogleLoginButton: React.FC = () => {
-  const { login } = useAuthStore();
   const { sendToast } = useNotifications();
 
   const handleSuccess = async (tokenResponse: any) => {
@@ -32,19 +30,11 @@ const GoogleLoginButton: React.FC = () => {
       // to create or verify the user and get a session token (JWT).
       // For this example, we'll simulate a successful login.
 
-      const userData = {
-        name: userProfile.name,
-        email: userProfile.email,
-        avatar: userProfile.picture,
-        token: tokenResponse.access_token, // This would be your app's JWT in a real scenario
-      };
-
-      // Update auth store
-      login(userData);
-
+      // NOTE: Backend social login integration not implemented yet.
+      // We only notify the user for now.
       sendToast('success', {
-        title: 'Login Successful',
-        description: `Welcome back, ${userProfile.name}!`,
+        title: 'Google login available soon',
+        description: `Hello ${userProfile.name}. Social login is not yet connected to backend.`,
       });
       
     } catch (error) {
