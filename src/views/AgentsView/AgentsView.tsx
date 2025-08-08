@@ -1,5 +1,5 @@
 import React from 'react';
-import { useViewConfig } from '@/contexts/ViewContext';
+import { useViewConfig } from '@/hooks/ui/useView';
 import { Button } from '@/components/ui/button';
 import { Plus } from 'lucide-react';
 

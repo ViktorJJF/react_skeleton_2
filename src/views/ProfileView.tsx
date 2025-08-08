@@ -9,7 +9,7 @@ import { Badge } from '@/components/ui/badge';
 import { Switch } from '@/components/ui/switch';
 import { Separator } from '@/components/ui/separator';
 import { useToast } from '@/hooks/ui/use-toast';
-import { useViewConfig } from '@/contexts/ViewContext';
+import { useViewConfig } from '@/hooks/ui/useView';
 import { useProfile } from '@/hooks/auth/useProfile';
 import { useTranslation } from 'react-i18next';
 import {

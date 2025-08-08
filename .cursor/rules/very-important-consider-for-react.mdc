@@ -1,0 +1,32 @@
+---
+alwaysApply: true
+---
+# React Infinite Loop Prevention Rules
+
+1. **Never call `setState` directly in the component body**
+2. **Always use `useEffect` with correct dependencies**
+3. **Use `setState(prev => ...)` for updates based on previous state**
+4. **Don't mutate state directly; use immutability**
+5. **Avoid inline objects/functions in props**
+6. **Don't use hooks conditionally**
+7. **Use `useMemo` and `useCallback` to optimize renders**
+8. **Understand when effects execute**
+9. **Use tools like React DevTools and ESLint**
+10. **React does exactly what you tell it to do**
+
+## Common Patterns That Cause Infinite Loops
+
+- `useEffect(() => { setState(value) }, [value])` without proper conditions
+- Direct state mutations during render
+- Missing or incorrect dependency arrays
+- Creating new objects/arrays on every render
+- Calling setState in render without useEffect
+
+## Best Practices
+
+- Use functional updates: `setCount(prev => prev + 1)`
+- Memoize expensive calculations: `useMemo(() => compute(), [deps])`
+- Memoize callbacks: `useCallback(() => fn(), [deps])`
+- Always add exhaustive dependencies to useEffect
+- Profile components with React DevTools
+- Enable eslint-plugin-react-hooks rules

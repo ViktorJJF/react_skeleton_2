@@ -1,9 +1,9 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { Button } from '@/components/ui/button';
 import { DataTable } from '@/components/data-table/data-table';
 import { ServerPagination } from '@/components/tables';
 import { LoadingSpinner } from '@/components/common/modals/LoadingSpinner';
-import { useViewConfig } from '@/contexts/ViewContext';
+import { useViewConfig } from '@/hooks/ui/useView';
 import { RefreshCw, Plus } from 'lucide-react';
 import { useModal } from '@/hooks/ui/useModal';
 import { usePagination } from '@/hooks/ui/usePagination';
@@ -122,19 +122,19 @@ export const BotsView: React.FC = () => {
     });
   };
 
-  const handleSearchChange = (query: string) => {
+  const handleSearchChange = useCallback((query: string) => {
     setSearchQuery(query);
     setSearch(query);
-  };
+  }, [setSearch]);
 
-  const handleStatusChange = (status: 'all' | 'active' | 'inactive') => {
+  const handleStatusChange = useCallback((status: 'all' | 'active' | 'inactive') => {
     setStatusFilter(status);
     const isActive = status === 'all' ? undefined : status === 'active';
     updateParams({ isActive, page: 1 });
-  };
+  }, [updateParams]);
 
-  // Configure view properties for the AdminLayout
-  useViewConfig({
+  // Configure view properties for the AdminLayout (memoized to avoid loops)
+  const viewConfig = useMemo(() => ({
     title: "Bots Management",
     description: "A list of all the bots in your account.",
     actionButton: (
@@ -168,7 +168,21 @@ export const BotsView: React.FC = () => {
         isRefreshing={isMutating || isBulkOperating}
       />
     ),
-  });
+  }), [
+    searchQuery,
+    statusFilter,
+    selectedBots,
+    isLoading,
+    isMutating,
+    isBulkOperating,
+    refetch,
+    createModal,
+    bulkDeleteModal,
+    handleSearchChange,
+    handleStatusChange,
+  ]);
+
+  useViewConfig(viewConfig);
 
   // Loading state
   if (isLoading && !bots.length) {

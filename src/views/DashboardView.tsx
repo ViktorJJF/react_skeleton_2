@@ -1,11 +1,11 @@
-import { useEffect } from 'react';
+import { useEffect, useMemo, useCallback, useRef } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
-import { XAxis, YAxis, Tooltip, ResponsiveContainer, AreaChart, Area } from 'recharts';
+import { XAxis, YAxis, Tooltip, AreaChart, Area, ResponsiveContainer } from 'recharts';
 import { Bot, MessageCircle, Users, TrendingUp, Activity, Target } from 'lucide-react';
-import { useViewConfig } from '@/contexts/ViewContext';
+import { useViewConfig } from '@/hooks/ui/useView';
 import { useNotifications } from '@/hooks/ui/useNotifications';
 import { useAnalytics } from '@/hooks/api/useAnalytics';
 
@@ -39,16 +39,16 @@ const topIntents = [
 
 const DashboardView = () => {
   const { t } = useTranslation();
-  const { sendToast, sendBanner, sendNotification } = useNotifications();
+  const { sendToast, sendNotification } = useNotifications();
   const { trackCustomEvent } = useAnalytics();
 
-  const handleCreateBotClick = () => {
+  const handleCreateBotClick = useCallback(() => {
     trackCustomEvent('Dashboard', 'Click', 'Create New Bot Button');
     // Add logic to open the create bot modal here
-  };
+  }, [trackCustomEvent]);
 
-  // Configure view properties for the AdminLayout
-  useViewConfig({
+  // Configure view properties for the AdminLayout (memoized)
+  const viewConfig = useMemo(() => ({
     title: t('dashboard.title'),
     description: t('dashboard.description'),
     actionButton: (
@@ -72,9 +72,15 @@ const DashboardView = () => {
         </Button>
       </div>
     ),
-  });
+  }), [t, handleCreateBotClick]);
+
+  useViewConfig(viewConfig);
+
+  const didRunRef = useRef(false);
 
   useEffect(() => {
+    if (didRunRef.current) return;
+    didRunRef.current = true;
     // This is for demonstration purposes. 
     // In a real application, these would be triggered by actual events.
 
@@ -97,7 +103,7 @@ const DashboardView = () => {
       description: 'You can now connect your account with Slack for real-time alerts.',
     });
     
-  }, [sendToast, sendBanner, sendNotification]);
+  }, [sendToast, sendNotification]);
 
   return (
     <div>
@@ -172,6 +178,7 @@ const DashboardView = () => {
                     fill="#E22A6F" 
                     fillOpacity={0.1}
                     strokeWidth={2}
+                    isAnimationActive={false}
                   />
                   <Area 
                     type="monotone" 
@@ -181,6 +188,7 @@ const DashboardView = () => {
                     fill="#F472B6" 
                     fillOpacity={0.1}
                     strokeWidth={2}
+                    isAnimationActive={false}
                   />
                 </AreaChart>
               </ResponsiveContainer>

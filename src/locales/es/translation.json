@@ -189,6 +189,7 @@
     "createDescription": "Crea un nuevo chatbot para interactuar con tus usuarios."
   },
   "auth": {
+    "logout": "Cerrar sesión",
     "login": "Iniciar sesión",
     "register": "Registrarse",
     "forgotPassword": "Olvidé mi contraseña",
@@ -263,7 +264,9 @@
     "stackTrace": "Traza de pila",
     "componentStack": "Traza del componente",
     "statusCode": "Código de Estado",
-    "refresh": "Actualizar"
+    "refresh": "Actualizar",
+    "goHome": "Ir al inicio",
+    "goBack": "Volver"
   },
   "profile": {
     "title": "Perfil",

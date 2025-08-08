@@ -4,7 +4,8 @@ import DesktopSidebar from '@/components/layout/DesktopSidebar';
 import NotificationBanner from '@/components/notifications/NotificationBanner';
 import ViewComponent from '@/components/layout/TheView';
 import { useVersionCheck } from '@/hooks/useVersionCheck';
-import { ViewProvider, useViewContext } from '@/contexts/ViewContext';
+import { ViewProvider } from '@/contexts/ViewContext';
+import { useViewContext } from '@/hooks/ui/useView';
 
 const AdminLayoutContent = () => {
   const { viewConfig } = useViewContext();

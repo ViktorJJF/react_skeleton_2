@@ -23,6 +23,7 @@ import DashboardView from '@/views/DashboardView';
 import NotFoundView from '@/views/NotFoundView';
 import ProfileView from '@/views/ProfileView';
 import { BotsView } from '@/views/BotsView/BotsView';
+import RouteErrorBoundary from '@/components/RouteErrorBoundary';
 
 // Authentication guard for protected routes
 const ProtectedRoute: React.FC = () => {
@@ -107,6 +108,7 @@ const AppRouter: React.FC = () => {
   const router = createBrowserRouter([
     {
       element: <RootLayout />,
+      errorElement: <RouteErrorBoundary />,
       children: [
         // Public Routes (with auth redirect guard)
         {
@@ -116,6 +118,7 @@ const AppRouter: React.FC = () => {
               <LoginView />
             </PublicRoute>
           ),
+          errorElement: <RouteErrorBoundary />,
         },
         {
           path: '/register',
@@ -124,6 +127,7 @@ const AppRouter: React.FC = () => {
               <RegisterView />
             </PublicRoute>
           ),
+          errorElement: <RouteErrorBoundary />,
         },
         {
           path: '/forgot-password',
@@ -132,34 +136,41 @@ const AppRouter: React.FC = () => {
               <ForgotPasswordView />
             </PublicRoute>
           ),
+          errorElement: <RouteErrorBoundary />,
         },
 
         // Protected Routes with Admin Layout
         {
           path: '/',
           element: <ProtectedRoute />,
+          errorElement: <RouteErrorBoundary />,
           children: [
             {
               element: <AdminLayout />,
+              errorElement: <RouteErrorBoundary />,
               children: [
                 // Default route - redirect to dashboard as home
                 {
                   index: true,
                   element: <Navigate to="/dashboard" replace />,
+                  errorElement: <RouteErrorBoundary />,
                 },
 
                 // Main application routes
                 {
                   path: 'dashboard',
                   element: <DashboardView />,
+                  errorElement: <RouteErrorBoundary />,
                 },
                 {
                   path: 'bots',
                   element: <BotsView />,
+                  errorElement: <RouteErrorBoundary />,
                 },
                 {
                   path: 'profile',
                   element: <ProfileView />,
+                  errorElement: <RouteErrorBoundary />,
                 },
               ],
             },
@@ -170,11 +181,13 @@ const AppRouter: React.FC = () => {
         {
           path: '/404',
           element: <NotFoundView />,
+          errorElement: <RouteErrorBoundary />,
         },
         // Catch-all 404
         {
           path: '*',
           element: <NotFoundView />,
+          errorElement: <RouteErrorBoundary />,
         },
       ],
     },

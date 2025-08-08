@@ -189,6 +189,7 @@
     "createDescription": "Create a new chatbot to engage with your users."
   },
   "auth": {
+    "logout": "Logout",
     "login": "Login",
     "register": "Register",
     "forgotPassword": "Forgot Password",
@@ -263,7 +264,9 @@
     "stackTrace": "Stack Trace",
     "componentStack": "Component Stack",
     "statusCode": "Status Code",
-    "refresh": "Refresh"
+    "refresh": "Refresh",
+    "goHome": "Go to Home",
+    "goBack": "Go Back"
   },
   "profile": {
     "title": "Profile",
