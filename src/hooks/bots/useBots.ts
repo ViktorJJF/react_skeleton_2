@@ -1,5 +1,9 @@
 import { useState, useMemo } from "react";
-import { useBotsQuery, useBotsStatsQuery } from "./queries/useBotsQuery";
+import {
+  useBotsQuery,
+  useBotsStatsQuery,
+  useBotQuery,
+} from "./queries/useBotsQuery";
 import {
   useCreateBotMutation,
   useUpdateBotMutation,
@@ -11,13 +15,20 @@ import type { IBotListQuery } from "@/types/entities/bots";
 interface UseBotsOptions {
   initialParams?: IBotListQuery;
   enableStats?: boolean;
+  botId?: string;
+  enableList?: boolean;
 }
 
 /**
  * Main hook for bot management - combines queries, mutations, and state
  */
 export const useBots = (options: UseBotsOptions = {}) => {
-  const { initialParams = {}, enableStats = true } = options;
+  const {
+    initialParams = {},
+    enableStats = true,
+    botId,
+    enableList = true,
+  } = options;
 
   // Query parameters state
   const [queryParams, setQueryParams] = useState<IBotListQuery>({
@@ -27,8 +38,9 @@ export const useBots = (options: UseBotsOptions = {}) => {
   });
 
   // Queries
-  const botsQuery = useBotsQuery(queryParams);
-  const statsQuery = useBotsStatsQuery(enableStats);
+  const botsQuery = useBotsQuery(enableList ? queryParams : { enabled: false });
+  const statsQuery = useBotsStatsQuery(enableStats && enableList);
+  const botQuery = useBotQuery(botId, { enabled: !!botId });
 
   // Mutations
   const createMutation = useCreateBotMutation();
@@ -39,6 +51,7 @@ export const useBots = (options: UseBotsOptions = {}) => {
   // Computed values
   const bots = useMemo(() => botsQuery.data?.payload || [], [botsQuery.data]);
   const pagination = useMemo(() => botsQuery.data || null, [botsQuery.data]);
+  const bot = useMemo(() => botQuery.data || null, [botQuery.data]);
   const stats = useMemo(
     () => statsQuery.data || { total: 0, active: 0, inactive: 0 },
     [statsQuery.data]
@@ -63,6 +76,7 @@ export const useBots = (options: UseBotsOptions = {}) => {
 
   // Loading states
   const isLoading = botsQuery.isLoading || botsQuery.isFetching;
+  const isBotLoading = botQuery.isLoading || botQuery.isFetching;
   const isStatsLoading = statsQuery.isLoading;
   const isMutating =
     createMutation.isPending ||
@@ -73,9 +87,17 @@ export const useBots = (options: UseBotsOptions = {}) => {
 
   // Error states
   const error = botsQuery.error || statsQuery.error;
+  const botError = botQuery.error;
   const hasError = !!error;
 
   return {
+    // Single bot data
+    bot,
+    isBotLoading,
+    isBotError: !!botError,
+    botError,
+    refetchBot: botQuery.refetch,
+
     bots,
     pagination,
     stats,

@@ -32,20 +32,24 @@ import {
   DropdownMenuContent,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
-import { ChevronDown, Search, Trash2, Settings, Loader2 } from "lucide-react"
+import { ChevronDown, Search, Settings } from "lucide-react"
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
   onRowSelectionChange?: (selectedItems: TData[]) => void
-  isDeleting?: boolean
+  showSearch?: boolean
+  showFooter?: boolean
+  showColumnControls?: boolean
 }
 
 export function DataTable<TData, TValue>({
   columns,
   data,
   onRowSelectionChange,
-  isDeleting = false,
+  showSearch = true,
+  showFooter = true,
+  showColumnControls = true,
 }: DataTableProps<TData, TValue>) {
   const [sorting, setSorting] = React.useState<SortingState>([])
   const [columnFilters, setColumnFilters] = React.useState<ColumnFiltersState>([])
@@ -72,64 +76,70 @@ export function DataTable<TData, TValue>({
   })
 
   const selectedRows = table.getFilteredSelectedRowModel().rows.length
-  const selectedItems = table.getFilteredSelectedRowModel().rows.map(row => row.original)
   
   React.useEffect(() => {
     if (onRowSelectionChange) {
-      onRowSelectionChange(selectedItems)
+      const items = table.getFilteredSelectedRowModel().rows.map((row) => row.original)
+      onRowSelectionChange(items)
     }
-  }, [rowSelection, onRowSelectionChange])
+  }, [rowSelection, onRowSelectionChange, table])
 
   return (
     <div className="space-y-4">
-      <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
-        <div className="relative flex-1 max-w-sm">
-          <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
-          <Input
-            placeholder="Search chatbots..."
-            value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
-            onChange={(event) =>
-              table.getColumn("name")?.setFilterValue(event.target.value)
-            }
-            className="pl-10"
-          />
-        </div>
-        <div className="flex items-center gap-2">
-          {selectedRows > 0 && (
-            <div className="flex items-center gap-2 text-sm text-muted-foreground">
-              <span>{selectedRows} of {table.getFilteredRowModel().rows.length} row(s) selected</span>
+      {(showSearch || showColumnControls) && (
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
+          {showSearch && (
+            <div className="relative flex-1 max-w-sm">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+              <Input
+                placeholder="Search..."
+                value={(table.getColumn("name")?.getFilterValue() as string) ?? ""}
+                onChange={(event) =>
+                  table.getColumn("name")?.setFilterValue(event.target.value)
+                }
+                className="pl-10"
+              />
             </div>
           )}
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="ml-auto h-9 gap-2">
-                <Settings className="h-4 w-4" />
-                Columns
-                <ChevronDown className="h-4 w-4" />
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              {table
-                .getAllColumns()
-                .filter((column) => column.getCanHide())
-                .map((column) => {
-                  return (
-                    <DropdownMenuCheckboxItem
-                      key={column.id}
-                      className="capitalize"
-                      checked={column.getIsVisible()}
-                      onCheckedChange={(value) =>
-                        column.toggleVisibility(!!value)
-                      }
-                    >
-                      {column.id}
-                    </DropdownMenuCheckboxItem>
-                  )
-                })}
-            </DropdownMenuContent>
-          </DropdownMenu>
+          {showColumnControls && (
+            <div className="flex items-center gap-2">
+              {selectedRows > 0 && (
+                <div className="flex items-center gap-2 text-sm text-muted-foreground">
+                  <span>{selectedRows} of {table.getFilteredRowModel().rows.length} row(s) selected</span>
+                </div>
+              )}
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="outline" className="ml-auto h-9 gap-2">
+                    <Settings className="h-4 w-4" />
+                    Columns
+                    <ChevronDown className="h-4 w-4" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  {table
+                    .getAllColumns()
+                    .filter((column) => column.getCanHide())
+                    .map((column) => {
+                      return (
+                        <DropdownMenuCheckboxItem
+                          key={column.id}
+                          className="capitalize"
+                          checked={column.getIsVisible()}
+                          onCheckedChange={(value) =>
+                            column.toggleVisibility(!!value)
+                          }
+                        >
+                          {column.id}
+                        </DropdownMenuCheckboxItem>
+                      )
+                    })}
+                </DropdownMenuContent>
+              </DropdownMenu>
+            </div>
+          )}
         </div>
-      </div>
+      )}
       <div className="rounded-lg border bg-card">
         <Table>
           <TableHeader>
@@ -185,36 +195,38 @@ export function DataTable<TData, TValue>({
           </TableBody>
         </Table>
       </div>
-      <div className="flex items-center justify-between">
-        <div className="flex-1 text-sm text-muted-foreground">
-          Showing {table.getFilteredRowModel().rows.length} of {data.length} results
-        </div>
-        <div className="flex items-center space-x-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.previousPage()}
-            disabled={!table.getCanPreviousPage()}
-          >
-            Previous
-          </Button>
-          <div className="flex items-center gap-1 text-sm">
-            <span>Page</span>
-            <strong>
-              {table.getState().pagination.pageIndex + 1} of{" "}
-              {table.getPageCount()}
-            </strong>
+      {showFooter && (
+        <div className="flex items-center justify-between">
+          <div className="flex-1 text-sm text-muted-foreground">
+            Showing {table.getFilteredRowModel().rows.length} of {data.length} results
           </div>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => table.nextPage()}
-            disabled={!table.getCanNextPage()}
-          >
-            Next
-          </Button>
+          <div className="flex items-center space-x-2">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => table.previousPage()}
+              disabled={!table.getCanPreviousPage()}
+            >
+              Previous
+            </Button>
+            <div className="flex items-center gap-1 text-sm">
+              <span>Page</span>
+              <strong>
+                {table.getState().pagination.pageIndex + 1} of{" "}
+                {table.getPageCount()}
+              </strong>
+            </div>
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={() => table.nextPage()}
+              disabled={!table.getCanNextPage()}
+            >
+              Next
+            </Button>
+          </div>
         </div>
-      </div>
+      )}
     </div>
   )
 } 

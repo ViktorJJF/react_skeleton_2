@@ -1,5 +1,6 @@
 import React from 'react';
 import { BaseModal } from '@/components/common/modals/BaseModal';
+import useConfirm from '@/hooks/ui/useConfirm';
 import { Badge } from '@/components/ui/badge';
 import { AlertTriangle, Bot, CheckCircle, XCircle } from 'lucide-react';
 import type { IBot } from '@/types/entities/bots';
@@ -12,9 +13,6 @@ interface BotDeleteDialogProps {
   loading?: boolean;
 }
 
-/**
- * Confirmation dialog for deleting a bot
- */
 export const BotDeleteDialog: React.FC<BotDeleteDialogProps> = ({
   isOpen,
   onClose,
@@ -24,11 +22,22 @@ export const BotDeleteDialog: React.FC<BotDeleteDialogProps> = ({
 }) => {
   if (!bot) return null;
 
+  const { confirm, ConfirmDialog } = useConfirm();
   const handleConfirm = async () => {
+    const ok = await confirm({
+      title: 'Are you sure?',
+      description: 'This action cannot be undone.',
+      confirmText: 'Delete',
+      cancelText: 'Cancel',
+      variant: 'destructive',
+    });
+    if (!ok) return;
     await onConfirm();
   };
 
   return (
+    <>
+    <ConfirmDialog />
     <BaseModal
       isOpen={isOpen}
       onClose={onClose}
@@ -42,7 +51,6 @@ export const BotDeleteDialog: React.FC<BotDeleteDialogProps> = ({
       icon={<AlertTriangle className="w-5 h-5 text-red-500" />}
     >
       <div className="space-y-4">
-        {/* Warning Message */}
         <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
           <div className="flex items-start gap-3">
             <AlertTriangle className="w-5 h-5 text-red-500 mt-0.5 flex-shrink-0" />
@@ -58,7 +66,6 @@ export const BotDeleteDialog: React.FC<BotDeleteDialogProps> = ({
           </div>
         </div>
 
-        {/* Bot Details */}
         <div className="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border">
           <div className="flex items-start gap-3">
             <div className="p-2 bg-blue-100 dark:bg-blue-900/20 rounded-lg">
@@ -85,13 +92,11 @@ export const BotDeleteDialog: React.FC<BotDeleteDialogProps> = ({
                   {bot.isActive ? 'Active' : 'Inactive'}
                 </Badge>
               </div>
-              
               {bot.description && (
                 <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
                   {bot.description}
                 </p>
               )}
-              
               <div className="text-xs text-gray-500 dark:text-gray-500">
                 <div>ID: {bot._id}</div>
                 <div>Created: {new Date(bot.createdAt).toLocaleDateString()}</div>
@@ -100,40 +105,12 @@ export const BotDeleteDialog: React.FC<BotDeleteDialogProps> = ({
             </div>
           </div>
         </div>
-
-        {/* Confirmation Text */}
-        <div className="text-sm text-gray-600 dark:text-gray-400">
-          <p>
-            Please confirm that you want to delete the bot <strong>"{bot.name}"</strong>.
-          </p>
-          <p className="mt-2">
-            Type the bot name to confirm deletion, or click "Delete Bot" to proceed.
-          </p>
-        </div>
-
-        {/* Impact Notice */}
-        {bot.isActive && (
-          <div className="p-3 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
-            <div className="flex items-center gap-2">
-              <AlertTriangle className="w-4 h-4 text-yellow-600 dark:text-yellow-400" />
-              <span className="text-sm font-medium text-yellow-800 dark:text-yellow-200">
-                Active Bot Warning
-              </span>
-            </div>
-            <p className="text-sm text-yellow-700 dark:text-yellow-300 mt-1">
-              This bot is currently active and may be processing requests. 
-              Deleting it may disrupt ongoing operations.
-            </p>
-          </div>
-        )}
       </div>
     </BaseModal>
+    </>
   );
 };
 
-/**
- * Bulk delete confirmation dialog
- */
 interface BotBulkDeleteDialogProps {
   isOpen: boolean;
   onClose: () => void;
@@ -151,12 +128,22 @@ export const BotBulkDeleteDialog: React.FC<BotBulkDeleteDialogProps> = ({
 }) => {
   const activeBots = bots.filter(bot => bot.isActive);
   const inactiveBots = bots.filter(bot => !bot.isActive);
-
+  const { confirm, ConfirmDialog } = useConfirm();
   const handleConfirm = async () => {
+    const ok = await confirm({
+      title: `Delete ${bots.length} Bots`,
+      description: 'Bulk deletion cannot be undone',
+      confirmText: `Delete ${bots.length}`,
+      cancelText: 'Cancel',
+      variant: 'destructive',
+    });
+    if (!ok) return;
     await onConfirm();
   };
 
   return (
+    <>
+    <ConfirmDialog />
     <BaseModal
       isOpen={isOpen}
       onClose={onClose}
@@ -170,7 +157,6 @@ export const BotBulkDeleteDialog: React.FC<BotBulkDeleteDialogProps> = ({
       icon={<AlertTriangle className="w-5 h-5 text-red-500" />}
     >
       <div className="space-y-4">
-        {/* Warning Message */}
         <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
           <div className="flex items-start gap-3">
             <AlertTriangle className="w-5 h-5 text-red-500 mt-0.5 flex-shrink-0" />
@@ -186,7 +172,6 @@ export const BotBulkDeleteDialog: React.FC<BotBulkDeleteDialogProps> = ({
           </div>
         </div>
 
-        {/* Summary */}
         <div className="p-4 bg-gray-50 dark:bg-gray-800 rounded-lg border">
           <h4 className="font-medium text-gray-900 dark:text-gray-100 mb-3">
             Deletion Summary
@@ -217,23 +202,6 @@ export const BotBulkDeleteDialog: React.FC<BotBulkDeleteDialogProps> = ({
           </div>
         </div>
 
-        {/* Active Bot Warning */}
-        {activeBots.length > 0 && (
-          <div className="p-3 bg-yellow-50 dark:bg-yellow-900/20 border border-yellow-200 dark:border-yellow-800 rounded-lg">
-            <div className="flex items-center gap-2">
-              <AlertTriangle className="w-4 h-4 text-yellow-600 dark:text-yellow-400" />
-              <span className="text-sm font-medium text-yellow-800 dark:text-yellow-200">
-                Active Bots Warning
-              </span>
-            </div>
-            <p className="text-sm text-yellow-700 dark:text-yellow-300 mt-1">
-              {activeBots.length} of the selected bots are currently active. 
-              Deleting them may disrupt ongoing operations.
-            </p>
-          </div>
-        )}
-
-        {/* Bot List Preview */}
         <div className="max-h-32 overflow-y-auto border rounded-lg">
           <div className="p-2">
             <div className="text-xs font-medium text-gray-500 dark:text-gray-400 mb-2">
@@ -258,5 +226,8 @@ export const BotBulkDeleteDialog: React.FC<BotBulkDeleteDialogProps> = ({
         </div>
       </div>
     </BaseModal>
+    </>
   );
 };
+
+

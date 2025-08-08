@@ -1,5 +1,2 @@
-// Core components
-export { BotForm } from "./BotForm";
-export { getBotTableColumns } from "./BotTableColumns";
-export { BotActions } from "./BotActions";
-export { BotDeleteDialog, BotBulkDeleteDialog } from "./BotDeleteDialog";
+// This module has moved to view-scoped components at `src/views/BotsView/components`.
+// Keeping file to avoid breaking imports in docs/examples.

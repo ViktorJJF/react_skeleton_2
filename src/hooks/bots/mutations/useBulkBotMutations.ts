@@ -7,6 +7,7 @@ import type {
   IBulkCreateBotsRequest,
   IBulkUpdateBotsRequest,
   IBulkDeleteBotsRequest,
+  IBotListResponse,
 } from "@/types/entities/bots";
 
 /**
@@ -22,15 +23,12 @@ export const useBulkCreateBotsMutation = () => {
       // Invalidate all bot queries
       queryClient.invalidateQueries({ queryKey: botQueryKeys.all });
 
-      toast({
-        title: "Success",
-        description: "Bots created successfully.",
-      });
+      toast({ title: "Success", description: "bots.created" });
     },
     onError: () => {
       toast({
         title: "Error",
-        description: "Failed to create bots. Please try again.",
+        description: "errors.genericError",
         variant: "destructive",
       });
     },
@@ -51,15 +49,15 @@ export const useBulkUpdateBotsMutation = () => {
       await queryClient.cancelQueries({ queryKey: botQueryKeys.lists() });
 
       // Snapshot previous value
-      const previousBots = queryClient.getQueriesData({
+      const previousBots = queryClient.getQueriesData<IBotListResponse>({
         queryKey: botQueryKeys.lists(),
       });
 
       // Optimistically update cache
-      queryClient.setQueriesData(
+      queryClient.setQueriesData<IBotListResponse>(
         { queryKey: botQueryKeys.lists() },
-        (old: any) => {
-          if (!old?.data?.docs) return old;
+        (old) => {
+          if (!old?.payload) return old as IBotListResponse | undefined;
 
           const updateMap = new Map(
             updateData.updates.map((update) => [update.id, update.data])
@@ -67,16 +65,13 @@ export const useBulkUpdateBotsMutation = () => {
 
           return {
             ...old,
-            data: {
-              ...old.data,
-              docs: old.data.docs.map((bot: IBot) => {
-                const update = updateMap.get(bot._id);
-                return update
-                  ? { ...bot, ...update, updatedAt: new Date().toISOString() }
-                  : bot;
-              }),
-            },
-          };
+            payload: old.payload.map((bot: IBot) => {
+              const update = updateMap.get(bot._id);
+              return update
+                ? { ...bot, ...update, updatedAt: new Date().toISOString() }
+                : bot;
+            }),
+          } as IBotListResponse;
         }
       );
 
@@ -92,7 +87,7 @@ export const useBulkUpdateBotsMutation = () => {
 
       toast({
         title: "Error",
-        description: "Failed to update bots. Please try again.",
+        description: "errors.genericError",
         variant: "destructive",
       });
     },
@@ -100,10 +95,7 @@ export const useBulkUpdateBotsMutation = () => {
       // Invalidate all bot queries
       queryClient.invalidateQueries({ queryKey: botQueryKeys.all });
 
-      toast({
-        title: "Success",
-        description: "Bots updated successfully.",
-      });
+      toast({ title: "Success", description: "bots.updated" });
     },
   });
 };
@@ -122,34 +114,26 @@ export const useBulkDeleteBotsMutation = () => {
       await queryClient.cancelQueries({ queryKey: botQueryKeys.lists() });
 
       // Snapshot previous value
-      const previousBots = queryClient.getQueriesData({
+      const previousBots = queryClient.getQueriesData<IBotListResponse>({
         queryKey: botQueryKeys.lists(),
       });
 
       // Optimistically remove from cache
-      queryClient.setQueriesData(
+      queryClient.setQueriesData<IBotListResponse>(
         { queryKey: botQueryKeys.lists() },
-        (old: any) => {
-          if (!old?.data?.docs) return old;
+        (old) => {
+          if (!old?.payload) return old as IBotListResponse | undefined;
 
           const deleteIds = new Set(deleteData.ids);
 
           return {
             ...old,
-            data: {
-              ...old.data,
-              docs: old.data.docs.filter(
-                (bot: IBot) => !deleteIds.has(bot._id)
-              ),
-              pagination: {
-                ...old.data.pagination,
-                totalDocs: Math.max(
-                  (old.data.pagination?.totalDocs || 0) - deleteData.ids.length,
-                  0
-                ),
-              },
-            },
-          };
+            payload: old.payload.filter((bot: IBot) => !deleteIds.has(bot._id)),
+            totalDocs: Math.max(
+              (old.totalDocs || 0) - deleteData.ids.length,
+              0
+            ),
+          } as IBotListResponse;
         }
       );
 
@@ -165,7 +149,7 @@ export const useBulkDeleteBotsMutation = () => {
 
       toast({
         title: "Error",
-        description: "Failed to delete bots. Please try again.",
+        description: "errors.genericError",
         variant: "destructive",
       });
     },
@@ -177,10 +161,7 @@ export const useBulkDeleteBotsMutation = () => {
       queryClient.invalidateQueries({ queryKey: botQueryKeys.lists() });
       queryClient.invalidateQueries({ queryKey: botQueryKeys.stats() });
 
-      toast({
-        title: "Success",
-        description: "Bots deleted successfully.",
-      });
+      toast({ title: "Success", description: "bots.deleted" });
     },
   });
 };

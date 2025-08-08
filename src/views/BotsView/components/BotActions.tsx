@@ -38,7 +38,7 @@ interface BotActionsProps {
   onRefresh: () => void;
   onExport?: () => void;
   onImport?: () => void;
-  onBulkDelete?: (bots: IBot[]) => void;
+  onBulkDelete?: () => void;
   
   // Selected items
   selectedBots: IBot[];
@@ -114,7 +114,7 @@ export const BotActions: React.FC<BotActionsProps> = ({
           <Button
             variant="destructive"
             size="sm"
-            onClick={() => onBulkDelete(selectedBots)}
+            onClick={() => onBulkDelete()}
             disabled={isLoading}
           >
             <Trash2 className="w-4 h-4 mr-2" />
@@ -178,3 +178,5 @@ export const BotActions: React.FC<BotActionsProps> = ({
     </div>
   );
 };
+
+

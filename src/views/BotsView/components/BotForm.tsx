@@ -21,9 +21,6 @@ interface FormData {
   isActive: boolean;
 }
 
-/**
- * Reusable bot form component for create/edit operations
- */
 export const BotForm: React.FC<BotFormProps> = ({
   bot,
   onSubmit,
@@ -40,7 +37,6 @@ export const BotForm: React.FC<BotFormProps> = ({
 
   const [errors, setErrors] = useState<Partial<FormData>>({});
 
-  // Initialize form data when bot changes
   useEffect(() => {
     if (bot) {
       setFormData({
@@ -49,18 +45,13 @@ export const BotForm: React.FC<BotFormProps> = ({
         isActive: bot.isActive ?? true,
       });
     } else {
-      setFormData({
-        name: '',
-        description: '',
-        isActive: true,
-      });
+      setFormData({ name: '', description: '', isActive: true });
     }
     setErrors({});
   }, [bot]);
 
   const validateForm = (): boolean => {
     const newErrors: Partial<FormData> = {};
-
     if (!formData.name.trim()) {
       newErrors.name = 'Name is required';
     } else if (formData.name.trim().length < 2) {
@@ -68,35 +59,26 @@ export const BotForm: React.FC<BotFormProps> = ({
     } else if (formData.name.trim().length > 100) {
       newErrors.name = 'Name must be less than 100 characters';
     }
-
     if (formData.description && formData.description.length > 500) {
       newErrors.description = 'Description must be less than 500 characters';
     }
-
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
-    if (!validateForm()) {
-      return;
-    }
-
+    if (!validateForm()) return;
     const submitData = {
       name: formData.name.trim(),
       description: formData.description.trim() || undefined,
       isActive: formData.isActive,
     };
-
     onSubmit(submitData);
   };
 
   const handleInputChange = (field: keyof FormData, value: string | boolean) => {
     setFormData(prev => ({ ...prev, [field]: value }));
-    
-    // Clear error when user starts typing
     if (errors[field]) {
       setErrors(prev => ({ ...prev, [field]: undefined }));
     }
@@ -107,7 +89,6 @@ export const BotForm: React.FC<BotFormProps> = ({
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      {/* Name Field */}
       <div className="space-y-2">
         <Label htmlFor="bot-name" className="text-sm font-medium">
           Name <span className="text-red-500">*</span>
@@ -126,7 +107,6 @@ export const BotForm: React.FC<BotFormProps> = ({
         )}
       </div>
 
-      {/* Description Field */}
       <div className="space-y-2">
         <Label htmlFor="bot-description" className="text-sm font-medium">
           Description
@@ -156,7 +136,6 @@ export const BotForm: React.FC<BotFormProps> = ({
         </p>
       </div>
 
-      {/* Active Status */}
       <div className="flex items-center justify-between p-4 border rounded-lg bg-gray-50 dark:bg-gray-800">
         <div className="space-y-1">
           <Label htmlFor="bot-active" className="text-sm font-medium">
@@ -177,7 +156,6 @@ export const BotForm: React.FC<BotFormProps> = ({
         />
       </div>
 
-      {/* Action Buttons */}
       {showActions && (
         <div className="flex justify-end gap-3 pt-4 border-t">
           {onCancel && (
@@ -203,3 +181,5 @@ export const BotForm: React.FC<BotFormProps> = ({
     </form>
   );
 };
+
+

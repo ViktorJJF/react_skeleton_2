@@ -2,6 +2,7 @@ import {
   useQuery,
   useInfiniteQuery,
   keepPreviousData,
+  useQueryClient,
 } from "@tanstack/react-query";
 import botsService from "@/services/api/bots";
 import { botQueryKeys } from "./queryKeys";
@@ -101,4 +102,40 @@ export const useBotSuggestionsQuery = (query: string, enabled = true) => {
       return data.payload || [];
     },
   });
+};
+
+/**
+ * Hook for fetching a single bot by ID (combined here to reduce files)
+ */
+export const useBotQuery = (
+  id: string | undefined,
+  options: {
+    enabled?: boolean;
+    staleTime?: number;
+    retry?: boolean | number;
+  } = {}
+) => {
+  const { enabled = true, staleTime = 5 * 60 * 1000, retry = 1 } = options;
+
+  return useQuery({
+    queryKey: botQueryKeys.detail(id as string),
+    queryFn: () => botsService.listOne(id as string),
+    enabled: enabled && !!id,
+    staleTime,
+    retry,
+    select: (response) => response.data,
+  });
+};
+
+/** Prefetch helper for single bot */
+export const usePrefetchBot = () => {
+  const queryClient = useQueryClient();
+  const prefetchBot = (id: string) => {
+    queryClient.prefetchQuery({
+      queryKey: botQueryKeys.detail(id),
+      queryFn: () => botsService.listOne(id),
+      staleTime: 5 * 60 * 1000,
+    });
+  };
+  return { prefetchBot };
 };

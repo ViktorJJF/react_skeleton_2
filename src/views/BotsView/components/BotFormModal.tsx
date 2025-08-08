@@ -1,6 +1,6 @@
 import React from 'react';
 import { BaseModal } from '@/components/common/modals/BaseModal';
-import { BotForm } from '@/components/bots/BotForm';
+import { BotForm } from './BotForm';
 import { Plus, Edit } from 'lucide-react';
 import type { IBot, ICreateBotRequest, IUpdateBotRequest } from '@/types/entities/bots';
 

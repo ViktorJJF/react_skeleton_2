@@ -1,6 +1,5 @@
 // Main hooks
 export { useBots } from "./useBots";
-export { useBot } from "./useBot";
 
 // Query hooks
 export {
@@ -8,8 +7,9 @@ export {
   useInfiniteBotsQuery,
   useBotsStatsQuery,
   useBotSuggestionsQuery,
+  useBotQuery,
+  usePrefetchBot,
 } from "./queries/useBotsQuery";
-export { useBotQuery, usePrefetchBot } from "./queries/useBotQuery";
 
 // Mutation hooks
 export {

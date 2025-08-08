@@ -24,9 +24,6 @@ interface BotTableColumnsOptions {
   showSelection?: boolean;
 }
 
-/**
- * Generate table columns for bot data table
- */
 export const getBotTableColumns = (
   options: BotTableColumnsOptions = {}
 ): ColumnDef<IBot>[] => {
@@ -39,7 +36,6 @@ export const getBotTableColumns = (
 
   const columns: ColumnDef<IBot>[] = [];
 
-  // Selection column
   if (showSelection) {
     columns.push({
       id: 'select',
@@ -65,7 +61,6 @@ export const getBotTableColumns = (
     });
   }
 
-  // Name column
   columns.push({
     accessorKey: 'name',
     header: ({ column }) => (
@@ -97,7 +92,6 @@ export const getBotTableColumns = (
     minSize: 200,
   });
 
-  // Status column
   columns.push({
     accessorKey: 'isActive',
     header: ({ column }) => (
@@ -141,7 +135,6 @@ export const getBotTableColumns = (
     size: 100,
   });
 
-  // Created date column
   columns.push({
     accessorKey: 'createdAt',
     header: ({ column }) => (
@@ -171,7 +164,6 @@ export const getBotTableColumns = (
     size: 120,
   });
 
-  // Actions column
   if (showActions) {
     columns.push({
       id: 'actions',
@@ -221,3 +213,5 @@ export const getBotTableColumns = (
 
   return columns;
 };
+
+

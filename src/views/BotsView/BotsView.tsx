@@ -1,23 +1,24 @@
 import React, { useState, useMemo } from 'react';
 import { Button } from '@/components/ui/button';
 import { DataTable } from '@/components/data-table/data-table';
+import { ServerPagination } from '@/components/tables';
 import { LoadingSpinner } from '@/components/common/modals/LoadingSpinner';
 import { useModal } from '@/hooks/ui/useModal';
 import { usePagination } from '@/hooks/ui/usePagination';
 
-// Bot components
+// Bot components (scoped to this view)
 import { 
   BotActions,
   getBotTableColumns,
   BotDeleteDialog,
-  BotBulkDeleteDialog
-} from '@/components/bots';
+  BotBulkDeleteDialog,
+  BotFormModal,
+} from './components';
 
 // Bot hooks
 import { useBots } from '@/hooks/bots';
 
-// View-specific components
-import { BotFormModal } from './components/BotFormModal';
+// View-specific components are imported above
 
 // Types
 import type { IBot, ICreateBotRequest, IUpdateBotRequest } from '@/types/entities/bots';
@@ -52,6 +53,8 @@ export const BotsView: React.FC = () => {
     refetch,
     setPage,
     setLimit,
+    setSearch,
+    updateParams,
     createMutation,
     updateMutation,
     deleteMutation,
@@ -60,9 +63,8 @@ export const BotsView: React.FC = () => {
     initialParams: {
       page: 1,
       limit: 10,
-      search: searchQuery || undefined,
-      isActive: statusFilter === 'all' ? undefined : statusFilter === 'active',
     },
+    enableStats: false,
   });
 
   // Pagination hook
@@ -118,6 +120,17 @@ export const BotsView: React.FC = () => {
     });
   };
 
+  const handleSearchChange = (query: string) => {
+    setSearchQuery(query);
+    setSearch(query);
+  };
+
+  const handleStatusChange = (status: 'all' | 'active' | 'inactive') => {
+    setStatusFilter(status);
+    const isActive = status === 'all' ? undefined : status === 'active';
+    updateParams({ isActive, page: 1 });
+  };
+
   // Loading state
   if (isLoading && !bots.length) {
     return (
@@ -156,12 +169,12 @@ export const BotsView: React.FC = () => {
       <div className="bg-background border rounded-lg shadow-sm">
         <BotActions
           searchQuery={searchQuery}
-          onSearchChange={setSearchQuery}
+          onSearchChange={handleSearchChange}
           statusFilter={statusFilter}
-          onStatusFilterChange={setStatusFilter}
+          onStatusFilterChange={handleStatusChange}
           onCreateBot={createModal.open}
           onRefresh={refetch}
-          onBulkDelete={handleBulkDelete}
+          onBulkDelete={() => bulkDeleteModal.open()}
           selectedBots={selectedBots}
           isLoading={isLoading}
           isRefreshing={isMutating || isBulkOperating}
@@ -170,31 +183,12 @@ export const BotsView: React.FC = () => {
           columns={columns}
           data={bots}
           onRowSelectionChange={setSelectedBots}
-          isDeleting={isBulkOperating}
+          showSearch={false}
+          showFooter={false}
         />
         {pagination && pagination.totalPages > 1 && (
-          <div className="flex items-center justify-between p-4 border-t">
-            <div className="text-sm text-muted-foreground">
-              {paginationControls.totalItems} results
-            </div>
-            <div className="flex items-center space-x-2">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={paginationControls.goToPrevPage}
-                disabled={!paginationControls.hasPrevPage}
-              >
-                Previous
-              </Button>
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={paginationControls.goToNextPage}
-                disabled={!paginationControls.hasNextPage}
-              >
-                Next
-              </Button>
-            </div>
+          <div className="p-4 border-t">
+            <ServerPagination controls={paginationControls} />
           </div>
         )}
       </div>

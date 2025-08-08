@@ -7,7 +7,7 @@ interface UsePaginationProps {
   onLimitChange: (limit: number) => void;
 }
 
-interface UsePaginationReturn {
+export interface UsePaginationReturn {
   // Current state
   currentPage: number;
   totalPages: number;
