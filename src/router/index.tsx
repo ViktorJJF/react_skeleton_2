@@ -34,7 +34,6 @@ const ProtectedRoute: React.FC = () => {
 
   useEffect(() => {
     const checkAuth = async () => {
-      console.log('ProtectedRoute: Starting auth check');
       // With Zustand persist we can attempt autoLogin always
       setIsAuthenticating(true);
       await autoLogin();
@@ -45,21 +44,12 @@ const ProtectedRoute: React.FC = () => {
     checkAuth();
   }, [autoLogin]);
 
-  // Log auth state changes
-  useEffect(() => {
-    console.log('ProtectedRoute: Auth state changed, isAuthenticated:', isAuthenticated);
-  }, [isAuthenticated]);
-
   // Show loading or spinner while we're checking auth state
   if (!authChecked || isAuthenticating) {
-    console.log('ProtectedRoute: Showing loading state');
     return <div className="auth-loading">Checking authentication...</div>;
   }
 
-  console.log('ProtectedRoute: Final auth state:', isAuthenticated);
-  
   if (!isAuthenticated) {
-    console.log('ProtectedRoute: Not authenticated, redirecting to login');
     // Redirect to login page with the return location
     return (
       <Navigate
@@ -70,8 +60,38 @@ const ProtectedRoute: React.FC = () => {
     );
   }
 
-  console.log('ProtectedRoute: Authenticated, showing outlet');
+
   return <Outlet />;
+};
+
+// Guard for public routes (redirect authenticated users to dashboard)
+const PublicRoute: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
+  const autoLogin = useAuthStore((state) => state.autoLogin);
+  const [authChecked, setAuthChecked] = useState(false);
+  const [isAuthenticating, setIsAuthenticating] = useState(false);
+
+  useEffect(() => {
+    const checkAuth = async () => {
+      setIsAuthenticating(true);
+      await autoLogin();
+      setIsAuthenticating(false);
+      setAuthChecked(true);
+    };
+
+    checkAuth();
+  }, [autoLogin]);
+
+  // Show loading while checking auth
+  if (!authChecked || isAuthenticating) {
+    return <div className="auth-loading">Checking authentication...</div>;
+  }
+
+  // If user is authenticated, redirect to dashboard
+  if (isAuthenticated) {
+    return <Navigate to="/dashboard" replace />;
+  }
+  return <>{children}</>;
 };
 
 // Define routes
@@ -88,18 +108,30 @@ const AppRouter: React.FC = () => {
     {
       element: <RootLayout />,
       children: [
-        // Public Routes
+        // Public Routes (with auth redirect guard)
         {
           path: '/login',
-          element: <LoginView />,
+          element: (
+            <PublicRoute>
+              <LoginView />
+            </PublicRoute>
+          ),
         },
         {
           path: '/register',
-          element: <RegisterView />,
+          element: (
+            <PublicRoute>
+              <RegisterView />
+            </PublicRoute>
+          ),
         },
         {
           path: '/forgot-password',
-          element: <ForgotPasswordView />,
+          element: (
+            <PublicRoute>
+              <ForgotPasswordView />
+            </PublicRoute>
+          ),
         },
 
         // Protected Routes with Admin Layout

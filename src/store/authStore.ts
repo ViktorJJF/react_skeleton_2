@@ -12,6 +12,7 @@ interface AuthState {
   error: string | null;
   // actions
   setToken: (token: string | null) => void;
+  setUser: (user: AuthUser | null) => void;
   login: (credentials: { email: string; password: string }) => Promise<{
     name: string;
     email: string;
@@ -59,24 +60,17 @@ export const useAuthStore = create(
       isLoading: false,
       error: null,
       setToken: (token) => set({ token }),
+      setUser: (user) => set({ user }),
       login: async ({ email, password }) => {
         try {
           set({ isLoading: true, error: null });
           const res = await authApi.login({ email, password });
-          console.log("Login response:", res);
-
           // Normalize the user from login response
           const normalizedUser = normalizeLoginUser(res.user);
           const name =
             normalizedUser.firstName && normalizedUser.lastName
               ? `${normalizedUser.firstName} ${normalizedUser.lastName}`.trim()
               : res.user.email.split("@")[0]; // fallback to email prefix
-
-          console.log("Setting auth state:", {
-            isAuthenticated: true,
-            token: res.token,
-            user: { ...normalizedUser, name },
-          });
 
           set({
             isAuthenticated: true,
@@ -88,7 +82,6 @@ export const useAuthStore = create(
 
           return { name, email: res.user.email, token: res.token };
         } catch (e) {
-          console.error("Login error:", e);
           const message = e instanceof Error ? e.message : "Login failed";
           set({ isLoading: false, error: message });
           throw e;
@@ -104,30 +97,21 @@ export const useAuthStore = create(
       },
       autoLogin: async () => {
         const token = get().token;
-        console.log("AutoLogin: token exists?", !!token);
         if (!token) {
-          console.log("AutoLogin: No token, skipping");
           return;
         }
         try {
-          console.log("AutoLogin: Calling /me endpoint");
           set({ isLoading: true, error: null });
           const me = await authApi.me();
-          console.log("AutoLogin: /me response:", me);
           const normalizedUser = normalizeApiUser(me);
           const name =
             `${normalizedUser.firstName} ${normalizedUser.lastName}`.trim();
-          console.log("AutoLogin: Setting authenticated state with user:", {
-            ...normalizedUser,
-            name,
-          });
           set({
             user: { ...normalizedUser, name },
             isAuthenticated: true,
             isLoading: false,
           });
-        } catch (error) {
-          console.log("AutoLogin: /me failed, trying refresh token:", error);
+        } catch {
           // try refresh token flow
           try {
             const refreshed = await get().refreshTokenAction();
@@ -146,9 +130,6 @@ export const useAuthStore = create(
           } catch {
             // Silently fail refresh attempt
           }
-          console.log(
-            "AutoLogin: Both /me and refresh failed, clearing auth state"
-          );
           set({
             isAuthenticated: false,
             token: null,

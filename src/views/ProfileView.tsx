@@ -1,15 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
+import { Avatar, AvatarFallback } from '@/components/ui/avatar';
 import { Badge } from '@/components/ui/badge';
 import { Switch } from '@/components/ui/switch';
 import { Separator } from '@/components/ui/separator';
 import { useToast } from '@/hooks/ui/use-toast';
 import { useViewConfig } from '@/contexts/ViewContext';
+import { useProfile } from '@/hooks/auth/useProfile';
+import { useTranslation } from 'react-i18next';
 import {
   User,
   Mail,
@@ -30,55 +32,40 @@ import {
   Settings,
 } from 'lucide-react';
 
-interface UserProfile {
-  id: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  phone: string;
-  avatar: string;
-  role: string;
-  status: 'active' | 'inactive';
-  location: string;
-  website: string;
-  bio: string;
-  joinedDate: string;
-  lastLogin: string;
-}
-
 const ProfileView: React.FC = () => {
+  const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState('personal');
   const [isEditing, setIsEditing] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
   const [showCurrentPassword, setShowCurrentPassword] = useState(false);
   const [showNewPassword, setShowNewPassword] = useState(false);
   const { toast } = useToast();
-
-  const [profile, setProfile] = useState<UserProfile>({
-    id: '1',
-    firstName: 'John',
-    lastName: 'Doe',
-    email: 'john.doe@example.com',
-    phone: '+1 (555) 123-4567',
-    avatar: '',
-    role: 'Administrator',
-    status: 'active',
-    location: 'San Francisco, CA',
-    website: 'https://johndoe.dev',
-    bio: 'Full-stack developer with 5+ years of experience in React, Node.js, and cloud technologies. Passionate about building scalable applications and contributing to open source projects.',
-    joinedDate: '2023-01-15',
-    lastLogin: '2024-01-15T10:30:00Z',
-  });
+  
+  const { user, updateProfile, changePassword, isLoading } = useProfile();
 
   const [formData, setFormData] = useState({
-    firstName: profile.firstName,
-    lastName: profile.lastName,
-    email: profile.email,
-    phone: profile.phone,
-    location: profile.location,
-    website: profile.website,
-    bio: profile.bio,
+    firstName: user?.firstName || '',
+    lastName: user?.lastName || '',
+    email: user?.email || '',
+    phone: '',
+    location: '',
+    website: '',
+    bio: '',
   });
+
+  // Initialize form data when user data is loaded
+  useEffect(() => {
+    if (user) {
+      setFormData({
+        firstName: user.firstName,
+        lastName: user.lastName,
+        email: user.email,
+        phone: '',
+        location: '',
+        website: '',
+        bio: '',
+      });
+    }
+  }, [user]);
 
   const [passwordData, setPasswordData] = useState({
     currentPassword: '',
@@ -108,25 +95,19 @@ const ProfileView: React.FC = () => {
   };
 
   const handleSaveProfile = async () => {
-    setIsLoading(true);
-    
-    // Simulate API call
-    setTimeout(() => {
-      setProfile(prev => ({ ...prev, ...formData }));
+    try {
+      await updateProfile(formData);
       setIsEditing(false);
-      setIsLoading(false);
-      toast({
-        title: "Profile updated! ✅",
-        description: "Your profile information has been successfully updated.",
-      });
-    }, 1000);
+    } catch {
+      // Error is already handled in the useProfile hook
+    }
   };
 
   const handleChangePassword = async () => {
     if (passwordData.newPassword !== passwordData.confirmPassword) {
       toast({
-        title: "Passwords don't match",
-        description: "Please make sure your new passwords match.",
+        title: t('profile.passwordsDontMatch'),
+        description: t('profile.passwordsDoNotMatch'),
         variant: "destructive",
       });
       return;
@@ -134,93 +115,88 @@ const ProfileView: React.FC = () => {
 
     if (passwordData.newPassword.length < 8) {
       toast({
-        title: "Password too short",
-        description: "Password must be at least 8 characters long.",
+        title: t('profile.passwordTooShort'),
+        description: t('profile.passwordMinLength'),
         variant: "destructive",
       });
       return;
     }
 
-    setIsLoading(true);
-    
-    setTimeout(() => {
+    try {
+      await changePassword({
+        currentPassword: passwordData.currentPassword,
+        newPassword: passwordData.newPassword,
+      });
+      
       setPasswordData({
         currentPassword: '',
         newPassword: '',
         confirmPassword: '',
       });
-      setIsLoading(false);
-      toast({
-        title: "Password changed! 🔒",
-        description: "Your password has been successfully updated.",
-      });
-    }, 1000);
+    } catch {
+      // Error is already handled in the useProfile hook
+    }
   };
 
   const handleSavePreferences = async () => {
-    setIsLoading(true);
-    
-    setTimeout(() => {
-      setIsLoading(false);
-      toast({
-        title: "Preferences saved! ⚙️",
-        description: "Your preferences have been successfully updated.",
-      });
-    }, 1000);
+    // For now just show success toast - preferences could be implemented later
+    toast({
+      title: t('profile.preferencesSaved'),
+      description: t('profile.preferencesUpdated'),
+    });
   };
 
   const handleAvatarUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        setProfile(prev => ({ ...prev, avatar: e.target?.result as string }));
-        toast({
-          title: "Avatar updated! 📸",
-          description: "Your profile picture has been successfully updated.",
-        });
-      };
-      reader.readAsDataURL(file);
+      // For now just show a placeholder message - avatar upload could be implemented later
+      toast({
+        title: t('profile.avatarUpload'),
+        description: t('profile.avatarUploadPlaceholder'),
+      });
     }
   };
 
   const getInitials = () => {
-    return `${profile.firstName.charAt(0)}${profile.lastName.charAt(0)}`.toUpperCase();
+    if (!user) return 'U';
+    return `${user.firstName.charAt(0)}${user.lastName.charAt(0)}`.toUpperCase();
   };
 
   // Configure view properties for the AdminLayout
   useViewConfig({
-    title: "Profile Settings",
-    description: "Manage your account settings and preferences",
+    title: t('profile.title'),
+    description: t('profile.description'),
     actionButton: isEditing ? (
       <div className="flex gap-2">
         <Button
           variant="outline"
           onClick={() => {
             setIsEditing(false);
-            setFormData({
-              firstName: profile.firstName,
-              lastName: profile.lastName,
-              email: profile.email,
-              phone: profile.phone,
-              location: profile.location,
-              website: profile.website,
-              bio: profile.bio,
-            });
+            if (user) {
+              setFormData({
+                firstName: user.firstName,
+                lastName: user.lastName,
+                email: user.email,
+                phone: '',
+                location: '',
+                website: '',
+                bio: '',
+              });
+            }
           }}
         >
-          Cancel
+          {t('common.cancel')}
         </Button>
         <Button onClick={handleSaveProfile} disabled={isLoading}>
           {isLoading ? (
             <>
               <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent mr-2" />
-              Saving...
+              {t('common.saving')}
             </>
           ) : (
             <>
               <Save className="h-4 w-4 mr-2" />
-              Save Changes
+              {t('profile.saveChanges')}
             </>
           )}
         </Button>
@@ -228,7 +204,7 @@ const ProfileView: React.FC = () => {
     ) : (
       <Button onClick={() => setIsEditing(true)}>
         <Edit className="h-4 w-4 mr-2" />
-        Edit Profile
+        {t('profile.editProfile')}
       </Button>
     ),
   });
@@ -241,7 +217,6 @@ const ProfileView: React.FC = () => {
             <div className="flex items-center gap-6">
               <div className="relative">
                 <Avatar className="h-20 w-20">
-                  <AvatarImage src={profile.avatar} alt={`${profile.firstName} ${profile.lastName}`} />
                   <AvatarFallback className="text-lg font-semibold">
                     {getInitials()}
                   </AvatarFallback>
@@ -261,15 +236,15 @@ const ProfileView: React.FC = () => {
               <div className="flex-1">
                 <div className="flex items-center gap-3 mb-2">
                   <h2 className="text-2xl font-bold">
-                    {profile.firstName} {profile.lastName}
+                    {user ? `${user.firstName} ${user.lastName}` : 'Loading...'}
                   </h2>
-                  <Badge variant={profile.status === 'active' ? 'default' : 'secondary'}>
-                    {profile.status}
+                  <Badge variant={user?.isActive ? 'default' : 'secondary'}>
+                    {user?.isActive ? 'active' : 'inactive'}
                   </Badge>
                 </div>
-                <p className="text-muted-foreground mb-1">{profile.role}</p>
+                <p className="text-muted-foreground mb-1 capitalize">{user?.role?.toLowerCase()}</p>
                 <p className="text-sm text-muted-foreground">
-                  Member since {new Date(profile.joinedDate).toLocaleDateString()}
+                  {t('profile.memberSince')} {user ? new Date(user.createdAt).toLocaleDateString() : ''}
                 </p>
               </div>
             </div>
@@ -678,20 +653,20 @@ const ProfileView: React.FC = () => {
               <CardContent className="space-y-4">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
-                    <Label className="text-sm font-medium text-muted-foreground">Account ID</Label>
-                    <p className="text-sm">{profile.id}</p>
+                    <Label className="text-sm font-medium text-muted-foreground">{t('profile.accountId')}</Label>
+                    <p className="text-sm">{user?._id}</p>
                   </div>
                   <div>
-                    <Label className="text-sm font-medium text-muted-foreground">Role</Label>
-                    <p className="text-sm">{profile.role}</p>
+                    <Label className="text-sm font-medium text-muted-foreground">{t('profile.role')}</Label>
+                    <p className="text-sm capitalize">{user?.role?.toLowerCase()}</p>
                   </div>
                   <div>
-                    <Label className="text-sm font-medium text-muted-foreground">Member Since</Label>
-                    <p className="text-sm">{new Date(profile.joinedDate).toLocaleDateString()}</p>
+                    <Label className="text-sm font-medium text-muted-foreground">{t('profile.memberSince')}</Label>
+                    <p className="text-sm">{user ? new Date(user.createdAt).toLocaleDateString() : ''}</p>
                   </div>
                   <div>
-                    <Label className="text-sm font-medium text-muted-foreground">Last Login</Label>
-                    <p className="text-sm">{new Date(profile.lastLogin).toLocaleString()}</p>
+                    <Label className="text-sm font-medium text-muted-foreground">{t('profile.lastUpdated')}</Label>
+                    <p className="text-sm">{user ? new Date(user.updatedAt).toLocaleString() : ''}</p>
                   </div>
                 </div>
               </CardContent>

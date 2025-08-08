@@ -34,16 +34,11 @@ const LoginView: React.FC = () => {
     setIsLoading(true);
     try {
       const result = await login({ email, password });
-      console.log('Login result:', result);
       if (result) {
         toast({ title: t('auth.welcomeBack'), description: t('auth.loginSuccess') });
-        console.log('Navigating to dashboard...');
         navigate('/dashboard');
-      } else {
-        console.log('Login result was falsy, not navigating');
       }
     } catch (err) {
-      console.error('Login view error:', err);
       const message = err instanceof Error ? err.message : t('auth.invalidCredentials');
       toast({ title: t('auth.loginFailed'), description: message, variant: 'destructive' });
     } finally {

@@ -5,6 +5,8 @@ import type {
   TokenResponse,
   LoginRequest,
   RegisterRequest,
+  UpdateProfileRequest,
+  ChangePasswordRequest,
 } from "@/types/api/auth";
 
 const authApi = {
@@ -23,6 +25,14 @@ const authApi = {
   },
   refreshToken() {
     return apiClient.get<TokenResponse>("/api/token").then((r) => r.data);
+  },
+  updateProfile(payload: UpdateProfileRequest) {
+    return apiClient.patch<MeResponse>("/api/me", payload).then((r) => r.data);
+  },
+  changePassword(payload: ChangePasswordRequest) {
+    return apiClient
+      .patch<{ success: boolean; message: string }>("/api/me/password", payload)
+      .then((r) => r.data);
   },
 };
 

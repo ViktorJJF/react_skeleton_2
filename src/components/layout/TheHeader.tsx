@@ -10,6 +10,8 @@ import {
   BookOpen,
   LogOut,
 } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 import { Button } from '@/components/ui/button';
 import {
@@ -26,8 +28,23 @@ import { ThemeToggle } from '@/components/layout/ThemeToggle';
 import TheSidebar from '@/components/layout/TheSidebar';
 import NotificationCenter from '@/components/notifications/NotificationCenter';
 import LanguageSwitcher from '@/components/layout/LanguageSwitcher';
+import { useAuth } from '@/hooks/auth/useAuth';
+import { useAuthStore } from '@/store/authStore';
 
 const TheHeader = () => {
+  const { t } = useTranslation();
+  const navigate = useNavigate();
+  const { logout } = useAuth();
+  const user = useAuthStore((state) => state.user);
+
+  const handleLogout = async () => {
+    await logout();
+    navigate('/login');
+  };
+
+  const handleProfileClick = () => {
+    navigate('/profile');
+  };
   return (
     <header className="sticky top-0 z-50 flex h-16 items-center justify-between border-b bg-background/95 px-4 shadow-sm backdrop-blur supports-[backdrop-filter]:bg-background/60 sm:px-6">
       {/* Left Side - Branding and Mobile Menu */}
@@ -97,33 +114,41 @@ const TheHeader = () => {
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-56">
-            <DropdownMenuLabel>My Account</DropdownMenuLabel>
+            <DropdownMenuLabel>
+              {user ? (`${user.firstName} ${user.lastName}`.trim() || user.email) : t('common.myAccount')}
+            </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="flex items-center gap-2">
+            <DropdownMenuItem 
+              className="flex items-center gap-2 cursor-pointer"
+              onClick={handleProfileClick}
+            >
               <CircleUser className="h-4 w-4" />
-              Profile
+              {t('common.profile')}
             </DropdownMenuItem>
-            <DropdownMenuItem className="flex items-center gap-2">
+            <DropdownMenuItem className="flex items-center gap-2 cursor-pointer">
               <Settings className="h-4 w-4" />
-              Settings
+              {t('common.settings')}
             </DropdownMenuItem>
-            <DropdownMenuItem className="flex items-center gap-2">
+            <DropdownMenuItem className="flex items-center gap-2 cursor-pointer">
               <CreditCard className="h-4 w-4" />
-              Billing
+              {t('common.billing')}
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="flex items-center gap-2">
+            <DropdownMenuItem className="flex items-center gap-2 cursor-pointer">
               <HelpCircle className="h-4 w-4" />
-              Support
+              {t('common.support')}
             </DropdownMenuItem>
-            <DropdownMenuItem className="flex items-center gap-2">
+            <DropdownMenuItem className="flex items-center gap-2 cursor-pointer">
               <BookOpen className="h-4 w-4" />
-              Documentation
+              {t('common.documentation')}
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem className="flex items-center gap-2 text-destructive">
+            <DropdownMenuItem 
+              className="flex items-center gap-2 text-destructive cursor-pointer"
+              onClick={handleLogout}
+            >
               <LogOut className="h-4 w-4" />
-              Logout
+              {t('auth.logout')}
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
