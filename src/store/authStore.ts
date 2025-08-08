@@ -1,69 +1,185 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
-
-// Define the shape of the user object
-interface User {
-  name: string;
-  email: string;
-  avatar?: string;
-}
+import authApi from "@/services/api/auth";
+import type { AuthUser, ApiUser, ApiLoginUser } from "@/types/entities/user";
 
 interface AuthState {
   isAuthenticated: boolean;
   token: string | null;
-  user: User | null;
-  login: (userData: {
+  refreshToken: string | null;
+  user: (AuthUser & { name?: string; avatar?: string }) | null;
+  isLoading: boolean;
+  error: string | null;
+  // actions
+  setToken: (token: string | null) => void;
+  login: (credentials: { email: string; password: string }) => Promise<{
     name: string;
     email: string;
     avatar?: string;
     token: string;
-  }) => void;
+  } | null>;
   logout: () => void;
-  autoLogin: () => void;
+  autoLogin: () => Promise<void>;
+  refreshTokenAction: () => Promise<string | null>;
 }
+
+// Helper functions to normalize API responses to our internal format
+const normalizeApiUser = (apiUser: ApiUser): AuthUser => ({
+  _id: apiUser._id,
+  email: apiUser.email,
+  firstName: apiUser.first_name || "",
+  lastName: apiUser.last_name || "",
+  role: apiUser.role,
+  isEmailVerified: apiUser.verified,
+  isActive: true, // API doesn't provide this field, assume true
+  createdAt: apiUser.createdAt,
+  updatedAt: apiUser.updatedAt,
+});
+
+const normalizeLoginUser = (loginUser: ApiLoginUser): Partial<AuthUser> => ({
+  _id: loginUser._id,
+  email: loginUser.email,
+  role: loginUser.role,
+  isEmailVerified: loginUser.verified,
+  isActive: true,
+  // firstName/lastName not provided in login response
+  firstName: "",
+  lastName: "",
+  createdAt: "",
+  updatedAt: "",
+});
 
 export const useAuthStore = create(
   persist<AuthState>(
-    (set) => ({
+    (set, get) => ({
       isAuthenticated: false,
       token: null,
+      refreshToken: null,
       user: null,
-      login: (userData) => {
-        set({
-          isAuthenticated: true,
-          token: userData.token,
-          user: {
-            name: userData.name,
-            email: userData.email,
-            avatar: userData.avatar,
-          },
-        });
+      isLoading: false,
+      error: null,
+      setToken: (token) => set({ token }),
+      login: async ({ email, password }) => {
+        try {
+          set({ isLoading: true, error: null });
+          const res = await authApi.login({ email, password });
+          console.log("Login response:", res);
+
+          // Normalize the user from login response
+          const normalizedUser = normalizeLoginUser(res.user);
+          const name =
+            normalizedUser.firstName && normalizedUser.lastName
+              ? `${normalizedUser.firstName} ${normalizedUser.lastName}`.trim()
+              : res.user.email.split("@")[0]; // fallback to email prefix
+
+          console.log("Setting auth state:", {
+            isAuthenticated: true,
+            token: res.token,
+            user: { ...normalizedUser, name },
+          });
+
+          set({
+            isAuthenticated: true,
+            token: res.token,
+            refreshToken: null, // API doesn't provide refresh token in login
+            user: { ...normalizedUser, name } as AuthUser & { name: string },
+            isLoading: false,
+          });
+
+          return { name, email: res.user.email, token: res.token };
+        } catch (e) {
+          console.error("Login error:", e);
+          const message = e instanceof Error ? e.message : "Login failed";
+          set({ isLoading: false, error: message });
+          throw e;
+        }
       },
       logout: () => {
         set({
           isAuthenticated: false,
           token: null,
+          refreshToken: null,
           user: null,
         });
       },
-      autoLogin: () => {
-        // The `persist` middleware automatically rehydrates the state from storage.
-        // This function can be used for any explicit re-login logic if needed.
-        // For example, you might want to verify the token with your backend here.
+      autoLogin: async () => {
+        const token = get().token;
+        console.log("AutoLogin: token exists?", !!token);
+        if (!token) {
+          console.log("AutoLogin: No token, skipping");
+          return;
+        }
+        try {
+          console.log("AutoLogin: Calling /me endpoint");
+          set({ isLoading: true, error: null });
+          const me = await authApi.me();
+          console.log("AutoLogin: /me response:", me);
+          const normalizedUser = normalizeApiUser(me);
+          const name =
+            `${normalizedUser.firstName} ${normalizedUser.lastName}`.trim();
+          console.log("AutoLogin: Setting authenticated state with user:", {
+            ...normalizedUser,
+            name,
+          });
+          set({
+            user: { ...normalizedUser, name },
+            isAuthenticated: true,
+            isLoading: false,
+          });
+        } catch (error) {
+          console.log("AutoLogin: /me failed, trying refresh token:", error);
+          // try refresh token flow
+          try {
+            const refreshed = await get().refreshTokenAction();
+            if (refreshed) {
+              const me = await authApi.me();
+              const normalizedUser = normalizeApiUser(me);
+              const name =
+                `${normalizedUser.firstName} ${normalizedUser.lastName}`.trim();
+              set({
+                user: { ...normalizedUser, name },
+                isAuthenticated: true,
+                isLoading: false,
+              });
+              return;
+            }
+          } catch {
+            // Silently fail refresh attempt
+          }
+          console.log(
+            "AutoLogin: Both /me and refresh failed, clearing auth state"
+          );
+          set({
+            isAuthenticated: false,
+            token: null,
+            refreshToken: null,
+            user: null,
+            isLoading: false,
+          });
+        }
+      },
+      refreshTokenAction: async () => {
+        try {
+          const res = await authApi.refreshToken();
+          if (res.token) {
+            set({ token: res.token });
+            return res.token;
+          }
+          return null;
+        } catch {
+          set({
+            isAuthenticated: false,
+            token: null,
+            refreshToken: null,
+            user: null,
+          });
+          return null;
+        }
       },
     }),
     {
       name: "auth-storage",
       storage: createJSONStorage(() => localStorage),
-      onRehydrateStorage: (state) => {
-        if (state) {
-          // If a token exists on rehydration, assume the user is still logged in.
-          // You might want to add token validation logic here.
-          if (state.token) {
-            state.autoLogin();
-          }
-        }
-      },
     }
   )
 );

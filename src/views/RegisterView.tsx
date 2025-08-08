@@ -7,6 +7,7 @@ import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Eye, EyeOff, Mail, Lock, User, Bot, ArrowRight, Github, Check, Chrome } from 'lucide-react';
 import { useToast } from '@/hooks/ui/use-toast';
+import { useRegister } from '@/hooks/auth/useRegister';
 
 const RegisterView: React.FC = () => {
   const { t } = useTranslation();
@@ -23,6 +24,7 @@ const RegisterView: React.FC = () => {
   const [agreedToTerms, setAgreedToTerms] = useState(false);
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { register } = useRegister();
 
   const handleInputChange = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
@@ -74,17 +76,19 @@ const RegisterView: React.FC = () => {
     if (!validateForm()) return;
 
     setIsLoading(true);
-    
-    // Simulate API call
-    setTimeout(() => {
-      setIsLoading(false);
-      
-      toast({
-        title: t('auth.accountCreated'),
-        description: t('auth.welcomeToAI'),
+    try {
+      await register({
+        email: formData.email,
+        password: formData.password,
+        firstName: formData.firstName,
+        lastName: formData.lastName,
       });
       navigate('/login');
-    }, 2000);
+    } catch (err) {
+      // Error is already handled in useRegister hook
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleSocialRegister = (provider: string) => {

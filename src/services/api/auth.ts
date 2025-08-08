@@ -1,25 +1,29 @@
-import axios from "axios";
+import apiClient from "@/services/api/apiClient";
+import type {
+  AuthSuccessResponse,
+  MeResponse,
+  TokenResponse,
+  LoginRequest,
+  RegisterRequest,
+} from "@/types/api/auth";
 
-import type { GenericObject } from "@/types/GenericObject";
-import config from "@/config";
-
-export default {
-  login(email: string, password: string) {
-    return axios.post(config.BACKEND_BASE_URL + "/api/login", {
-      email,
-      password,
-    });
+const authApi = {
+  login(payload: LoginRequest) {
+    return apiClient
+      .post<AuthSuccessResponse>("/api/login", payload)
+      .then((r) => r.data);
   },
-  editUser(id: string, payload: GenericObject) {
-    return axios.put(config.BACKEND_BASE_URL + `/api/members/${id}`, payload);
+  register(payload: RegisterRequest) {
+    return apiClient
+      .post<AuthSuccessResponse>("/api/register", payload)
+      .then((r) => r.data);
   },
-  updatePassword(id: string, newPassword: string) {
-    return axios.put(
-      config.BACKEND_BASE_URL + `/api/members/${id}/update-password`,
-      { newPassword }
-    );
+  me() {
+    return apiClient.get<MeResponse>("/api/me").then((r) => r.data);
   },
   refreshToken() {
-    return axios.get(config.BACKEND_BASE_URL + "/api/token");
+    return apiClient.get<TokenResponse>("/api/token").then((r) => r.data);
   },
 };
+
+export default authApi;

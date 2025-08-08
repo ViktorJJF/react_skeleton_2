@@ -1,5 +1,5 @@
-import axios, { type AxiosPromise } from "axios";
-import config from "@/config";
+import { type AxiosPromise } from "axios";
+import apiClient from "@/services/api/apiClient";
 import type {
   IBotListQuery,
   ICreateBotRequest,
@@ -19,41 +19,41 @@ import type {
 
 export default {
   list(query: IBotListQuery): AxiosPromise<IListBotsResponse> {
-    return axios.get(config.BACKEND_BASE_URL + "/api/v1/bots", {
+    return apiClient.get("/api/v1/bots", {
       params: query,
     });
   },
   listOne(id: string): AxiosPromise<IListOneBotResponse> {
-    return axios.get(config.BACKEND_BASE_URL + "/api/v1/bots/" + id);
+    return apiClient.get("/api/v1/bots/" + id);
   },
   update(
     id: string,
     payload: IUpdateBotRequest
   ): AxiosPromise<IUpdateBotResponse> {
-    return axios.put(config.BACKEND_BASE_URL + `/api/v1/bots/${id}`, payload);
+    return apiClient.put(`/api/v1/bots/${id}`, payload);
   },
   create(payload: ICreateBotRequest): AxiosPromise<ICreateBotResponse> {
-    return axios.post(config.BACKEND_BASE_URL + "/api/v1/bots", payload);
+    return apiClient.post("/api/v1/bots", payload);
   },
   delete(id: string): AxiosPromise<IDeleteBotResponse> {
-    return axios.delete(config.BACKEND_BASE_URL + `/api/v1/bots/${id}`);
+    return apiClient.delete(`/api/v1/bots/${id}`);
   },
 
   // Bulk operations
   bulkCreate(
     payload: IBulkCreateBotsRequest
   ): AxiosPromise<IBulkCreateBotsResponse> {
-    return axios.post(config.BACKEND_BASE_URL + "/api/v1/bots/bulk", payload);
+    return apiClient.post("/api/v1/bots/bulk", payload);
   },
   bulkUpdate(
     payload: IBulkUpdateBotsRequest
   ): AxiosPromise<IBulkUpdateBotsResponse> {
-    return axios.put(config.BACKEND_BASE_URL + "/api/v1/bots/bulk", payload);
+    return apiClient.put("/api/v1/bots/bulk", payload);
   },
   bulkDelete(
     payload: IBulkDeleteBotsRequest
   ): AxiosPromise<IBulkDeleteBotsResponse> {
-    return axios.delete(config.BACKEND_BASE_URL + "/api/v1/bots/bulk", {
+    return apiClient.delete("/api/v1/bots/bulk", {
       data: payload,
     });
   },

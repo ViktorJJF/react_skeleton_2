@@ -34,27 +34,32 @@ const ProtectedRoute: React.FC = () => {
 
   useEffect(() => {
     const checkAuth = async () => {
-      const hasToken = localStorage.getItem('auth_token') !== null;
-
-      if (hasToken && !isAuthenticated) {
-        // Try auto login if we have a token but not authenticated yet
-        setIsAuthenticating(true);
-        await autoLogin();
-        setIsAuthenticating(false);
-      }
-
+      console.log('ProtectedRoute: Starting auth check');
+      // With Zustand persist we can attempt autoLogin always
+      setIsAuthenticating(true);
+      await autoLogin();
+      setIsAuthenticating(false);
       setAuthChecked(true);
     };
 
     checkAuth();
-  }, [isAuthenticated, autoLogin]);
+  }, [autoLogin]);
+
+  // Log auth state changes
+  useEffect(() => {
+    console.log('ProtectedRoute: Auth state changed, isAuthenticated:', isAuthenticated);
+  }, [isAuthenticated]);
 
   // Show loading or spinner while we're checking auth state
   if (!authChecked || isAuthenticating) {
+    console.log('ProtectedRoute: Showing loading state');
     return <div className="auth-loading">Checking authentication...</div>;
   }
 
+  console.log('ProtectedRoute: Final auth state:', isAuthenticated);
+  
   if (!isAuthenticated) {
+    console.log('ProtectedRoute: Not authenticated, redirecting to login');
     // Redirect to login page with the return location
     return (
       <Navigate
@@ -65,6 +70,7 @@ const ProtectedRoute: React.FC = () => {
     );
   }
 
+  console.log('ProtectedRoute: Authenticated, showing outlet');
   return <Outlet />;
 };
 

@@ -17,8 +17,7 @@ export const useAuth = () => {
     error,
     login: authLogin,
     logout: authLogout,
-    refreshToken,
-    clearError,
+    refreshTokenAction,
   } = useAuthStore();
 
   const login = useCallback(
@@ -62,7 +61,7 @@ export const useAuth = () => {
 
   const refresh = useCallback(async () => {
     try {
-      return await refreshToken();
+      return await refreshTokenAction();
     } catch (error: any) {
       toast({
         title: t("auth.sessionExpired"),
@@ -71,16 +70,7 @@ export const useAuth = () => {
       });
       throw error;
     }
-  }, [refreshToken, toast, t]);
+  }, [refreshTokenAction, toast, t]);
 
-  return {
-    user,
-    isAuthenticated,
-    isLoading,
-    error,
-    login,
-    logout,
-    refresh,
-    clearError,
-  };
+  return { user, isAuthenticated, isLoading, error, login, logout, refresh };
 };
