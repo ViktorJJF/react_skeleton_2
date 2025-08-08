@@ -7,6 +7,7 @@ import type {
   RegisterRequest,
   UpdateProfileRequest,
   ChangePasswordRequest,
+  SocialLoginRequest,
 } from "@/types/api/auth";
 
 const authApi = {
@@ -32,6 +33,12 @@ const authApi = {
   changePassword(payload: ChangePasswordRequest) {
     return apiClient
       .patch<{ success: boolean; message: string }>("/api/me/password", payload)
+      .then((r) => r.data);
+  },
+  loginWithGoogle(payload: SocialLoginRequest) {
+    // Backend endpoint should verify Google token and return same shape as AuthSuccessResponse
+    return apiClient
+      .post<AuthSuccessResponse>("/api/login/google", payload)
       .then((r) => r.data);
   },
 };
