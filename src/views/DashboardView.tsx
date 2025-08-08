@@ -1,11 +1,11 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { XAxis, YAxis, Tooltip, ResponsiveContainer, AreaChart, Area } from 'recharts';
 import { Bot, MessageCircle, Users, TrendingUp, Activity, Target } from 'lucide-react';
-import ViewComponent from '@/components/layout/TheView';
+import { useViewConfig } from '@/contexts/ViewContext';
 import { useNotifications } from '@/hooks/ui/useNotifications';
 import { useAnalytics } from '@/hooks/api/useAnalytics';
 
@@ -42,6 +42,38 @@ const DashboardView = () => {
   const { sendToast, sendBanner, sendNotification } = useNotifications();
   const { trackCustomEvent } = useAnalytics();
 
+  const handleCreateBotClick = () => {
+    trackCustomEvent('Dashboard', 'Click', 'Create New Bot Button');
+    // Add logic to open the create bot modal here
+  };
+
+  // Configure view properties for the AdminLayout
+  useViewConfig({
+    title: t('dashboard.title'),
+    description: t('dashboard.description'),
+    actionButton: (
+      <div className="flex items-center gap-3">
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" className="font-medium">
+              Last 7 days
+            </Button>
+          </DropdownMenuTrigger>
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem>Last 24 hours</DropdownMenuItem>
+            <DropdownMenuItem>Last 7 days</DropdownMenuItem>
+            <DropdownMenuItem>Last 30 days</DropdownMenuItem>
+            <DropdownMenuItem>Last 90 days</DropdownMenuItem>
+          </DropdownMenuContent>
+        </DropdownMenu>
+        <Button onClick={handleCreateBotClick}>
+          <Bot className="w-4 h-4 mr-2" />
+          {t('dashboard.createNewBot')}
+        </Button>
+      </div>
+    ),
+  });
+
   useEffect(() => {
     // This is for demonstration purposes. 
     // In a real application, these would be triggered by actual events.
@@ -67,38 +99,8 @@ const DashboardView = () => {
     
   }, [sendToast, sendBanner, sendNotification]);
 
-  const handleCreateBotClick = () => {
-    trackCustomEvent('Dashboard', 'Click', 'Create New Bot Button');
-    // Add logic to open the create bot modal here
-  };
-
-
   return (
-    <ViewComponent
-      title={t('dashboard.title')}
-      description={t('dashboard.description')}
-      actionButton={
-        <div className="flex items-center gap-3">
-          <DropdownMenu>
-            <DropdownMenuTrigger asChild>
-              <Button variant="outline" className="font-medium">
-                Last 7 days
-              </Button>
-            </DropdownMenuTrigger>
-            <DropdownMenuContent align="end">
-              <DropdownMenuItem>Last 24 hours</DropdownMenuItem>
-              <DropdownMenuItem>Last 7 days</DropdownMenuItem>
-              <DropdownMenuItem>Last 30 days</DropdownMenuItem>
-              <DropdownMenuItem>Last 90 days</DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-          <Button onClick={handleCreateBotClick}>
-            <Bot className="w-4 h-4 mr-2" />
-            {t('dashboard.createNewBot')}
-          </Button>
-        </div>
-      }
-    >
+    <div>
       {/* Stats Grid */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6">
         {statCards.map((card, index) => (
@@ -124,7 +126,7 @@ const DashboardView = () => {
       </div>
 
       {/* Main Charts */}
-      <div className="grid gap-6 lg:grid-cols-3">
+      <div className="grid gap-6 lg:grid-cols-3 mt-6">
         <Card className="lg:col-span-2">
           <CardHeader>
             <div className="flex items-center justify-between">
@@ -211,7 +213,7 @@ const DashboardView = () => {
           </CardContent>
         </Card>
       </div>
-    </ViewComponent>
+    </div>
   );
 };
 

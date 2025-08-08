@@ -3,6 +3,8 @@ import { Button } from '@/components/ui/button';
 import { DataTable } from '@/components/data-table/data-table';
 import { ServerPagination } from '@/components/tables';
 import { LoadingSpinner } from '@/components/common/modals/LoadingSpinner';
+import { useViewConfig } from '@/contexts/ViewContext';
+import { RefreshCw, Plus } from 'lucide-react';
 import { useModal } from '@/hooks/ui/useModal';
 import { usePagination } from '@/hooks/ui/usePagination';
 
@@ -131,6 +133,43 @@ export const BotsView: React.FC = () => {
     updateParams({ isActive, page: 1 });
   };
 
+  // Configure view properties for the AdminLayout
+  useViewConfig({
+    title: "Bots Management",
+    description: "A list of all the bots in your account.",
+    actionButton: (
+      <div className="flex items-center gap-2">
+        <Button
+          variant="outline"
+          size="sm"
+          onClick={() => refetch()}
+          disabled={isLoading}
+        >
+          <RefreshCw className={`h-4 w-4 mr-2 ${(isMutating || isBulkOperating) ? 'animate-spin' : ''}`} />
+          Refresh
+        </Button>
+        <Button onClick={createModal.open}>
+          <Plus className="h-4 w-4 mr-2" />
+          Create Bot
+        </Button>
+      </div>
+    ),
+    filters: (
+      <BotActions
+        searchQuery={searchQuery}
+        onSearchChange={handleSearchChange}
+        statusFilter={statusFilter}
+        onStatusFilterChange={handleStatusChange}
+        onCreateBot={createModal.open}
+        onRefresh={refetch}
+        onBulkDelete={() => bulkDeleteModal.open()}
+        selectedBots={selectedBots}
+        isLoading={isLoading}
+        isRefreshing={isMutating || isBulkOperating}
+      />
+    ),
+  });
+
   // Loading state
   if (isLoading && !bots.length) {
     return (
@@ -158,27 +197,8 @@ export const BotsView: React.FC = () => {
   }
 
   return (
-    <div className="container mx-auto py-8 px-4 space-y-8">
-      <header>
-        <h1 className="text-3xl font-bold tracking-tight">Bots Management</h1>
-        <p className="text-muted-foreground mt-2">
-          A list of all the bots in your account.
-        </p>
-      </header>
-
+    <div className="space-y-6">
       <div className="bg-background border rounded-lg shadow-sm">
-        <BotActions
-          searchQuery={searchQuery}
-          onSearchChange={handleSearchChange}
-          statusFilter={statusFilter}
-          onStatusFilterChange={handleStatusChange}
-          onCreateBot={createModal.open}
-          onRefresh={refetch}
-          onBulkDelete={() => bulkDeleteModal.open()}
-          selectedBots={selectedBots}
-          isLoading={isLoading}
-          isRefreshing={isMutating || isBulkOperating}
-        />
         <DataTable
           columns={columns}
           data={bots}

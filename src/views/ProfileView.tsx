@@ -9,7 +9,7 @@ import { Badge } from '@/components/ui/badge';
 import { Switch } from '@/components/ui/switch';
 import { Separator } from '@/components/ui/separator';
 import { useToast } from '@/hooks/ui/use-toast';
-import ViewComponent from '@/components/layout/TheView';
+import { useViewConfig } from '@/contexts/ViewContext';
 import {
   User,
   Mail,
@@ -25,13 +25,9 @@ import {
   Edit,
   Trash2,
   Download,
-  Upload,
   Eye,
   EyeOff,
-  CheckCircle,
-  AlertCircle,
   Settings,
-  LogOut,
 } from 'lucide-react';
 
 interface UserProfile {
@@ -192,52 +188,52 @@ const ProfileView: React.FC = () => {
     return `${profile.firstName.charAt(0)}${profile.lastName.charAt(0)}`.toUpperCase();
   };
 
+  // Configure view properties for the AdminLayout
+  useViewConfig({
+    title: "Profile Settings",
+    description: "Manage your account settings and preferences",
+    actionButton: isEditing ? (
+      <div className="flex gap-2">
+        <Button
+          variant="outline"
+          onClick={() => {
+            setIsEditing(false);
+            setFormData({
+              firstName: profile.firstName,
+              lastName: profile.lastName,
+              email: profile.email,
+              phone: profile.phone,
+              location: profile.location,
+              website: profile.website,
+              bio: profile.bio,
+            });
+          }}
+        >
+          Cancel
+        </Button>
+        <Button onClick={handleSaveProfile} disabled={isLoading}>
+          {isLoading ? (
+            <>
+              <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent mr-2" />
+              Saving...
+            </>
+          ) : (
+            <>
+              <Save className="h-4 w-4 mr-2" />
+              Save Changes
+            </>
+          )}
+        </Button>
+      </div>
+    ) : (
+      <Button onClick={() => setIsEditing(true)}>
+        <Edit className="h-4 w-4 mr-2" />
+        Edit Profile
+      </Button>
+    ),
+  });
+
   return (
-    <ViewComponent
-      title="Profile Settings"
-      description="Manage your account settings and preferences"
-      actionButton={
-        isEditing ? (
-          <div className="flex gap-2">
-            <Button
-              variant="outline"
-              onClick={() => {
-                setIsEditing(false);
-                setFormData({
-                  firstName: profile.firstName,
-                  lastName: profile.lastName,
-                  email: profile.email,
-                  phone: profile.phone,
-                  location: profile.location,
-                  website: profile.website,
-                  bio: profile.bio,
-                });
-              }}
-            >
-              Cancel
-            </Button>
-            <Button onClick={handleSaveProfile} disabled={isLoading}>
-              {isLoading ? (
-                <>
-                  <div className="h-4 w-4 animate-spin rounded-full border-2 border-current border-t-transparent mr-2" />
-                  Saving...
-                </>
-              ) : (
-                <>
-                  <Save className="h-4 w-4 mr-2" />
-                  Save Changes
-                </>
-              )}
-            </Button>
-          </div>
-        ) : (
-          <Button onClick={() => setIsEditing(true)}>
-            <Edit className="h-4 w-4 mr-2" />
-            Edit Profile
-          </Button>
-        )
-      }
-    >
       <div className="space-y-6">
         {/* Profile Header */}
         <Card>
@@ -749,7 +745,6 @@ const ProfileView: React.FC = () => {
           </TabsContent>
         </Tabs>
       </div>
-    </ViewComponent>
   );
 };
 
