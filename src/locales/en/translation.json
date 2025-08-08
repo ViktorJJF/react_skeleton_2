@@ -15,6 +15,7 @@
     "continue": "Continue",
     "yes": "Yes",
     "no": "No",
+    "refresh": "Refresh",
     "name": "Name",
     "description": "Description",
     "email": "Email",
@@ -59,8 +60,49 @@
     "totalUsers": "Total Users",
     "revenue": "Revenue",
     "performance": "Performance",
-    "recentActivity": "Recent Activity",
-    "quickActions": "Quick Actions"
+    "recentActivity": {
+      "title": "Recent Activity",
+      "description": "Latest updates and system events"
+    },
+    "quickActions": "Quick Actions",
+    "welcome": "Welcome Back!",
+    "welcomeMessage": "Your dashboard is ready with the latest updates.",
+    "refreshed": "Data Refreshed",
+    "dataUpdated": "Dashboard data has been updated successfully.",
+    "refreshError": "Failed to refresh data. Please try again.",
+    "exportStarted": "Export Started",
+    "exportDescription": "Your data export will be ready shortly.",
+    "viewDetails": "View Details",
+    "viewAll": "View All",
+    "actions": "Actions",
+    "exportData": "Export Data",
+    "timeRange": {
+      "label": "Time Range",
+      "24h": "Last 24 hours",
+      "7d": "Last 7 days",
+      "30d": "Last 30 days",
+      "90d": "Last 90 days"
+    },
+    "stats": {
+      "activeBots": "Active Bots",
+      "totalChats": "Total Chats",
+      "activeUsers": "Active Users",
+      "conversionRate": "Conversion Rate",
+      "responseTime": "Avg Response Time",
+      "goalsCompleted": "Goals Completed"
+    },
+    "charts": {
+      "performance": {
+        "title": "Chatbot Performance",
+        "description": "Conversations and resolution rates over time"
+      },
+      "intents": {
+        "title": "Top Intents",
+        "description": "Most common user queries"
+      },
+      "conversations": "Conversations",
+      "resolved": "Resolved"
+    }
   },
   "sidebar": {
     "dashboard": "Dashboard",

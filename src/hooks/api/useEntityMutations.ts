@@ -5,6 +5,7 @@ import {
 } from "@tanstack/react-query";
 import { useToast } from "@/hooks/ui/use-toast";
 import { useTranslation } from "react-i18next";
+import { handleServiceError } from "@/services/errorHandler";
 
 export interface EntityQueryKeys {
   lists: () => QueryKey;
@@ -65,10 +66,9 @@ export function useCreateEntityMutation<TCreate, TEntity, TListShape>(
           queryClient.setQueryData(key, data);
         });
       }
-      toast({
-        title: t("common.error"),
-        description: t(errorMessage),
-        variant: "destructive",
+      handleServiceError(_err, {
+        operation: t("common.create"),
+        fallbackMessage: t(errorMessage),
       });
     },
     onSuccess: () => {
@@ -158,10 +158,9 @@ export function useUpdateEntityMutation<
           queryClient.setQueryData(key, data);
         });
       }
-      toast({
-        title: t("common.error"),
-        description: errorMessage,
-        variant: "destructive",
+      handleServiceError(_err, {
+        operation: t("common.update"),
+        fallbackMessage: errorMessage,
       });
     },
     onSuccess: (_res, { id }) => {
@@ -222,10 +221,9 @@ export function useDeleteEntityMutation<TListShape>(
           queryClient.setQueryData(key, data);
         });
       }
-      toast({
-        title: t("common.error"),
-        description: errorMessage,
-        variant: "destructive",
+      handleServiceError(_err, {
+        operation: t("common.delete"),
+        fallbackMessage: errorMessage,
       });
     },
     onSuccess: (_res, id) => {

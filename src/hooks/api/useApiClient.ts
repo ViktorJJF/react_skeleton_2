@@ -1,6 +1,10 @@
 import { useCallback } from "react";
 import { useToast } from "@/hooks/ui/use-toast";
 import { useTranslation } from "react-i18next";
+import {
+  GlobalErrorHandler,
+  IErrorHandlerOptions,
+} from "@/services/errorHandler";
 
 /**
  * Generic API client hook for handling common API operations
@@ -10,22 +14,16 @@ export const useApiClient = () => {
   const { t } = useTranslation();
 
   const handleApiError = useCallback(
-    (error: any, operation?: string) => {
-      const errorMessage =
-        error.response?.data?.message || error.message || t("common.apiError");
+    (error: unknown, operation?: string) => {
+      const options: IErrorHandlerOptions = {
+        showToast: true,
+        operation,
+        fallbackMessage: t("common.apiError"),
+      };
 
-      toast({
-        title: t("common.error"),
-        description: operation
-          ? t("common.operationFailed", { operation })
-          : errorMessage,
-        variant: "destructive",
-      });
-
-      console.error("API Error:", error);
-      return errorMessage;
+      return GlobalErrorHandler.handleError(error, options);
     },
-    [toast, t]
+    [t]
   );
 
   const handleApiSuccess = useCallback(
@@ -41,5 +39,10 @@ export const useApiClient = () => {
   return {
     handleApiError,
     handleApiSuccess,
+    // Expose additional error handling utilities
+    extractErrorMessage: GlobalErrorHandler.extractErrorMessage,
+    extractErrorCode: GlobalErrorHandler.extractErrorCode,
+    isValidationError: GlobalErrorHandler.isValidationError,
+    getValidationErrors: GlobalErrorHandler.getValidationErrors,
   };
 };

@@ -15,6 +15,7 @@
     "continue": "Continuar",
     "yes": "Sí",
     "no": "No",
+    "refresh": "Actualizar",
     "name": "Nombre",
     "description": "Descripción",
     "email": "Correo electrónico",
@@ -59,8 +60,49 @@
     "totalUsers": "Total de Usuarios",
     "revenue": "Ingresos",
     "performance": "Rendimiento",
-    "recentActivity": "Actividad Reciente",
-    "quickActions": "Acciones Rápidas"
+    "recentActivity": {
+      "title": "Actividad Reciente",
+      "description": "Últimas actualizaciones y eventos del sistema"
+    },
+    "quickActions": "Acciones Rápidas",
+    "welcome": "¡Bienvenido de vuelta!",
+    "welcomeMessage": "Tu tablero está listo con las últimas actualizaciones.",
+    "refreshed": "Datos Actualizados",
+    "dataUpdated": "Los datos del tablero se han actualizado exitosamente.",
+    "refreshError": "Error al actualizar los datos. Por favor, inténtalo de nuevo.",
+    "exportStarted": "Exportación Iniciada",
+    "exportDescription": "Tu exportación de datos estará lista en breve.",
+    "viewDetails": "Ver Detalles",
+    "viewAll": "Ver Todo",
+    "actions": "Acciones",
+    "exportData": "Exportar Datos",
+    "timeRange": {
+      "label": "Rango de Tiempo",
+      "24h": "Últimas 24 horas",
+      "7d": "Últimos 7 días",
+      "30d": "Últimos 30 días",
+      "90d": "Últimos 90 días"
+    },
+    "stats": {
+      "activeBots": "Bots Activos",
+      "totalChats": "Total de Chats",
+      "activeUsers": "Usuarios Activos",
+      "conversionRate": "Tasa de Conversión",
+      "responseTime": "Tiempo de Respuesta Prom.",
+      "goalsCompleted": "Objetivos Completados"
+    },
+    "charts": {
+      "performance": {
+        "title": "Rendimiento del Chatbot",
+        "description": "Conversaciones y tasas de resolución a lo largo del tiempo"
+      },
+      "intents": {
+        "title": "Intenciones Principales",
+        "description": "Consultas de usuario más comunes"
+      },
+      "conversations": "Conversaciones",
+      "resolved": "Resueltas"
+    }
   },
   "sidebar": {
     "dashboard": "Tablero",
