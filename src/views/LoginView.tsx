@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -18,6 +18,37 @@ const LoginView: React.FC = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const { login } = useAuth();
+  const [searchParams] = useSearchParams();
+
+  // Handle redirect reason notifications
+  useEffect(() => {
+    const reason = searchParams.get('reason');
+    if (reason) {
+      switch (reason) {
+        case 'session_expired':
+          toast({
+            title: t('auth.sessionExpired'),
+            description: t('auth.sessionExpiredMessage'),
+            variant: 'destructive',
+          });
+          break;
+        case 'token_expired':
+          toast({
+            title: t('auth.tokenExpired'),
+            description: t('auth.tokenExpiredMessage'),
+            variant: 'destructive',
+          });
+          break;
+        case 'unauthorized':
+          toast({
+            title: t('auth.accessDenied'),
+            description: t('auth.loginRequired'),
+            variant: 'destructive',
+          });
+          break;
+      }
+    }
+  }, [searchParams, toast, t]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -36,7 +67,10 @@ const LoginView: React.FC = () => {
       const result = await login({ email, password });
       if (result) {
         toast({ title: t('auth.welcomeBack'), description: t('auth.loginSuccess') });
-        navigate('/dashboard');
+        
+        // Redirect to original destination or dashboard
+        const redirectTo = searchParams.get('redirect') || '/dashboard';
+        navigate(redirectTo, { replace: true });
       }
     } catch (err) {
       const message = err instanceof Error ? err.message : t('auth.invalidCredentials');

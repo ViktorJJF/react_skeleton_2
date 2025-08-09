@@ -88,12 +88,32 @@ export const useAuthStore = create(
         }
       },
       logout: () => {
+        // Clear all auth state
         set({
           isAuthenticated: false,
           token: null,
           refreshToken: null,
           user: null,
+          error: null,
+          isLoading: false,
         });
+
+        // Clear localStorage auth data
+        if (typeof window !== "undefined") {
+          localStorage.removeItem("auth-storage");
+
+          // Clear any other auth-related data
+          const keysToRemove = Object.keys(localStorage).filter(
+            (key) =>
+              key.includes("auth") ||
+              key.includes("token") ||
+              key.includes("user")
+          );
+          keysToRemove.forEach((key) => localStorage.removeItem(key));
+
+          // Clear sessionStorage as well
+          sessionStorage.clear();
+        }
       },
       autoLogin: async () => {
         const token = get().token;
@@ -111,8 +131,21 @@ export const useAuthStore = create(
             isAuthenticated: true,
             isLoading: false,
           });
-        } catch {
-          // try refresh token flow
+        } catch (error: unknown) {
+          const errorMessage =
+            error instanceof Error ? error.message : "Unknown error";
+          console.warn("AutoLogin failed:", errorMessage);
+
+          // If it's a 401 error, don't try refresh token as it will be handled by apiClient
+          if (error && typeof error === "object" && "response" in error) {
+            const axiosError = error as { response?: { status?: number } };
+            if (axiosError.response?.status === 401) {
+              get().logout();
+              return;
+            }
+          }
+
+          // For other errors, try refresh token flow
           try {
             const refreshed = await get().refreshTokenAction();
             if (refreshed) {
@@ -130,13 +163,9 @@ export const useAuthStore = create(
           } catch {
             // Silently fail refresh attempt
           }
-          set({
-            isAuthenticated: false,
-            token: null,
-            refreshToken: null,
-            user: null,
-            isLoading: false,
-          });
+
+          // If all fails, logout
+          get().logout();
         }
       },
       refreshTokenAction: async () => {

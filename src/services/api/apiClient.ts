@@ -34,12 +34,42 @@ const processQueue = (error: any, token: string | null = null) => {
   pendingQueue = [];
 };
 
+// Helper function to redirect to login
+const redirectToLogin = (reason = "unauthorized") => {
+  // Clear auth store
+  useAuthStore.getState().logout();
+
+  // Navigate to login with reason
+  if (typeof window !== "undefined") {
+    const currentPath = window.location.pathname + window.location.search;
+    const loginUrl = `/login?reason=${reason}&redirect=${encodeURIComponent(
+      currentPath
+    )}`;
+
+    // Use window.location.href for immediate redirect
+    window.location.href = loginUrl;
+  }
+};
+
 apiClient.interceptors.response.use(
   (response) => response,
   async (error) => {
     const originalRequest = error.config;
+    const isUnauthorized = error.response?.status === 401;
+    const isMeEndpoint = originalRequest?.url?.includes("/api/me");
+    const isTokenEndpoint = originalRequest?.url?.includes("/api/token");
 
-    if (error.response?.status === 401 && !originalRequest._retry) {
+    if (isUnauthorized && !originalRequest._retry) {
+      // Special handling for /me endpoint - immediate redirect without retry
+      if (isMeEndpoint) {
+        console.warn(
+          "Unauthorized access to /me endpoint - redirecting to login"
+        );
+        redirectToLogin("session_expired");
+        return Promise.reject(error);
+      }
+
+      // For other endpoints, try refresh token flow
       if (isRefreshing) {
         return new Promise((resolve, reject) => {
           pendingQueue.push({
@@ -68,7 +98,10 @@ apiClient.interceptors.response.use(
         return apiClient(originalRequest);
       } catch (refreshErr) {
         processQueue(refreshErr, null);
-        useAuthStore.getState().logout();
+
+        // If refresh token also fails, redirect to login
+        console.warn("Refresh token failed - redirecting to login");
+        redirectToLogin("token_expired");
         return Promise.reject(refreshErr);
       } finally {
         isRefreshing = false;
