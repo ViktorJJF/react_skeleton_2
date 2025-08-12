@@ -4,13 +4,6 @@ import { Button } from '@/components/ui/button';
 import { useNotifications } from '@/hooks/ui/useNotifications';
 import { useAuth } from '@/hooks/auth/useAuth';
 
-// Define the shape of the user profile from Google
-interface GoogleUserProfile {
-  email: string;
-  name: string;
-  picture: string;
-}
-
 const GoogleLoginButton: React.FC = () => {
   const { sendToast } = useNotifications();
   const { loginWithGoogle } = useAuth();

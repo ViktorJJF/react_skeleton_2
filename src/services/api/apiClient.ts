@@ -57,7 +57,6 @@ apiClient.interceptors.response.use(
     const originalRequest = error.config;
     const isUnauthorized = error.response?.status === 401;
     const isMeEndpoint = originalRequest?.url?.includes('/api/me');
-    const isTokenEndpoint = originalRequest?.url?.includes('/api/token');
 
     if (isUnauthorized && !originalRequest._retry) {
       // Special handling for /me endpoint - immediate redirect without retry

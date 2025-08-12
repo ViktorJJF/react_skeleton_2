@@ -18,7 +18,7 @@ const testObject = {
 };
 const dogNames = ['lilith', 'luna', 'lily', 'lola', 'luna 2'];
 
-const TestView: React.FC<TestViewProps> = ({ title }) => {
+const TestView: React.FC<TestViewProps> = ({}) => {
   const [todos, setTodos] = useState<Todo[]>([]);
   const [newTodoContent, setNewTodoContent] = useState<string>('');
 
