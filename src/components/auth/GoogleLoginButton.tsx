@@ -28,9 +28,6 @@ const GoogleLoginButton: React.FC = () => {
       if (!userInfoResponse.ok) {
         throw new Error('Failed to fetch user info from Google');
       }
-
-      const userProfile: GoogleUserProfile = await userInfoResponse.json();
-
       // Here you would typically send the user profile to your backend
       // to create or verify the user and get a session token (JWT).
       // For this example, we'll simulate a successful login.

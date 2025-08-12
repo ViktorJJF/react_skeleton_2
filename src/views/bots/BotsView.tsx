@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { Toaster, toast } from 'sonner';
 import { PlusCircle, Loader2, Pencil, Trash2 } from 'lucide-react';
 
@@ -60,6 +60,8 @@ import type { IBot } from '@/types/entities/bots';
 
 import Bots from '@/models/Bots';
 
+const defaultItem: IBot = Bots() as IBot;
+
 const BotsView = () => {
   // initilal config for view
   useViewConfig({
@@ -89,17 +91,17 @@ const BotsView = () => {
 
   // --- UI-specific State (for the dialog/form) ---
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [editedItem, setEditedItem] = useState<IBot>(Bots());
+  const [editedItem, setEditedItem] = useState<IBot>(defaultItem);
 
   // --- UI Handlers ---
   const closeDialog = () => {
     setDialogOpen(false);
     // Use a timeout to prevent flicker while the dialog closes
-    setTimeout(() => setEditedItem(Bots()), 300);
+    setTimeout(() => setEditedItem(defaultItem), 300);
   };
 
   const handleCreateClick = () => {
-    setEditedItem(Bots());
+    setEditedItem(defaultItem);
     setDialogOpen(true);
   };
 
