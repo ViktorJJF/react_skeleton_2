@@ -22,8 +22,9 @@ import ForgotPasswordView from '@/views/ForgotPasswordView';
 import DashboardView from '@/views/DashboardView';
 import NotFoundView from '@/views/NotFoundView';
 import ProfileView from '@/views/ProfileView';
-import { BotsView } from '@/views/BotsView/BotsView';
+import BotsView from '@/views/bots/BotsView';
 import RouteErrorBoundary from '@/components/RouteErrorBoundary';
+import TestView from '@/views/TestView';
 
 // Authentication guard for protected routes
 const ProtectedRoute: React.FC = () => {
@@ -106,6 +107,11 @@ const AppRouter: React.FC = () => {
   }, []);
 
   const router = createBrowserRouter([
+    {
+      path: '/test',
+      element: <TestView title="Test de tests" />,
+      errorElement: <RouteErrorBoundary />,
+    },
     {
       element: <RootLayout />,
       errorElement: <RouteErrorBoundary />,

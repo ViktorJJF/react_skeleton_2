@@ -18,7 +18,7 @@ import type {
 } from "@/types/entities/bots";
 
 export default {
-  list(query: IBotListQuery): AxiosPromise<IListBotsResponse> {
+  list(query: IBotListQuery = {}): AxiosPromise<IListBotsResponse> {
     return apiClient.get("/api/v1/bots", {
       params: query,
     });
@@ -37,18 +37,6 @@ export default {
   },
   delete(id: string): AxiosPromise<IDeleteBotResponse> {
     return apiClient.delete(`/api/v1/bots/${id}`);
-  },
-
-  // Bulk operations
-  bulkCreate(
-    payload: IBulkCreateBotsRequest
-  ): AxiosPromise<IBulkCreateBotsResponse> {
-    return apiClient.post("/api/v1/bots/bulk", payload);
-  },
-  bulkUpdate(
-    payload: IBulkUpdateBotsRequest
-  ): AxiosPromise<IBulkUpdateBotsResponse> {
-    return apiClient.put("/api/v1/bots/bulk", payload);
   },
   bulkDelete(
     payload: IBulkDeleteBotsRequest
