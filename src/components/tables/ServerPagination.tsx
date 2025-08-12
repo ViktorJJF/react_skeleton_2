@@ -6,7 +6,9 @@ interface ServerPaginationProps {
   controls: UsePaginationReturn;
 }
 
-export const ServerPagination: React.FC<ServerPaginationProps> = ({ controls }) => {
+export const ServerPagination: React.FC<ServerPaginationProps> = ({
+  controls,
+}) => {
   const {
     currentPage,
     totalPages,
@@ -56,5 +58,3 @@ export const ServerPagination: React.FC<ServerPaginationProps> = ({ controls }) 
 };
 
 export default ServerPagination;
-
-

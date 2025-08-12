@@ -1,4 +1,4 @@
-import apiClient from "@/services/api/apiClient";
+import apiClient from '@/services/api/apiClient';
 import type {
   AuthSuccessResponse,
   MeResponse,
@@ -8,37 +8,37 @@ import type {
   UpdateProfileRequest,
   ChangePasswordRequest,
   SocialLoginRequest,
-} from "@/types/api/auth";
+} from '@/types/api/auth';
 
 const authApi = {
   login(payload: LoginRequest) {
     return apiClient
-      .post<AuthSuccessResponse>("/api/login", payload)
+      .post<AuthSuccessResponse>('/api/login', payload)
       .then((r) => r.data);
   },
   register(payload: RegisterRequest) {
     return apiClient
-      .post<AuthSuccessResponse>("/api/register", payload)
+      .post<AuthSuccessResponse>('/api/register', payload)
       .then((r) => r.data);
   },
   me() {
-    return apiClient.get<MeResponse>("/api/me").then((r) => r.data);
+    return apiClient.get<MeResponse>('/api/me').then((r) => r.data);
   },
   refreshToken() {
-    return apiClient.get<TokenResponse>("/api/token").then((r) => r.data);
+    return apiClient.get<TokenResponse>('/api/token').then((r) => r.data);
   },
   updateProfile(payload: UpdateProfileRequest) {
-    return apiClient.patch<MeResponse>("/api/me", payload).then((r) => r.data);
+    return apiClient.patch<MeResponse>('/api/me', payload).then((r) => r.data);
   },
   changePassword(payload: ChangePasswordRequest) {
     return apiClient
-      .patch<{ success: boolean; message: string }>("/api/me/password", payload)
+      .patch<{ success: boolean; message: string }>('/api/me/password', payload)
       .then((r) => r.data);
   },
   loginWithGoogle(payload: SocialLoginRequest) {
     // Backend endpoint should verify Google token and return same shape as AuthSuccessResponse
     return apiClient
-      .post<AuthSuccessResponse>("/api/login/google", payload)
+      .post<AuthSuccessResponse>('/api/login/google', payload)
       .then((r) => r.data);
   },
 };

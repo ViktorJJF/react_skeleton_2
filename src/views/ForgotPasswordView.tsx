@@ -4,7 +4,13 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
 import { Mail, Bot, ArrowLeft, ArrowRight, CheckCircle } from 'lucide-react';
 import { useToast } from '@/hooks/ui/use-toast';
 
@@ -17,18 +23,18 @@ const ForgotPasswordView: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!email) {
       toast({
         title: t('auth.emailRequired'),
         description: t('auth.pleaseEnterEmail'),
-        variant: "destructive",
+        variant: 'destructive',
       });
       return;
     }
 
     setIsLoading(true);
-    
+
     // Simulate API call
     setTimeout(() => {
       setIsLoading(false);
@@ -50,7 +56,9 @@ const ForgotPasswordView: React.FC = () => {
               <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-primary shadow-lg">
                 <Bot className="h-6 w-6 text-primary-foreground" />
               </div>
-              <span className="text-2xl font-bold text-foreground">AI Panel</span>
+              <span className="text-2xl font-bold text-foreground">
+                AI Panel
+              </span>
             </div>
           </div>
 
@@ -64,7 +72,9 @@ const ForgotPasswordView: React.FC = () => {
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <h2 className="text-2xl font-bold">{t('auth.checkYourEmail')}</h2>
+                  <h2 className="text-2xl font-bold">
+                    {t('auth.checkYourEmail')}
+                  </h2>
                   <p className="text-muted-foreground">
                     {t('auth.resetLinkSent', { email })}
                   </p>
@@ -106,7 +116,9 @@ const ForgotPasswordView: React.FC = () => {
             </div>
             <span className="text-2xl font-bold text-foreground">AI Panel</span>
           </div>
-          <h1 className="text-3xl font-bold tracking-tight">{t('auth.forgotPassword')}</h1>
+          <h1 className="text-3xl font-bold tracking-tight">
+            {t('auth.forgotPassword')}
+          </h1>
           <p className="text-muted-foreground">
             {t('auth.resetPasswordEmail')}
           </p>
@@ -115,10 +127,10 @@ const ForgotPasswordView: React.FC = () => {
         {/* Form Card */}
         <Card className="border-0 shadow-lg bg-card/50 backdrop-blur-sm">
           <CardHeader className="space-y-1">
-            <CardTitle className="text-2xl">{t('auth.resetPassword')}</CardTitle>
-            <CardDescription>
-              {t('auth.enterEmailForReset')}
-            </CardDescription>
+            <CardTitle className="text-2xl">
+              {t('auth.resetPassword')}
+            </CardTitle>
+            <CardDescription>{t('auth.enterEmailForReset')}</CardDescription>
           </CardHeader>
           <CardContent>
             <form onSubmit={handleSubmit} className="space-y-4">
@@ -154,7 +166,10 @@ const ForgotPasswordView: React.FC = () => {
             </form>
 
             <div className="mt-6 text-center">
-              <Link to="/login" className="text-sm text-primary hover:underline">
+              <Link
+                to="/login"
+                className="text-sm text-primary hover:underline"
+              >
                 <ArrowLeft className="inline mr-1 h-4 w-4" />
                 {t('auth.backToLogin')}
               </Link>
@@ -166,4 +181,4 @@ const ForgotPasswordView: React.FC = () => {
   );
 };
 
-export default ForgotPasswordView; 
+export default ForgotPasswordView;

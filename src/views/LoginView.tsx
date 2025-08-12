@@ -52,12 +52,12 @@ const LoginView: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!email || !password) {
       toast({
         title: t('auth.missingInformation'),
         description: t('auth.fillAllFields'),
-        variant: "destructive",
+        variant: 'destructive',
       });
       return;
     }
@@ -66,15 +66,23 @@ const LoginView: React.FC = () => {
     try {
       const result = await login({ email, password });
       if (result) {
-        toast({ title: t('auth.welcomeBack'), description: t('auth.loginSuccess') });
-        
+        toast({
+          title: t('auth.welcomeBack'),
+          description: t('auth.loginSuccess'),
+        });
+
         // Redirect to original destination or dashboard
         const redirectTo = searchParams.get('redirect') || '/dashboard';
         navigate(redirectTo, { replace: true });
       }
     } catch (err) {
-      const message = err instanceof Error ? err.message : t('auth.invalidCredentials');
-      toast({ title: t('auth.loginFailed'), description: message, variant: 'destructive' });
+      const message =
+        err instanceof Error ? err.message : t('auth.invalidCredentials');
+      toast({
+        title: t('auth.loginFailed'),
+        description: message,
+        variant: 'destructive',
+      });
     } finally {
       setIsLoading(false);
     }
@@ -106,7 +114,10 @@ const LoginView: React.FC = () => {
             <form onSubmit={handleSubmit} className="space-y-6">
               <div className="space-y-4">
                 <div className="space-y-2">
-                  <Label htmlFor="email" className="text-sm font-medium text-slate-700 dark:text-slate-300">
+                  <Label
+                    htmlFor="email"
+                    className="text-sm font-medium text-slate-700 dark:text-slate-300"
+                  >
                     {t('common.email')}
                   </Label>
                   <div className="relative">
@@ -122,16 +133,19 @@ const LoginView: React.FC = () => {
                     />
                   </div>
                 </div>
-                
+
                 <div className="space-y-2">
-                  <Label htmlFor="password" className="text-sm font-medium text-slate-700 dark:text-slate-300">
+                  <Label
+                    htmlFor="password"
+                    className="text-sm font-medium text-slate-700 dark:text-slate-300"
+                  >
                     {t('common.password')}
                   </Label>
                   <div className="relative">
                     <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400 h-5 w-5" />
                     <Input
                       id="password"
-                      type={showPassword ? "text" : "password"}
+                      type={showPassword ? 'text' : 'password'}
                       placeholder="Enter your password"
                       value={password}
                       onChange={(e) => setPassword(e.target.value)}
@@ -164,8 +178,8 @@ const LoginView: React.FC = () => {
                 </Link>
               </div>
 
-              <Button 
-                type="submit" 
+              <Button
+                type="submit"
                 className="w-full h-12 bg-gradient-to-r from-primary to-primary/90 hover:from-primary/90 hover:to-primary/80 shadow-lg"
                 disabled={isLoading}
               >
@@ -185,7 +199,10 @@ const LoginView: React.FC = () => {
 
             <div className="mt-8 text-center text-sm text-slate-600 dark:text-slate-400">
               Don't have an account?{' '}
-              <Link to="/register" className="text-primary hover:underline font-medium">
+              <Link
+                to="/register"
+                className="text-primary hover:underline font-medium"
+              >
                 Sign up
               </Link>
             </div>

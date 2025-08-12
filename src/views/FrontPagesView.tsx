@@ -8,4 +8,4 @@ const FrontPagesView: React.FC = () => {
   );
 };
 
-export default FrontPagesView; 
+export default FrontPagesView;

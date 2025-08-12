@@ -1,5 +1,5 @@
-import { useState, useCallback } from "react";
-import { useApiClient } from "@/hooks/api/useApiClient";
+import { useState, useCallback } from 'react';
+import { useApiClient } from '@/hooks/api/useApiClient';
 
 interface UseApiState<T> {
   data: T | null;
@@ -82,7 +82,7 @@ export const useApi = <T = any>(options: UseApiOptions = {}) => {
       showErrorToast,
       successMessage,
       errorMessage,
-    ]
+    ],
   );
 
   const reset = useCallback(() => {

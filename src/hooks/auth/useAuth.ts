@@ -1,8 +1,8 @@
-import { useCallback } from "react";
-import { useAuthStore } from "@/store/authStore";
-import { useToast } from "@/hooks/ui/use-toast";
-import { useTranslation } from "react-i18next";
-import authApi from "@/services/api/auth";
+import { useCallback } from 'react';
+import { useAuthStore } from '@/store/authStore';
+import { useToast } from '@/hooks/ui/use-toast';
+import { useTranslation } from 'react-i18next';
+import authApi from '@/services/api/auth';
 
 /**
  * Main authentication hook
@@ -27,35 +27,35 @@ export const useAuth = () => {
         const result = await authLogin(credentials);
         if (result) {
           toast({
-            title: t("auth.loginSuccess"),
-            description: t("auth.welcomeBack", { name: result.name }),
+            title: t('auth.loginSuccess'),
+            description: t('auth.welcomeBack', { name: result.name }),
           });
         }
         return result;
       } catch (error: any) {
         toast({
-          title: t("auth.loginError"),
-          description: error.message || t("auth.invalidCredentials"),
-          variant: "destructive",
+          title: t('auth.loginError'),
+          description: error.message || t('auth.invalidCredentials'),
+          variant: 'destructive',
         });
         throw error;
       }
     },
-    [authLogin, toast, t]
+    [authLogin, toast, t],
   );
 
   const logout = useCallback(async () => {
     try {
       await authLogout();
       toast({
-        title: t("auth.logoutSuccess"),
-        description: t("auth.seeYouSoon"),
+        title: t('auth.logoutSuccess'),
+        description: t('auth.seeYouSoon'),
       });
     } catch (error: any) {
       toast({
-        title: t("common.error"),
-        description: error.message || t("auth.logoutError"),
-        variant: "destructive",
+        title: t('common.error'),
+        description: error.message || t('auth.logoutError'),
+        variant: 'destructive',
       });
     }
   }, [authLogout, toast, t]);
@@ -65,9 +65,9 @@ export const useAuth = () => {
       return await refreshTokenAction();
     } catch (error: any) {
       toast({
-        title: t("auth.sessionExpired"),
-        description: t("auth.pleaseLoginAgain"),
-        variant: "destructive",
+        title: t('auth.sessionExpired'),
+        description: t('auth.pleaseLoginAgain'),
+        variant: 'destructive',
       });
       throw error;
     }
@@ -78,28 +78,28 @@ export const useAuth = () => {
       try {
         const res = await authApi.loginWithGoogle({
           accessToken,
-          provider: "google",
+          provider: 'google',
         });
         // Update store token and fetch user
         useAuthStore.getState().setToken(res.token);
         await useAuthStore.getState().autoLogin();
         toast({
-          title: t("auth.loginSuccess"),
-          description: t("auth.welcomeBack", {
-            name: res.user.email.split("@")[0],
+          title: t('auth.loginSuccess'),
+          description: t('auth.welcomeBack', {
+            name: res.user.email.split('@')[0],
           }),
         });
         return res;
       } catch (error: any) {
         toast({
-          title: t("auth.loginFailed"),
-          description: error?.message || t("auth.invalidCredentials"),
-          variant: "destructive",
+          title: t('auth.loginFailed'),
+          description: error?.message || t('auth.invalidCredentials'),
+          variant: 'destructive',
         });
         throw error;
       }
     },
-    [toast, t]
+    [toast, t],
   );
 
   return {

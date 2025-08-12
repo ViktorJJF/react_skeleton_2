@@ -1,7 +1,7 @@
-import { create } from "zustand";
-import { persist, createJSONStorage } from "zustand/middleware";
-import authApi from "@/services/api/auth";
-import type { AuthUser, ApiUser, ApiLoginUser } from "@/types/entities/user";
+import { create } from 'zustand';
+import { persist, createJSONStorage } from 'zustand/middleware';
+import authApi from '@/services/api/auth';
+import type { AuthUser, ApiUser, ApiLoginUser } from '@/types/entities/user';
 
 interface AuthState {
   isAuthenticated: boolean;
@@ -28,8 +28,8 @@ interface AuthState {
 const normalizeApiUser = (apiUser: ApiUser): AuthUser => ({
   _id: apiUser._id,
   email: apiUser.email,
-  firstName: apiUser.first_name || "",
-  lastName: apiUser.last_name || "",
+  firstName: apiUser.first_name || '',
+  lastName: apiUser.last_name || '',
   role: apiUser.role,
   isEmailVerified: apiUser.verified,
   isActive: true, // API doesn't provide this field, assume true
@@ -44,10 +44,10 @@ const normalizeLoginUser = (loginUser: ApiLoginUser): Partial<AuthUser> => ({
   isEmailVerified: loginUser.verified,
   isActive: true,
   // firstName/lastName not provided in login response
-  firstName: "",
-  lastName: "",
-  createdAt: "",
-  updatedAt: "",
+  firstName: '',
+  lastName: '',
+  createdAt: '',
+  updatedAt: '',
 });
 
 export const useAuthStore = create(
@@ -70,7 +70,7 @@ export const useAuthStore = create(
           const name =
             normalizedUser.firstName && normalizedUser.lastName
               ? `${normalizedUser.firstName} ${normalizedUser.lastName}`.trim()
-              : res.user.email.split("@")[0]; // fallback to email prefix
+              : res.user.email.split('@')[0]; // fallback to email prefix
 
           set({
             isAuthenticated: true,
@@ -82,7 +82,7 @@ export const useAuthStore = create(
 
           return { name, email: res.user.email, token: res.token };
         } catch (e) {
-          const message = e instanceof Error ? e.message : "Login failed";
+          const message = e instanceof Error ? e.message : 'Login failed';
           set({ isLoading: false, error: message });
           throw e;
         }
@@ -99,15 +99,15 @@ export const useAuthStore = create(
         });
 
         // Clear localStorage auth data
-        if (typeof window !== "undefined") {
-          localStorage.removeItem("auth-storage");
+        if (typeof window !== 'undefined') {
+          localStorage.removeItem('auth-storage');
 
           // Clear any other auth-related data
           const keysToRemove = Object.keys(localStorage).filter(
             (key) =>
-              key.includes("auth") ||
-              key.includes("token") ||
-              key.includes("user")
+              key.includes('auth') ||
+              key.includes('token') ||
+              key.includes('user'),
           );
           keysToRemove.forEach((key) => localStorage.removeItem(key));
 
@@ -133,11 +133,11 @@ export const useAuthStore = create(
           });
         } catch (error: unknown) {
           const errorMessage =
-            error instanceof Error ? error.message : "Unknown error";
-          console.warn("AutoLogin failed:", errorMessage);
+            error instanceof Error ? error.message : 'Unknown error';
+          console.warn('AutoLogin failed:', errorMessage);
 
           // If it's a 401 error, don't try refresh token as it will be handled by apiClient
-          if (error && typeof error === "object" && "response" in error) {
+          if (error && typeof error === 'object' && 'response' in error) {
             const axiosError = error as { response?: { status?: number } };
             if (axiosError.response?.status === 401) {
               get().logout();
@@ -188,8 +188,8 @@ export const useAuthStore = create(
       },
     }),
     {
-      name: "auth-storage",
+      name: 'auth-storage',
       storage: createJSONStorage(() => localStorage),
-    }
-  )
+    },
+  ),
 );

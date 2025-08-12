@@ -1,1 +1,1 @@
-export { ServerPagination } from "./ServerPagination";
+export { ServerPagination } from './ServerPagination';

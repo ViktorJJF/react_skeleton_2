@@ -1,8 +1,8 @@
-import { useCallback } from "react";
-import { useToast } from "@/hooks/ui/use-toast";
-import { useTranslation } from "react-i18next";
-import authApi from "@/services/api/auth";
-import type { RegisterRequest } from "@/types/api/auth";
+import { useCallback } from 'react';
+import { useToast } from '@/hooks/ui/use-toast';
+import { useTranslation } from 'react-i18next';
+import authApi from '@/services/api/auth';
+import type { RegisterRequest } from '@/types/api/auth';
 
 /**
  * Hook for user registration
@@ -17,8 +17,8 @@ export const useRegister = () => {
         const result = await authApi.register(credentials);
         if (result) {
           toast({
-            title: t("auth.registrationSuccess"),
-            description: t("auth.accountCreated"),
+            title: t('auth.registrationSuccess'),
+            description: t('auth.accountCreated'),
           });
         }
         return result;
@@ -26,16 +26,16 @@ export const useRegister = () => {
         const message =
           error?.response?.data?.errors?.msg ||
           error?.message ||
-          t("auth.registrationFailed");
+          t('auth.registrationFailed');
         toast({
-          title: t("auth.registrationError"),
+          title: t('auth.registrationError'),
           description: message,
-          variant: "destructive",
+          variant: 'destructive',
         });
         throw error;
       }
     },
-    [toast, t]
+    [toast, t],
   );
 
   return { register };

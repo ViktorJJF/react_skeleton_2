@@ -1,4 +1,4 @@
-import type { NavigateFunction } from "react-router-dom";
+import type { NavigateFunction } from 'react-router-dom';
 
 /**
  * Validates if a route exists in the application
@@ -7,43 +7,43 @@ import type { NavigateFunction } from "react-router-dom";
 export const isValidRoute = (path: string): boolean => {
   // Define valid routes in the application
   const validRoutes = [
-    "/",
-    "/dashboard",
-    "/dashboard/analytics",
-    "/assistants",
-    "/agents",
-    "/chatbots",
-    "/conversations",
-    "/bot-analytics",
-    "/bot-training",
-    "/chatbots-table",
-    "/docs",
-    "/pricing",
-    "/profile",
-    "/settings",
-    "/settings/notifications",
-    "/users",
-    "/billing",
-    "/api-keys",
-    "/integrations",
-    "/live-chat",
-    "/leads",
-    "/ecommerce",
-    "/front-pages",
-    "/calendar",
-    "/kanban",
-    "/chats",
-    "/email",
-    "/notes",
-    "/contacts",
-    "/invoice",
-    "/elements/ui",
-    "/elements/tables",
-    "/elements/icons",
-    "/login",
-    "/register",
-    "/forgot-password",
-    "/404",
+    '/',
+    '/dashboard',
+    '/dashboard/analytics',
+    '/assistants',
+    '/agents',
+    '/chatbots',
+    '/conversations',
+    '/bot-analytics',
+    '/bot-training',
+    '/chatbots-table',
+    '/docs',
+    '/pricing',
+    '/profile',
+    '/settings',
+    '/settings/notifications',
+    '/users',
+    '/billing',
+    '/api-keys',
+    '/integrations',
+    '/live-chat',
+    '/leads',
+    '/ecommerce',
+    '/front-pages',
+    '/calendar',
+    '/kanban',
+    '/chats',
+    '/email',
+    '/notes',
+    '/contacts',
+    '/invoice',
+    '/elements/ui',
+    '/elements/tables',
+    '/elements/icons',
+    '/login',
+    '/register',
+    '/forgot-password',
+    '/404',
   ];
 
   return validRoutes.includes(path);
@@ -54,12 +54,12 @@ export const isValidRoute = (path: string): boolean => {
  */
 export const safeNavigate = (
   navigate: NavigateFunction,
-  path: string
+  path: string,
 ): void => {
   if (isValidRoute(path)) {
     navigate(path);
   } else {
-    navigate("/404");
+    navigate('/404');
   }
 };
 
@@ -67,18 +67,18 @@ export const safeNavigate = (
  * Checks if a path should be treated as a 404
  */
 export const isNotFoundPath = (path: string): boolean => {
-  return path === "/404" || path === "*" || !isValidRoute(path);
+  return path === '/404' || path === '*' || !isValidRoute(path);
 };
 
 /**
  * Extracts route parameters and validates them
  */
 export const validateRouteParams = (
-  params: Record<string, string | undefined>
+  params: Record<string, string | undefined>,
 ): boolean => {
   // Add validation logic for route parameters here
   // For example, check if IDs are valid UUIDs, etc.
   return Object.values(params).every(
-    (param) => param !== undefined && param !== ""
+    (param) => param !== undefined && param !== '',
   );
 };

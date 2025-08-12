@@ -1,6 +1,6 @@
-import { AxiosError } from "axios";
-import { toast } from "@/hooks/ui/use-toast";
-import type { IServiceError, IErrorHandlerOptions } from "@/types/api/errors";
+import { AxiosError } from 'axios';
+import { toast } from '@/hooks/ui/use-toast';
+import type { IServiceError, IErrorHandlerOptions } from '@/types/api/errors';
 
 /**
  * Global error handler for API services
@@ -16,13 +16,13 @@ export class GlobalErrorHandler {
 
       if (responseData?.errors) {
         // Handle single error with msg and code
-        if ("msg" in responseData.errors) {
+        if ('msg' in responseData.errors) {
           return responseData.errors.msg;
         }
 
         // Handle validation errors array
         if (Array.isArray(responseData.errors)) {
-          return responseData.errors.map((err) => err.message).join(", ");
+          return responseData.errors.map((err) => err.message).join(', ');
         }
       }
 
@@ -34,7 +34,7 @@ export class GlobalErrorHandler {
       return error.message;
     }
 
-    return "An unexpected error occurred";
+    return 'An unexpected error occurred';
   }
 
   /**
@@ -44,7 +44,7 @@ export class GlobalErrorHandler {
     if (error instanceof AxiosError) {
       const responseData = error.response?.data as IServiceError;
 
-      if (responseData?.errors && "code" in responseData.errors) {
+      if (responseData?.errors && 'code' in responseData.errors) {
         return responseData.errors.code;
       }
 
@@ -61,14 +61,14 @@ export class GlobalErrorHandler {
     const {
       showToast = true,
       operation,
-      fallbackMessage = "An error occurred",
+      fallbackMessage = 'An error occurred',
     } = options;
 
     const errorMessage = this.extractErrorMessage(error);
     const errorCode = this.extractErrorCode(error);
 
     // Log error for debugging
-    console.error("Service Error:", {
+    console.error('Service Error:', {
       error,
       message: errorMessage,
       code: errorCode,
@@ -76,13 +76,13 @@ export class GlobalErrorHandler {
     });
 
     if (showToast) {
-      const title = operation ? `${operation} Failed` : "Error";
+      const title = operation ? `${operation} Failed` : 'Error';
       const description = errorMessage || fallbackMessage;
 
       toast({
         title,
         description,
-        variant: "destructive",
+        variant: 'destructive',
       });
     }
 
@@ -133,7 +133,7 @@ export class GlobalErrorHandler {
 // Convenience functions for common use cases
 export const handleServiceError = (
   error: unknown,
-  options?: IErrorHandlerOptions
+  options?: IErrorHandlerOptions,
 ) => {
   return GlobalErrorHandler.handleError(error, options);
 };

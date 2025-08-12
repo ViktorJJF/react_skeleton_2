@@ -1,14 +1,14 @@
-import axios from "axios";
-import config from "@/config";
-import { useAuthStore } from "@/store/authStore";
+import axios from 'axios';
+import config from '@/config';
+import { useAuthStore } from '@/store/authStore';
 
 // Create Axios instance
 export const apiClient = axios.create({
   baseURL: `${config.BACKEND_BASE_URL}`,
   withCredentials: false,
   headers: {
-    Accept: "application/json",
-    "Content-Type": "application/json",
+    Accept: 'application/json',
+    'Content-Type': 'application/json',
   },
 });
 
@@ -35,15 +35,15 @@ const processQueue = (error: any, token: string | null = null) => {
 };
 
 // Helper function to redirect to login
-const redirectToLogin = (reason = "unauthorized") => {
+const redirectToLogin = (reason = 'unauthorized') => {
   // Clear auth store
   useAuthStore.getState().logout();
 
   // Navigate to login with reason
-  if (typeof window !== "undefined") {
+  if (typeof window !== 'undefined') {
     const currentPath = window.location.pathname + window.location.search;
     const loginUrl = `/login?reason=${reason}&redirect=${encodeURIComponent(
-      currentPath
+      currentPath,
     )}`;
 
     // Use window.location.href for immediate redirect
@@ -56,16 +56,16 @@ apiClient.interceptors.response.use(
   async (error) => {
     const originalRequest = error.config;
     const isUnauthorized = error.response?.status === 401;
-    const isMeEndpoint = originalRequest?.url?.includes("/api/me");
-    const isTokenEndpoint = originalRequest?.url?.includes("/api/token");
+    const isMeEndpoint = originalRequest?.url?.includes('/api/me');
+    const isTokenEndpoint = originalRequest?.url?.includes('/api/token');
 
     if (isUnauthorized && !originalRequest._retry) {
       // Special handling for /me endpoint - immediate redirect without retry
       if (isMeEndpoint) {
         console.warn(
-          "Unauthorized access to /me endpoint - redirecting to login"
+          'Unauthorized access to /me endpoint - redirecting to login',
         );
-        redirectToLogin("session_expired");
+        redirectToLogin('session_expired');
         return Promise.reject(error);
       }
 
@@ -88,7 +88,7 @@ apiClient.interceptors.response.use(
       isRefreshing = true;
 
       try {
-        const res = await apiClient.get("/api/token");
+        const res = await apiClient.get('/api/token');
         const newToken = res.data?.token as string | undefined;
         if (newToken) {
           useAuthStore.getState().setToken(newToken);
@@ -100,8 +100,8 @@ apiClient.interceptors.response.use(
         processQueue(refreshErr, null);
 
         // If refresh token also fails, redirect to login
-        console.warn("Refresh token failed - redirecting to login");
-        redirectToLogin("token_expired");
+        console.warn('Refresh token failed - redirecting to login');
+        redirectToLogin('token_expired');
         return Promise.reject(refreshErr);
       } finally {
         isRefreshing = false;
@@ -109,7 +109,7 @@ apiClient.interceptors.response.use(
     }
 
     return Promise.reject(error);
-  }
+  },
 );
 
 export default apiClient;

@@ -10,13 +10,13 @@ interface ViewComponentProps {
   showBreadcrumbs?: boolean;
 }
 
-const ViewComponent: React.FC<ViewComponentProps> = ({ 
-  children, 
-  title, 
-  description, 
-  actionButton, 
+const ViewComponent: React.FC<ViewComponentProps> = ({
+  children,
+  title,
+  description,
+  actionButton,
   filters,
-  showBreadcrumbs = true 
+  showBreadcrumbs = true,
 }) => {
   return (
     <div className="flex flex-col gap-4">
@@ -26,7 +26,7 @@ const ViewComponent: React.FC<ViewComponentProps> = ({
           <Breadcrumbs />
         </div>
       )}
-      
+
       {/* Page Header */}
       <div className="flex items-center justify-between">
         <div>
@@ -35,14 +35,10 @@ const ViewComponent: React.FC<ViewComponentProps> = ({
         </div>
         {actionButton}
       </div>
-      
+
       {/* Filters */}
-      {filters && (
-        <div className="flex flex-wrap gap-4">
-          {filters}
-        </div>
-      )}
-      
+      {filters && <div className="flex flex-wrap gap-4">{filters}</div>}
+
       {/* Main Content */}
       <div className="p-6 bg-card text-card-foreground rounded-lg shadow-sm">
         {children}
@@ -51,4 +47,4 @@ const ViewComponent: React.FC<ViewComponentProps> = ({
   );
 };
 
-export default ViewComponent; 
+export default ViewComponent;

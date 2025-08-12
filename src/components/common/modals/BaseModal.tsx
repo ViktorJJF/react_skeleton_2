@@ -6,8 +6,8 @@ import {
   DialogFooter,
   DialogHeader,
   DialogTitle,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
+} from '@/components/ui/dialog';
+import { Button } from '@/components/ui/button';
 import { Loader2 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
@@ -21,7 +21,13 @@ interface BaseModalProps {
   onCancel?: () => void;
   confirmText?: string;
   cancelText?: string;
-  confirmVariant?: 'default' | 'destructive' | 'outline' | 'secondary' | 'ghost' | 'link';
+  confirmVariant?:
+    | 'default'
+    | 'destructive'
+    | 'outline'
+    | 'secondary'
+    | 'ghost'
+    | 'link';
   size?: 'sm' | 'md' | 'lg' | 'xl' | 'full';
   loading?: boolean;
   disabled?: boolean;
@@ -78,36 +84,31 @@ export const BaseModal: React.FC<BaseModalProps> = ({
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={(open) => { if (!open) onClose(); }}>
+    <Dialog
+      open={isOpen}
+      onOpenChange={(open) => {
+        if (!open) onClose();
+      }}
+    >
       <DialogContent className={`${sizeClasses[size]} ${className || ''}`}>
         <DialogHeader>
           <DialogTitle className="flex items-center gap-2">
             {icon}
             {title}
           </DialogTitle>
-          {description && (
-            <DialogDescription>
-              {description}
-            </DialogDescription>
-          )}
+          {description && <DialogDescription>{description}</DialogDescription>}
         </DialogHeader>
-        
-        <div className="py-4">
-          {children}
-        </div>
+
+        <div className="py-4">{children}</div>
 
         {showFooter && (
           <DialogFooter>
-            <Button 
-              variant="outline" 
-              onClick={handleCancel}
-              disabled={loading}
-            >
+            <Button variant="outline" onClick={handleCancel} disabled={loading}>
               {cancelText || t('common.cancel')}
             </Button>
             {onConfirm && (
-              <Button 
-                onClick={handleConfirm} 
+              <Button
+                onClick={handleConfirm}
                 disabled={disabled || loading}
                 variant={confirmVariant}
               >

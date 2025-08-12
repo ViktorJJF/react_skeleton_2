@@ -62,7 +62,6 @@ const ProtectedRoute: React.FC = () => {
     );
   }
 
-
   return <Outlet />;
 };
 
@@ -101,8 +100,8 @@ const AppRouter: React.FC = () => {
   // Initialize GA and check for updates when router is initialized
   useEffect(() => {
     initGA();
-    if(config.APP_VERSION){
-        checkForUpdates(config.APP_VERSION);
+    if (config.APP_VERSION) {
+      checkForUpdates(config.APP_VERSION);
     }
   }, []);
 

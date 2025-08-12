@@ -1,6 +1,6 @@
-import { useState, useCallback } from "react";
-import { useAuth } from "@/hooks/auth/useAuth";
-import { useApi } from "@/hooks/api/useApi";
+import { useState, useCallback } from 'react';
+import { useAuth } from '@/hooks/auth/useAuth';
+import { useApi } from '@/hooks/api/useApi';
 
 interface LoginCredentials {
   email: string;
@@ -21,8 +21,8 @@ export const useLogin = () => {
   const { login } = useAuth();
   const [errors, setErrors] = useState<LoginFormErrors>({});
   const [formData, setFormData] = useState<LoginCredentials>({
-    email: "",
-    password: "",
+    email: '',
+    password: '',
     rememberMe: false,
   });
 
@@ -33,30 +33,30 @@ export const useLogin = () => {
   const validateField = useCallback(
     (field: keyof LoginCredentials, value: unknown): string | null => {
       switch (field) {
-        case "email":
-          if (typeof value !== "string" || value.length === 0)
-            return "Email is required";
-          if (!/\S+@\S+\.\S+/.test(value)) return "Please enter a valid email";
+        case 'email':
+          if (typeof value !== 'string' || value.length === 0)
+            return 'Email is required';
+          if (!/\S+@\S+\.\S+/.test(value)) return 'Please enter a valid email';
           return null;
-        case "password":
-          if (typeof value !== "string" || value.length === 0)
-            return "Password is required";
-          if (value.length < 6) return "Password must be at least 6 characters";
+        case 'password':
+          if (typeof value !== 'string' || value.length === 0)
+            return 'Password is required';
+          if (value.length < 6) return 'Password must be at least 6 characters';
           return null;
         default:
           return null;
       }
     },
-    []
+    [],
   );
 
   const validateForm = useCallback((): boolean => {
     const newErrors: LoginFormErrors = {};
 
-    const emailError = validateField("email", formData.email);
+    const emailError = validateField('email', formData.email);
     if (emailError) newErrors.email = emailError;
 
-    const passwordError = validateField("password", formData.password);
+    const passwordError = validateField('password', formData.password);
     if (passwordError) newErrors.password = passwordError;
 
     setErrors(newErrors);
@@ -75,7 +75,7 @@ export const useLogin = () => {
         setErrors((prev) => ({ ...prev, [field]: undefined }));
       }
     },
-    [errors]
+    [errors],
   );
 
   const handleLogin = useCallback(async () => {
@@ -88,7 +88,7 @@ export const useLogin = () => {
         login({
           email: formData.email,
           password: formData.password,
-        })
+        }),
       );
 
       return !!result;
@@ -98,7 +98,7 @@ export const useLogin = () => {
         general:
           error instanceof Error
             ? error.message
-            : "Login failed. Please try again.",
+            : 'Login failed. Please try again.',
       }));
       return false;
     }
@@ -110,8 +110,8 @@ export const useLogin = () => {
 
   const clearForm = useCallback(() => {
     setFormData({
-      email: "",
-      password: "",
+      email: '',
+      password: '',
       rememberMe: false,
     });
     setErrors({});

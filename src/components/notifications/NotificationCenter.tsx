@@ -2,15 +2,18 @@ import React from 'react';
 import { useNotificationStore } from '@/store/notificationStore';
 import { Button } from '@/components/ui/button';
 import { Bell, Trash2, Info, AlertTriangle, CheckCircle } from 'lucide-react';
-import { 
-  DropdownMenu, 
-  DropdownMenuContent, 
-  DropdownMenuItem, 
-  DropdownMenuTrigger, 
-  DropdownMenuSeparator 
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+  DropdownMenuSeparator,
 } from '@/components/ui/dropdown-menu';
 import { Badge } from '@/components/ui/badge';
-import type { Notification, NotificationType } from '@/types/common/notification';
+import type {
+  Notification,
+  NotificationType,
+} from '@/types/common/notification';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { formatDistanceToNow } from 'date-fns';
 
@@ -22,8 +25,9 @@ const notificationIcons: Record<NotificationType, React.ReactNode> = {
 };
 
 const NotificationCenter: React.FC = () => {
-  const { notifications, markAsRead, markAllAsRead, clearNotifications } = useNotificationStore();
-  const unreadCount = notifications.filter(n => !n.read).length;
+  const { notifications, markAsRead, markAllAsRead, clearNotifications } =
+    useNotificationStore();
+  const unreadCount = notifications.filter((n) => !n.read).length;
 
   return (
     <DropdownMenu>
@@ -31,7 +35,7 @@ const NotificationCenter: React.FC = () => {
         <Button variant="ghost" size="icon" className="relative">
           <Bell className="w-5 h-5" />
           {unreadCount > 0 && (
-            <Badge 
+            <Badge
               variant="destructive"
               className="absolute -top-1 -right-1 h-5 w-5 justify-center rounded-full p-1"
             >
@@ -60,16 +64,22 @@ const NotificationCenter: React.FC = () => {
               <DropdownMenuItem
                 key={notification.id}
                 onSelect={() => markAsRead(notification.id)}
-                className={`flex items-start gap-3 p-3 ${!notification.read ? 'bg-blue-50' : ''}`}
+                className={`flex items-start gap-3 p-3 ${
+                  !notification.read ? 'bg-blue-50' : ''
+                }`}
               >
                 <div className="mt-1">
                   {notificationIcons[notification.type]}
                 </div>
                 <div className="flex-1">
                   <p className="font-semibold">{notification.title}</p>
-                  <p className="text-sm text-gray-600">{notification.description}</p>
+                  <p className="text-sm text-gray-600">
+                    {notification.description}
+                  </p>
                   <p className="text-xs text-gray-400 mt-1">
-                    {formatDistanceToNow(new Date(notification.date), { addSuffix: true })}
+                    {formatDistanceToNow(new Date(notification.date), {
+                      addSuffix: true,
+                    })}
                   </p>
                 </div>
               </DropdownMenuItem>
@@ -93,4 +103,4 @@ const NotificationCenter: React.FC = () => {
   );
 };
 
-export default NotificationCenter; 
+export default NotificationCenter;

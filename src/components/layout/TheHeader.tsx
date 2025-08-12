@@ -61,7 +61,7 @@ const TheHeader = () => {
             <TheSidebar />
           </SheetContent>
         </Sheet>
-        
+
         {/* Branding - Hidden on mobile, shown on md and up */}
         <div className="hidden items-center gap-3 md:flex">
           <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-primary to-primary/80 shadow-md">
@@ -71,7 +71,9 @@ const TheHeader = () => {
             <span className="text-lg font-bold text-foreground bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
               AI Panel
             </span>
-            <span className="text-xs text-muted-foreground -mt-1">Intelligent Dashboard</span>
+            <span className="text-xs text-muted-foreground -mt-1">
+              Intelligent Dashboard
+            </span>
           </div>
         </div>
       </div>
@@ -108,17 +110,23 @@ const TheHeader = () => {
         {/* User Profile */}
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button variant="ghost" size="icon" className="rounded-full hover:bg-muted/50">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="rounded-full hover:bg-muted/50"
+            >
               <CircleUser className="h-6 w-6" />
               <span className="sr-only">User menu</span>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-56">
             <DropdownMenuLabel>
-              {user ? (`${user.firstName} ${user.lastName}`.trim() || user.email) : t('common.myAccount')}
+              {user
+                ? `${user.firstName} ${user.lastName}`.trim() || user.email
+                : t('common.myAccount')}
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem 
+            <DropdownMenuItem
               className="flex items-center gap-2 cursor-pointer"
               onClick={handleProfileClick}
             >
@@ -143,7 +151,7 @@ const TheHeader = () => {
               {t('common.documentation')}
             </DropdownMenuItem>
             <DropdownMenuSeparator />
-            <DropdownMenuItem 
+            <DropdownMenuItem
               className="flex items-center gap-2 text-destructive cursor-pointer"
               onClick={handleLogout}
             >
@@ -157,4 +165,4 @@ const TheHeader = () => {
   );
 };
 
-export default TheHeader; 
+export default TheHeader;

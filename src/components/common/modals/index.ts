@@ -1,2 +1,2 @@
-export { BaseModal } from "./BaseModal";
-export { LoadingSpinner } from "./LoadingSpinner";
+export { BaseModal } from './BaseModal';
+export { LoadingSpinner } from './LoadingSpinner';

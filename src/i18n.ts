@@ -1,10 +1,10 @@
-import i18n from "i18next";
-import { initReactI18next } from "react-i18next";
-import LanguageDetector from "i18next-browser-languagedetector";
+import i18n from 'i18next';
+import { initReactI18next } from 'react-i18next';
+import LanguageDetector from 'i18next-browser-languagedetector';
 
 // Import translation files
-import en from "@/locales/en/translation.json";
-import es from "@/locales/es/translation.json";
+import en from '@/locales/en/translation.json';
+import es from '@/locales/es/translation.json';
 
 const resources = {
   en: {
@@ -20,13 +20,13 @@ i18n
   .use(initReactI18next)
   .init({
     resources,
-    fallbackLng: "es",
-    lng: "es", // Force Spanish as default
-    debug: process.env.NODE_ENV === "development",
+    fallbackLng: 'es',
+    lng: 'es', // Force Spanish as default
+    debug: process.env.NODE_ENV === 'development',
     detection: {
-      order: ["localStorage", "navigator"],
-      caches: ["localStorage"],
-      lookupLocalStorage: "i18nextLng",
+      order: ['localStorage', 'navigator'],
+      caches: ['localStorage'],
+      lookupLocalStorage: 'i18nextLng',
     },
     interpolation: {
       escapeValue: false, // React already safes from xss

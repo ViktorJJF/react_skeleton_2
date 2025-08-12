@@ -1,12 +1,12 @@
-import { useCallback, useState } from "react";
-import { useToast } from "@/hooks/ui/use-toast";
-import { useTranslation } from "react-i18next";
-import authApi from "@/services/api/auth";
-import { useAuthStore } from "@/store/authStore";
+import { useCallback, useState } from 'react';
+import { useToast } from '@/hooks/ui/use-toast';
+import { useTranslation } from 'react-i18next';
+import authApi from '@/services/api/auth';
+import { useAuthStore } from '@/store/authStore';
 import type {
   UpdateProfileRequest,
   ChangePasswordRequest,
-} from "@/types/api/auth";
+} from '@/types/api/auth';
 
 export const useProfile = () => {
   const { toast } = useToast();
@@ -28,8 +28,8 @@ export const useProfile = () => {
         const normalizedUser = {
           _id: updatedUser._id,
           email: updatedUser.email,
-          firstName: updatedUser.first_name || "",
-          lastName: updatedUser.last_name || "",
+          firstName: updatedUser.first_name || '',
+          lastName: updatedUser.last_name || '',
           role: updatedUser.role,
           isEmailVerified: updatedUser.verified,
           isActive: true,
@@ -41,8 +41,8 @@ export const useProfile = () => {
         setAuthUser(normalizedUser);
 
         toast({
-          title: t("profile.updateSuccess"),
-          description: t("profile.profileUpdated"),
+          title: t('profile.updateSuccess'),
+          description: t('profile.profileUpdated'),
         });
 
         return normalizedUser;
@@ -50,19 +50,19 @@ export const useProfile = () => {
         const message =
           err?.response?.data?.errors?.msg ||
           err?.message ||
-          t("profile.updateFailed");
+          t('profile.updateFailed');
         setError(message);
         toast({
-          title: t("profile.updateFailed"),
+          title: t('profile.updateFailed'),
           description: message,
-          variant: "destructive",
+          variant: 'destructive',
         });
         throw err;
       } finally {
         setIsLoading(false);
       }
     },
-    [toast, t, setAuthUser]
+    [toast, t, setAuthUser],
   );
 
   const changePassword = useCallback(
@@ -73,8 +73,8 @@ export const useProfile = () => {
         const result = await authApi.changePassword(data);
 
         toast({
-          title: t("profile.passwordChanged"),
-          description: t("profile.passwordChangeSuccess"),
+          title: t('profile.passwordChanged'),
+          description: t('profile.passwordChangeSuccess'),
         });
 
         return result;
@@ -82,19 +82,19 @@ export const useProfile = () => {
         const message =
           err?.response?.data?.errors?.msg ||
           err?.message ||
-          t("profile.passwordChangeFailed");
+          t('profile.passwordChangeFailed');
         setError(message);
         toast({
-          title: t("profile.passwordChangeFailed"),
+          title: t('profile.passwordChangeFailed'),
           description: message,
-          variant: "destructive",
+          variant: 'destructive',
         });
         throw err;
       } finally {
         setIsLoading(false);
       }
     },
-    [toast, t]
+    [toast, t],
   );
 
   return {

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState } from 'react';
 
 interface TodoComponentProps {
   todo: {
@@ -40,4 +40,3 @@ const TodoComponent: React.FC<TodoComponentProps> = ({ todo, onUpdate }) => {
 };
 
 export default TodoComponent;
-

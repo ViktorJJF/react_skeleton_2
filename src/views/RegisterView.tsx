@@ -4,8 +4,24 @@ import { Link, useNavigate } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Eye, EyeOff, Mail, Lock, User, Bot, ArrowRight, Github, Chrome } from 'lucide-react';
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+} from '@/components/ui/card';
+import {
+  Eye,
+  EyeOff,
+  Mail,
+  Lock,
+  User,
+  Bot,
+  ArrowRight,
+  Github,
+  Chrome,
+} from 'lucide-react';
 import { useToast } from '@/hooks/ui/use-toast';
 import { useRegister } from '@/hooks/auth/useRegister';
 
@@ -27,15 +43,20 @@ const RegisterView: React.FC = () => {
   const { register } = useRegister();
 
   const handleInputChange = (field: string, value: string) => {
-    setFormData(prev => ({ ...prev, [field]: value }));
+    setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
   const validateForm = () => {
-    if (!formData.firstName || !formData.lastName || !formData.email || !formData.password) {
+    if (
+      !formData.firstName ||
+      !formData.lastName ||
+      !formData.email ||
+      !formData.password
+    ) {
       toast({
         title: t('auth.missingInformation'),
         description: t('auth.fillAllFields'),
-        variant: "destructive",
+        variant: 'destructive',
       });
       return false;
     }
@@ -44,7 +65,7 @@ const RegisterView: React.FC = () => {
       toast({
         title: t('auth.passwordsDontMatch'),
         description: t('auth.passwordsDoNotMatch'),
-        variant: "destructive",
+        variant: 'destructive',
       });
       return false;
     }
@@ -53,7 +74,7 @@ const RegisterView: React.FC = () => {
       toast({
         title: t('auth.passwordTooShort'),
         description: t('auth.passwordMinLength'),
-        variant: "destructive",
+        variant: 'destructive',
       });
       return false;
     }
@@ -62,7 +83,7 @@ const RegisterView: React.FC = () => {
       toast({
         title: t('auth.termsAndConditions'),
         description: t('auth.agreeToTerms'),
-        variant: "destructive",
+        variant: 'destructive',
       });
       return false;
     }
@@ -72,7 +93,7 @@ const RegisterView: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     if (!validateForm()) return;
 
     setIsLoading(true);
@@ -111,10 +132,14 @@ const RegisterView: React.FC = () => {
               <span className="text-2xl font-bold bg-gradient-to-r from-primary to-primary/60 bg-clip-text text-transparent">
                 AI Panel
               </span>
-              <span className="text-xs text-muted-foreground -mt-1">Intelligent Dashboard</span>
+              <span className="text-xs text-muted-foreground -mt-1">
+                Intelligent Dashboard
+              </span>
             </div>
           </div>
-          <h1 className="text-3xl font-bold tracking-tight">{t('auth.createAccount')}</h1>
+          <h1 className="text-3xl font-bold tracking-tight">
+            {t('auth.createAccount')}
+          </h1>
           <p className="text-muted-foreground">
             {t('auth.createAccountDescription')}
           </p>
@@ -123,10 +148,10 @@ const RegisterView: React.FC = () => {
         {/* Registration Form */}
         <Card className="border-0 shadow-2xl bg-white/80 dark:bg-slate-900/80 backdrop-blur-xl">
           <CardHeader className="space-y-1 pb-4">
-            <CardTitle className="text-xl font-semibold">{t('auth.signUp')}</CardTitle>
-            <CardDescription>
-              {t('auth.enterDetailsToCreate')}
-            </CardDescription>
+            <CardTitle className="text-xl font-semibold">
+              {t('auth.signUp')}
+            </CardTitle>
+            <CardDescription>{t('auth.enterDetailsToCreate')}</CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
             {/* Social Registration Buttons */}
@@ -174,13 +199,15 @@ const RegisterView: React.FC = () => {
                       type="text"
                       placeholder={t('profile.firstName')}
                       value={formData.firstName}
-                      onChange={(e) => handleInputChange('firstName', e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange('firstName', e.target.value)
+                      }
                       className="h-11 pl-10 border-0 bg-muted/50 focus:bg-white dark:focus:bg-slate-800"
                       required
                     />
                   </div>
                 </div>
-                
+
                 <div className="space-y-2">
                   <Label htmlFor="lastName" className="text-sm font-medium">
                     {t('profile.lastName')}
@@ -192,7 +219,9 @@ const RegisterView: React.FC = () => {
                       type="text"
                       placeholder={t('profile.lastName')}
                       value={formData.lastName}
-                      onChange={(e) => handleInputChange('lastName', e.target.value)}
+                      onChange={(e) =>
+                        handleInputChange('lastName', e.target.value)
+                      }
                       className="h-11 pl-10 border-0 bg-muted/50 focus:bg-white dark:focus:bg-slate-800"
                       required
                     />
@@ -217,7 +246,7 @@ const RegisterView: React.FC = () => {
                   />
                 </div>
               </div>
-              
+
               <div className="space-y-2">
                 <Label htmlFor="password" className="text-sm font-medium">
                   {t('common.password')}
@@ -229,7 +258,9 @@ const RegisterView: React.FC = () => {
                     type={showPassword ? 'text' : 'password'}
                     placeholder={t('auth.passwordPlaceholder')}
                     value={formData.password}
-                    onChange={(e) => handleInputChange('password', e.target.value)}
+                    onChange={(e) =>
+                      handleInputChange('password', e.target.value)
+                    }
                     className="h-11 pl-10 pr-10 border-0 bg-muted/50 focus:bg-white dark:focus:bg-slate-800"
                     required
                   />
@@ -246,14 +277,19 @@ const RegisterView: React.FC = () => {
                       <Eye className="h-4 w-4 text-muted-foreground" />
                     )}
                     <span className="sr-only">
-                      {showPassword ? t('auth.hidePassword') : t('auth.showPassword')}
+                      {showPassword
+                        ? t('auth.hidePassword')
+                        : t('auth.showPassword')}
                     </span>
                   </Button>
                 </div>
               </div>
 
               <div className="space-y-2">
-                <Label htmlFor="confirmPassword" className="text-sm font-medium">
+                <Label
+                  htmlFor="confirmPassword"
+                  className="text-sm font-medium"
+                >
                   {t('auth.confirmPasswordPlaceholder')}
                 </Label>
                 <div className="relative">
@@ -263,7 +299,9 @@ const RegisterView: React.FC = () => {
                     type={showConfirmPassword ? 'text' : 'password'}
                     placeholder={t('auth.confirmPasswordPlaceholder')}
                     value={formData.confirmPassword}
-                    onChange={(e) => handleInputChange('confirmPassword', e.target.value)}
+                    onChange={(e) =>
+                      handleInputChange('confirmPassword', e.target.value)
+                    }
                     className="h-11 pl-10 pr-10 border-0 bg-muted/50 focus:bg-white dark:focus:bg-slate-800"
                     required
                   />
@@ -280,7 +318,9 @@ const RegisterView: React.FC = () => {
                       <Eye className="h-4 w-4 text-muted-foreground" />
                     )}
                     <span className="sr-only">
-                      {showConfirmPassword ? t('auth.hidePassword') : t('auth.showPassword')}
+                      {showConfirmPassword
+                        ? t('auth.hidePassword')
+                        : t('auth.showPassword')}
                     </span>
                   </Button>
                 </div>
@@ -294,7 +334,10 @@ const RegisterView: React.FC = () => {
                   onChange={(e) => setAgreedToTerms(e.target.checked)}
                   className="rounded border-gray-300"
                 />
-                <Label htmlFor="terms" className="text-sm text-muted-foreground">
+                <Label
+                  htmlFor="terms"
+                  className="text-sm text-muted-foreground"
+                >
                   {t('auth.agreeToTermsText')}
                 </Label>
               </div>
@@ -340,4 +383,4 @@ const RegisterView: React.FC = () => {
   );
 };
 
-export default RegisterView; 
+export default RegisterView;

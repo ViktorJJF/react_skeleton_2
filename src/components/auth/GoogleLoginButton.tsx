@@ -18,9 +18,12 @@ const GoogleLoginButton: React.FC = () => {
   const handleSuccess = async (tokenResponse: any) => {
     try {
       // Fetch user profile from Google
-      const userInfoResponse = await fetch('https://www.googleapis.com/oauth2/v3/userinfo', {
-        headers: { Authorization: `Bearer ${tokenResponse.access_token}` },
-      });
+      const userInfoResponse = await fetch(
+        'https://www.googleapis.com/oauth2/v3/userinfo',
+        {
+          headers: { Authorization: `Bearer ${tokenResponse.access_token}` },
+        },
+      );
 
       if (!userInfoResponse.ok) {
         throw new Error('Failed to fetch user info from Google');
@@ -33,7 +36,6 @@ const GoogleLoginButton: React.FC = () => {
       // For this example, we'll simulate a successful login.
 
       await loginWithGoogle(tokenResponse.access_token);
-      
     } catch (error) {
       console.error('Login failed:', error);
       sendToast('error', {
@@ -90,4 +92,4 @@ const GoogleLoginButton: React.FC = () => {
   );
 };
 
-export default GoogleLoginButton; 
+export default GoogleLoginButton;

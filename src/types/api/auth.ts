@@ -1,4 +1,4 @@
-import type { ApiUser, ApiLoginUser } from "@/types/entities/user";
+import type { ApiUser, ApiLoginUser } from '@/types/entities/user';
 
 // Actual login response format
 export interface AuthSuccessResponse {
@@ -58,5 +58,5 @@ export interface ChangePasswordRequest {
 
 export interface SocialLoginRequest {
   accessToken: string;
-  provider?: "google";
+  provider?: 'google';
 }

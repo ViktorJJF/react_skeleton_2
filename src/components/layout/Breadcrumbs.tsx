@@ -12,11 +12,14 @@ const Breadcrumbs: React.FC = () => {
 
   return (
     <nav className="flex items-center text-sm text-muted-foreground">
-      <Link to="/" className="hover:text-primary">Home</Link>
+      <Link to="/" className="hover:text-primary">
+        Home
+      </Link>
       {pathnames.map((value, index) => {
         const to = `/${pathnames.slice(0, index + 1).join('/')}`;
         const isLast = index === pathnames.length - 1;
-        const name = value.charAt(0).toUpperCase() + value.slice(1).replace(/-/g, ' ');
+        const name =
+          value.charAt(0).toUpperCase() + value.slice(1).replace(/-/g, ' ');
 
         return (
           <React.Fragment key={to}>
@@ -24,7 +27,9 @@ const Breadcrumbs: React.FC = () => {
             {isLast ? (
               <span className="font-medium text-foreground">{name}</span>
             ) : (
-              <Link to={to} className="hover:text-primary">{name}</Link>
+              <Link to={to} className="hover:text-primary">
+                {name}
+              </Link>
             )}
           </React.Fragment>
         );
@@ -33,4 +38,4 @@ const Breadcrumbs: React.FC = () => {
   );
 };
 
-export default Breadcrumbs; 
+export default Breadcrumbs;

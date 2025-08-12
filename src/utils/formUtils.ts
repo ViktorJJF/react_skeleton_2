@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useState } from 'react';
 
 /**
  * Generic form state interface
@@ -15,7 +15,7 @@ export interface FormState<T> {
  */
 export type ValidationFunction<T> = (
   field: keyof T,
-  value: any
+  value: any,
 ) => string | undefined;
 
 /**
@@ -39,7 +39,7 @@ export type ValidationRules<T> = {
  */
 export const useFormState = <T extends Record<string, any>>(
   initialData: T,
-  validationRules?: ValidationRules<T>
+  validationRules?: ValidationRules<T>,
 ) => {
   const [formState, setFormState] = useState<FormState<T>>({
     data: { ...initialData },
@@ -56,7 +56,7 @@ export const useFormState = <T extends Record<string, any>>(
       // Required validation
       if (
         rules.required &&
-        (value === undefined || value === null || value === "")
+        (value === undefined || value === null || value === '')
       ) {
         return `${String(field)} is required`;
       }
@@ -64,13 +64,13 @@ export const useFormState = <T extends Record<string, any>>(
       // Skip other validations if field is empty and not required
       if (
         !rules.required &&
-        (value === undefined || value === null || value === "")
+        (value === undefined || value === null || value === '')
       ) {
         return undefined;
       }
 
       // String validations
-      if (typeof value === "string") {
+      if (typeof value === 'string') {
         if (rules.minLength && value.length < rules.minLength) {
           return `${String(field)} must be at least ${
             rules.minLength
@@ -95,7 +95,7 @@ export const useFormState = <T extends Record<string, any>>(
 
       return undefined;
     },
-    [validationRules]
+    [validationRules],
   );
 
   const validateForm = useCallback(
@@ -120,7 +120,7 @@ export const useFormState = <T extends Record<string, any>>(
 
       return isValid;
     },
-    [validateField]
+    [validateField],
   );
 
   const updateField = useCallback(
@@ -146,7 +146,7 @@ export const useFormState = <T extends Record<string, any>>(
         };
       });
     },
-    [validateField]
+    [validateField],
   );
 
   const setFieldError = useCallback((field: keyof T, error: string) => {
@@ -187,7 +187,7 @@ export const useFormState = <T extends Record<string, any>>(
         isDirty: false,
       });
     },
-    [initialData]
+    [initialData],
   );
 
   const setFormData = useCallback((data: T) => {
@@ -218,7 +218,7 @@ export const commonValidations = {
   required: (fieldName: string) => ({
     required: true,
     custom: (value: any) => {
-      if (value === undefined || value === null || value === "") {
+      if (value === undefined || value === null || value === '') {
         return `${fieldName} is required`;
       }
       return undefined;
@@ -229,13 +229,13 @@ export const commonValidations = {
     pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
     custom: (value: string) => {
       if (value && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
-        return "Please enter a valid email address";
+        return 'Please enter a valid email address';
       }
       return undefined;
     },
   },
 
-  minLength: (min: number, fieldName: string = "Field") => ({
+  minLength: (min: number, fieldName: string = 'Field') => ({
     minLength: min,
     custom: (value: string) => {
       if (value && value.length < min) {
@@ -245,7 +245,7 @@ export const commonValidations = {
     },
   }),
 
-  maxLength: (max: number, fieldName: string = "Field") => ({
+  maxLength: (max: number, fieldName: string = 'Field') => ({
     maxLength: max,
     custom: (value: string) => {
       if (value && value.length > max) {
@@ -259,7 +259,7 @@ export const commonValidations = {
     pattern: /^https?:\/\/.+/,
     custom: (value: string) => {
       if (value && !/^https?:\/\/.+/.test(value)) {
-        return "Please enter a valid URL";
+        return 'Please enter a valid URL';
       }
       return undefined;
     },

@@ -28,9 +28,11 @@ const NotificationBanner: React.FC = () => {
   return (
     <div className="fixed top-0 left-0 right-0 z-50">
       {banners.map((banner) => (
-        <div 
-          key={banner.id} 
-          className={`flex items-center justify-between p-3 ${bannerStyles[banner.type]}`}
+        <div
+          key={banner.id}
+          className={`flex items-center justify-between p-3 ${
+            bannerStyles[banner.type]
+          }`}
         >
           <div className="flex items-center">
             {banner.icon || bannerIcons[banner.type]}
@@ -50,4 +52,4 @@ const NotificationBanner: React.FC = () => {
   );
 };
 
-export default NotificationBanner; 
+export default NotificationBanner;

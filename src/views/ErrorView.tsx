@@ -15,7 +15,7 @@ interface ErrorViewProps {
 const ErrorView: React.FC<ErrorViewProps> = ({
   error,
   errorInfo,
-  statusCode = 500
+  statusCode = 500,
 }) => {
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -28,20 +28,20 @@ const ErrorView: React.FC<ErrorViewProps> = ({
         return {
           title: t('errors.notFound'),
           description: t('errors.notFoundDescription'),
-          icon: '🔍'
+          icon: '🔍',
         };
       case 403:
         return {
           title: t('errors.forbidden'),
           description: t('errors.forbiddenDescription'),
-          icon: '🚫'
+          icon: '🚫',
         };
       case 500:
       default:
         return {
           title: t('errors.serverError'),
           description: t('errors.serverErrorDescription'),
-          icon: '⚠️'
+          icon: '⚠️',
         };
     }
   };
@@ -123,11 +123,19 @@ const ErrorView: React.FC<ErrorViewProps> = ({
                   <Home className="w-4 h-4 mr-2" />
                   {t('errors.goHome')}
                 </Button>
-                <Button variant="outline" onClick={handleGoBack} className="flex-1">
+                <Button
+                  variant="outline"
+                  onClick={handleGoBack}
+                  className="flex-1"
+                >
                   <ArrowLeft className="w-4 h-4 mr-2" />
                   {t('errors.goBack')}
                 </Button>
-                <Button variant="outline" onClick={handleRefresh} className="flex-1">
+                <Button
+                  variant="outline"
+                  onClick={handleRefresh}
+                  className="flex-1"
+                >
                   <RefreshCw className="w-4 h-4 mr-2" />
                   {t('errors.refresh')}
                 </Button>
@@ -140,4 +148,4 @@ const ErrorView: React.FC<ErrorViewProps> = ({
   );
 };
 
-export default ErrorView; 
+export default ErrorView;

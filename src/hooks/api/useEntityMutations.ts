@@ -2,10 +2,10 @@ import {
   useMutation,
   useQueryClient,
   type QueryKey,
-} from "@tanstack/react-query";
-import { useToast } from "@/hooks/ui/use-toast";
-import { useTranslation } from "react-i18next";
-import { handleServiceError } from "@/services/errorHandler";
+} from '@tanstack/react-query';
+import { useToast } from '@/hooks/ui/use-toast';
+import { useTranslation } from 'react-i18next';
+import { handleServiceError } from '@/services/errorHandler';
 
 export interface EntityQueryKeys {
   lists: () => QueryKey;
@@ -20,14 +20,14 @@ export interface CreateEntityOptions<TCreate, TEntity, TListShape> {
   makeOptimisticEntity?: (payload: TCreate) => TEntity;
   applyOptimisticToList?: (
     prev: TListShape | undefined,
-    optimistic: TEntity
+    optimistic: TEntity,
   ) => TListShape | undefined;
   successMessage?: string;
   errorMessage?: string;
 }
 
 export function useCreateEntityMutation<TCreate, TEntity, TListShape>(
-  options: CreateEntityOptions<TCreate, TEntity, TListShape>
+  options: CreateEntityOptions<TCreate, TEntity, TListShape>,
 ) {
   const queryClient = useQueryClient();
   const { toast } = useToast();
@@ -37,8 +37,8 @@ export function useCreateEntityMutation<TCreate, TEntity, TListShape>(
     keys,
     makeOptimisticEntity,
     applyOptimisticToList,
-    successMessage = "common.success",
-    errorMessage = "errors.genericError",
+    successMessage = 'common.success',
+    errorMessage = 'errors.genericError',
   } = options;
 
   return useMutation({
@@ -54,7 +54,7 @@ export function useCreateEntityMutation<TCreate, TEntity, TListShape>(
         const optimistic = makeOptimisticEntity(payload as TCreate);
         queryClient.setQueriesData<TListShape>(
           { queryKey: keys.lists() },
-          (old) => applyOptimisticToList(old, optimistic)
+          (old) => applyOptimisticToList(old, optimistic),
         );
       }
 
@@ -67,14 +67,14 @@ export function useCreateEntityMutation<TCreate, TEntity, TListShape>(
         });
       }
       handleServiceError(_err, {
-        operation: t("common.create"),
+        operation: t('common.create'),
         fallbackMessage: t(errorMessage),
       });
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: keys.lists() });
       if (keys.stats) queryClient.invalidateQueries({ queryKey: keys.stats() });
-      toast({ title: t("common.success"), description: t(successMessage) });
+      toast({ title: t('common.success'), description: t(successMessage) });
     },
   });
 }
@@ -84,18 +84,18 @@ export interface UpdateEntityOptions<
   TUpdate,
   _TEntity,
   TListShape,
-  TDetailShape
+  TDetailShape,
 > {
   updateFn: (args: { id: string; data: TUpdate }) => Promise<unknown>;
   keys: EntityQueryKeys;
   applyOptimisticToDetail?: (
     prev: TDetailShape | undefined,
-    update: TUpdate
+    update: TUpdate,
   ) => TDetailShape | undefined;
   applyOptimisticToList?: (
     prev: TListShape | undefined,
     id: string,
-    update: TUpdate
+    update: TUpdate,
   ) => TListShape | undefined;
   successMessage?: string;
   errorMessage?: string;
@@ -105,7 +105,7 @@ export function useUpdateEntityMutation<
   TUpdate,
   _TEntity,
   TListShape,
-  TDetailShape
+  TDetailShape,
 >(options: UpdateEntityOptions<TUpdate, _TEntity, TListShape, TDetailShape>) {
   const queryClient = useQueryClient();
   const { toast } = useToast();
@@ -115,8 +115,8 @@ export function useUpdateEntityMutation<
     keys,
     applyOptimisticToDetail,
     applyOptimisticToList,
-    successMessage = t("common.success"),
-    errorMessage = t("errors.genericError"),
+    successMessage = t('common.success'),
+    errorMessage = t('errors.genericError'),
   } = options;
 
   return useMutation({
@@ -126,7 +126,7 @@ export function useUpdateEntityMutation<
       await queryClient.cancelQueries({ queryKey: keys.lists() });
 
       const previousDetail = queryClient.getQueryData<TDetailShape>(
-        keys.detail(id)
+        keys.detail(id),
       );
       const previousLists = queryClient.getQueriesData<TListShape>({
         queryKey: keys.lists(),
@@ -134,13 +134,13 @@ export function useUpdateEntityMutation<
 
       if (applyOptimisticToDetail) {
         queryClient.setQueryData<TDetailShape>(keys.detail(id), (old) =>
-          applyOptimisticToDetail(old, data as TUpdate)
+          applyOptimisticToDetail(old, data as TUpdate),
         );
       }
       if (applyOptimisticToList) {
         queryClient.setQueriesData<TListShape>(
           { queryKey: keys.lists() },
-          (old) => applyOptimisticToList(old, id, data as TUpdate)
+          (old) => applyOptimisticToList(old, id, data as TUpdate),
         );
       }
 
@@ -150,7 +150,7 @@ export function useUpdateEntityMutation<
       if (context?.previousDetail) {
         queryClient.setQueryData(
           keys.detail(context.id),
-          context.previousDetail
+          context.previousDetail,
         );
       }
       if (context?.previousLists) {
@@ -159,14 +159,14 @@ export function useUpdateEntityMutation<
         });
       }
       handleServiceError(_err, {
-        operation: t("common.update"),
+        operation: t('common.update'),
         fallbackMessage: errorMessage,
       });
     },
     onSuccess: (_res, { id }) => {
       queryClient.invalidateQueries({ queryKey: keys.detail(id) });
       queryClient.invalidateQueries({ queryKey: keys.lists() });
-      toast({ title: t("common.success"), description: t(successMessage) });
+      toast({ title: t('common.success'), description: t(successMessage) });
     },
   });
 }
@@ -177,14 +177,14 @@ export interface DeleteEntityOptions<TListShape> {
   keys: EntityQueryKeys;
   applyOptimisticToList?: (
     prev: TListShape | undefined,
-    id: string
+    id: string,
   ) => TListShape | undefined;
   successMessage?: string;
   errorMessage?: string;
 }
 
 export function useDeleteEntityMutation<TListShape>(
-  options: DeleteEntityOptions<TListShape>
+  options: DeleteEntityOptions<TListShape>,
 ) {
   const queryClient = useQueryClient();
   const { toast } = useToast();
@@ -193,8 +193,8 @@ export function useDeleteEntityMutation<TListShape>(
     deleteFn,
     keys,
     applyOptimisticToList,
-    successMessage = t("common.success"),
-    errorMessage = t("errors.genericError"),
+    successMessage = t('common.success'),
+    errorMessage = t('errors.genericError'),
   } = options;
 
   return useMutation({
@@ -209,7 +209,7 @@ export function useDeleteEntityMutation<TListShape>(
       if (applyOptimisticToList) {
         queryClient.setQueriesData<TListShape>(
           { queryKey: keys.lists() },
-          (old) => applyOptimisticToList(old, id)
+          (old) => applyOptimisticToList(old, id),
         );
       }
 
@@ -222,7 +222,7 @@ export function useDeleteEntityMutation<TListShape>(
         });
       }
       handleServiceError(_err, {
-        operation: t("common.delete"),
+        operation: t('common.delete'),
         fallbackMessage: errorMessage,
       });
     },
@@ -230,7 +230,7 @@ export function useDeleteEntityMutation<TListShape>(
       queryClient.removeQueries({ queryKey: keys.detail(id) });
       queryClient.invalidateQueries({ queryKey: keys.lists() });
       if (keys.stats) queryClient.invalidateQueries({ queryKey: keys.stats() });
-      toast({ title: t("common.success"), description: t(successMessage) });
+      toast({ title: t('common.success'), description: t(successMessage) });
     },
   });
 }

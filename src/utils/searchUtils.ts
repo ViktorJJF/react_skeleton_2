@@ -1,4 +1,4 @@
-import { useEffect, useRef, useCallback } from "react";
+import { useEffect, useRef, useCallback } from 'react';
 
 /**
  * Default debounce delay in milliseconds
@@ -13,7 +13,7 @@ export const DEFAULT_DEBOUNCE_DELAY = 600;
  */
 export const debounce = <T extends (...args: any[]) => any>(
   func: T,
-  delay: number = DEFAULT_DEBOUNCE_DELAY
+  delay: number = DEFAULT_DEBOUNCE_DELAY,
 ): ((...args: Parameters<T>) => void) => {
   let timeoutId: NodeJS.Timeout;
 
@@ -32,7 +32,7 @@ export const debounce = <T extends (...args: any[]) => any>(
 export const useDebounceSearch = (
   searchValue: string,
   onSearch: (value: string) => void,
-  delay: number = DEFAULT_DEBOUNCE_DELAY
+  delay: number = DEFAULT_DEBOUNCE_DELAY,
 ) => {
   const timerRef = useRef<NodeJS.Timeout | null>(null);
   const onSearchRef = useRef(onSearch);
@@ -78,7 +78,7 @@ export const useDebounceSearch = (
 export const useDebouncedCallback = <T extends (...args: any[]) => any>(
   callback: T,
   delay: number = DEFAULT_DEBOUNCE_DELAY,
-  deps: React.DependencyList = []
+  deps: React.DependencyList = [],
 ) => {
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -92,7 +92,7 @@ export const useDebouncedCallback = <T extends (...args: any[]) => any>(
         callback(...args);
       }, delay);
     },
-    [...deps, delay]
+    [...deps, delay],
   );
 };
 
@@ -106,7 +106,7 @@ export const useDebouncedCallback = <T extends (...args: any[]) => any>(
 export const filterBySearch = <T extends Record<string, any>>(
   items: T[],
   searchTerm: string,
-  searchFields: (keyof T)[]
+  searchFields: (keyof T)[],
 ): T[] => {
   if (!searchTerm.trim()) {
     return items;
@@ -120,7 +120,7 @@ export const filterBySearch = <T extends Record<string, any>>(
       if (fieldValue == null) return false;
 
       return String(fieldValue).toLowerCase().includes(lowerSearchTerm);
-    })
+    }),
   );
 };
 
@@ -134,15 +134,15 @@ export const filterBySearch = <T extends Record<string, any>>(
 export const highlightSearchTerm = (
   text: string,
   searchTerm: string,
-  className: string = "bg-yellow-200 dark:bg-yellow-800"
+  className: string = 'bg-yellow-200 dark:bg-yellow-800',
 ): string => {
   if (!searchTerm.trim()) {
     return text;
   }
 
   const regex = new RegExp(
-    `(${searchTerm.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")})`,
-    "gi"
+    `(${searchTerm.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')})`,
+    'gi',
   );
   return text.replace(regex, `<span class="${className}">$1</span>`);
 };
@@ -161,9 +161,9 @@ export const buildSearchQuery = (
   search?: string,
   page: number = 1,
   limit: number = 10,
-  sort: string = "createdAt",
-  order: "asc" | "desc" = "desc",
-  additionalParams?: Record<string, any>
+  sort: string = 'createdAt',
+  order: 'asc' | 'desc' = 'desc',
+  additionalParams?: Record<string, any>,
 ) => {
   const query: Record<string, any> = {
     page,

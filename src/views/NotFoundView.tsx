@@ -71,7 +71,11 @@ const NotFoundView: React.FC = () => {
                   <Home className="w-4 h-4 mr-2" />
                   {t('errors.goHome')}
                 </Button>
-                <Button variant="outline" onClick={handleGoBack} className="flex-1">
+                <Button
+                  variant="outline"
+                  onClick={handleGoBack}
+                  className="flex-1"
+                >
                   <ArrowLeft className="w-4 h-4 mr-2" />
                   {t('errors.goBack')}
                 </Button>
@@ -90,4 +94,4 @@ const NotFoundView: React.FC = () => {
   );
 };
 
-export default NotFoundView; 
+export default NotFoundView;

@@ -1,12 +1,12 @@
-import { format, formatDistanceToNow, isValid, parseISO } from "date-fns";
-import { es, enUS, type Locale } from "date-fns/locale";
-import i18n from "@/i18n";
+import { format, formatDistanceToNow, isValid, parseISO } from 'date-fns';
+import { es, enUS, type Locale } from 'date-fns/locale';
+import i18n from '@/i18n';
 
 /**
  * Get the appropriate locale for date-fns based on current language
  */
 export const getDateLocale = () => {
-  return i18n.language === "es" ? es : enUS;
+  return i18n.language === 'es' ? es : enUS;
 };
 
 /**
@@ -18,30 +18,30 @@ export const getDateLocale = () => {
  */
 export const formatDate = (
   date: string | Date | number,
-  formatString: string = "dd/MM/yyyy HH:mm",
-  locale?: Locale
+  formatString: string = 'dd/MM/yyyy HH:mm',
+  locale?: Locale,
 ): string => {
   try {
     let dateObj: Date;
 
-    if (typeof date === "string") {
+    if (typeof date === 'string') {
       dateObj = parseISO(date);
-    } else if (typeof date === "number") {
+    } else if (typeof date === 'number') {
       dateObj = new Date(date);
     } else {
       dateObj = date;
     }
 
     if (!isValid(dateObj)) {
-      console.warn("Invalid date provided to formatDate:", date);
-      return "Invalid Date";
+      console.warn('Invalid date provided to formatDate:', date);
+      return 'Invalid Date';
     }
 
     const dateLocale = locale || getDateLocale();
     return format(dateObj, formatString, { locale: dateLocale });
   } catch (error) {
-    console.error("Error formatting date:", error);
-    return "Invalid Date";
+    console.error('Error formatting date:', error);
+    return 'Invalid Date';
   }
 };
 
@@ -53,22 +53,22 @@ export const formatDate = (
  */
 export const formatRelativeTime = (
   date: string | Date | number,
-  locale?: Locale
+  locale?: Locale,
 ): string => {
   try {
     let dateObj: Date;
 
-    if (typeof date === "string") {
+    if (typeof date === 'string') {
       dateObj = parseISO(date);
-    } else if (typeof date === "number") {
+    } else if (typeof date === 'number') {
       dateObj = new Date(date);
     } else {
       dateObj = date;
     }
 
     if (!isValid(dateObj)) {
-      console.warn("Invalid date provided to formatRelativeTime:", date);
-      return "Invalid Date";
+      console.warn('Invalid date provided to formatRelativeTime:', date);
+      return 'Invalid Date';
     }
 
     const dateLocale = locale || getDateLocale();
@@ -77,8 +77,8 @@ export const formatRelativeTime = (
       locale: dateLocale,
     });
   } catch (error) {
-    console.error("Error formatting relative time:", error);
-    return "Invalid Date";
+    console.error('Error formatting relative time:', error);
+    return 'Invalid Date';
   }
 };
 
@@ -88,7 +88,7 @@ export const formatRelativeTime = (
  * @returns Short formatted date string
  */
 export const formatTableDate = (date: string | Date | number): string => {
-  return formatDate(date, "dd/MM/yyyy");
+  return formatDate(date, 'dd/MM/yyyy');
 };
 
 /**
@@ -97,7 +97,7 @@ export const formatTableDate = (date: string | Date | number): string => {
  * @returns Long formatted date string with time
  */
 export const formatDateTime = (date: string | Date | number): string => {
-  return formatDate(date, "dd/MM/yyyy HH:mm:ss");
+  return formatDate(date, 'dd/MM/yyyy HH:mm:ss');
 };
 
 /**
@@ -109,22 +109,22 @@ export const formatApiDate = (date: string | Date | number): string => {
   try {
     let dateObj: Date;
 
-    if (typeof date === "string") {
+    if (typeof date === 'string') {
       dateObj = parseISO(date);
-    } else if (typeof date === "number") {
+    } else if (typeof date === 'number') {
       dateObj = new Date(date);
     } else {
       dateObj = date;
     }
 
     if (!isValid(dateObj)) {
-      throw new Error("Invalid date");
+      throw new Error('Invalid date');
     }
 
     return dateObj.toISOString();
   } catch (error) {
-    console.error("Error formatting API date:", error);
-    throw new Error("Invalid date provided");
+    console.error('Error formatting API date:', error);
+    throw new Error('Invalid date provided');
   }
 };
 
@@ -137,9 +137,9 @@ export const isValidDate = (date: string | Date | number): boolean => {
   try {
     let dateObj: Date;
 
-    if (typeof date === "string") {
+    if (typeof date === 'string') {
       dateObj = parseISO(date);
-    } else if (typeof date === "number") {
+    } else if (typeof date === 'number') {
       dateObj = new Date(date);
     } else {
       dateObj = date;

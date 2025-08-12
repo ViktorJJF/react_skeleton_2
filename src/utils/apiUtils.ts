@@ -1,4 +1,4 @@
-import type { AxiosResponse, AxiosError } from "axios";
+import type { AxiosResponse, AxiosError } from 'axios';
 
 /**
  * Generic API response handler
@@ -18,14 +18,14 @@ export const handleApiResponse = <T>(response: AxiosResponse<T>): T => {
  * @returns Formatted error message
  */
 export const handleApiError = (error: AxiosError | Error): string => {
-  if ("isAxiosError" in error && error.isAxiosError) {
+  if ('isAxiosError' in error && error.isAxiosError) {
     const axiosError = error as AxiosError;
 
     // Handle validation errors (422)
     if (axiosError.response?.status === 422) {
       const responseData = axiosError.response.data as any;
       if (responseData?.errors && Array.isArray(responseData.errors)) {
-        return responseData.errors.map((err: any) => err.message).join(", ");
+        return responseData.errors.map((err: any) => err.message).join(', ');
       }
     }
 
@@ -47,7 +47,7 @@ export const handleApiError = (error: AxiosError | Error): string => {
   }
 
   // Handle generic errors
-  return error.message || "An unexpected error occurred";
+  return error.message || 'An unexpected error occurred';
 };
 
 /**
@@ -83,13 +83,13 @@ export const buildQueryString = (params: Record<string, any>): string => {
   const searchParams = new URLSearchParams();
 
   Object.entries(params).forEach(([key, value]) => {
-    if (value !== undefined && value !== null && value !== "") {
+    if (value !== undefined && value !== null && value !== '') {
       searchParams.append(key, String(value));
     }
   });
 
   const queryString = searchParams.toString();
-  return queryString ? `?${queryString}` : "";
+  return queryString ? `?${queryString}` : '';
 };
 
 /**
@@ -102,7 +102,7 @@ export const buildQueryString = (params: Record<string, any>): string => {
 export const retryApiCall = async <T>(
   apiCall: () => Promise<T>,
   maxRetries: number = 3,
-  baseDelay: number = 1000
+  baseDelay: number = 1000,
 ): Promise<T> => {
   let lastError: Error;
 
@@ -144,7 +144,7 @@ export const createTimeout = (ms: number): Promise<never> => {
  */
 export const apiCallWithTimeout = async <T>(
   apiCall: () => Promise<T>,
-  timeoutMs: number = 30000
+  timeoutMs: number = 30000,
 ): Promise<T> => {
   return Promise.race([apiCall(), createTimeout(timeoutMs)]);
 };
@@ -157,7 +157,7 @@ export const apiCallWithTimeout = async <T>(
  */
 export const batchApiRequests = async <T>(
   requests: (() => Promise<T>)[],
-  batchSize: number = 5
+  batchSize: number = 5,
 ): Promise<T[]> => {
   const results: T[] = [];
 
