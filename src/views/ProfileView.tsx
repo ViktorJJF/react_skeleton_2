@@ -246,8 +246,8 @@ const ProfileView: React.FC = () => {
                 <h2 className="text-2xl font-bold">
                   {user ? `${user.firstName} ${user.lastName}` : 'Loading...'}
                 </h2>
-                <Badge variant={user?.isActive ? 'default' : 'secondary'}>
-                  {user?.isActive ? 'active' : 'inactive'}
+                <Badge variant={user?.is_active ? 'default' : 'secondary'}>
+                  {user?.is_active ? 'active' : 'inactive'}
                 </Badge>
               </div>
               <p className="text-muted-foreground mb-1 capitalize">
@@ -255,7 +255,7 @@ const ProfileView: React.FC = () => {
               </p>
               <p className="text-sm text-muted-foreground">
                 {t('profile.memberSince')}{' '}
-                {user ? new Date(user.createdAt).toLocaleDateString() : ''}
+                {user ? new Date(user.created_at).toLocaleDateString() : ''}
               </p>
             </div>
           </div>
@@ -728,7 +728,7 @@ const ProfileView: React.FC = () => {
                     {t('profile.memberSince')}
                   </Label>
                   <p className="text-sm">
-                    {user ? new Date(user.createdAt).toLocaleDateString() : ''}
+                    {user ? new Date(user.created_at).toLocaleDateString() : ''}
                   </p>
                 </div>
                 <div>
@@ -736,7 +736,7 @@ const ProfileView: React.FC = () => {
                     {t('profile.lastUpdated')}
                   </Label>
                   <p className="text-sm">
-                    {user ? new Date(user.updatedAt).toLocaleString() : ''}
+                    {user ? new Date(user.updated_at).toLocaleString() : ''}
                   </p>
                 </div>
               </div>

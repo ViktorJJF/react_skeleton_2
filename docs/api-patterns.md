@@ -69,9 +69,9 @@ export interface IBot {
   id: number;
   name: string;
   description?: string;
-  isActive: boolean;
-  createdAt: string;
-  updatedAt: string;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
 }
 ```
 
@@ -80,13 +80,13 @@ export interface IBot {
 export interface ICreateBotRequest extends ICreateRequest<IBot> {
   name: string;
   description?: string;
-  isActive?: boolean;
+  is_active?: boolean;
 }
 
 export interface IUpdateBotRequest extends IUpdateRequest<IBot> {
   name?: string;
   description?: string;
-  isActive?: boolean;
+  is_active?: boolean;
 }
 ```
 

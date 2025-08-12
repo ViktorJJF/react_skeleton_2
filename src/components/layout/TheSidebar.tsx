@@ -18,8 +18,8 @@ const Sidebar = () => {
   const inactiveLinkClass =
     'flex items-center gap-3 rounded-lg px-3 py-2 text-muted-foreground transition-all hover:bg-primary/10 hover:text-primary';
 
-  const getNavLinkClass = ({ isActive }: { isActive: boolean }) =>
-    isActive ? activeLinkClass : inactiveLinkClass;
+  const getNavLinkClass = ({ is_active }: { is_active: boolean }) =>
+    is_active ? activeLinkClass : inactiveLinkClass;
 
   return (
     <div className="hidden border-r bg-card text-card-foreground md:block sticky top-0 h-screen">

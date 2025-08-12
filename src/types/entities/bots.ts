@@ -7,22 +7,22 @@ export interface IBot {
   id: number;
   name: string;
   description?: string;
-  isActive: boolean;
-  createdAt: string;
-  updatedAt: string;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
 }
 
 // Request payload interfaces
 export interface ICreateBotRequest {
   name: string;
   description?: string;
-  isActive?: boolean;
+  is_active?: boolean;
 }
 
 export interface IUpdateBotRequest {
   name?: string;
   description?: string;
-  isActive?: boolean;
+  is_active?: boolean;
 }
 
 // Legacy types (keep for backward compatibility)
@@ -35,7 +35,7 @@ export type IDeleteBotResponse = IApiResponse<IBot>;
 // Query parameters for list endpoint
 export interface IListBotQuery extends IBaseQueryParams {
   search?: string;
-  isActive?: boolean;
+  is_active?: boolean;
   sort?: string;
   order?: 'asc' | 'desc';
 }
@@ -45,7 +45,7 @@ export interface IBulkCreateBotsRequest {
   bots: Array<{
     name: string;
     description?: string;
-    isActive?: boolean;
+    is_active?: boolean;
   }>;
 }
 
@@ -60,7 +60,7 @@ export interface IBulkUpdateBotsRequest {
     data: {
       name?: string;
       description?: string;
-      isActive?: boolean;
+      is_active?: boolean;
     };
   }>;
 }

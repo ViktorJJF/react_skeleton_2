@@ -7,6 +7,9 @@ import { VitePWA } from 'vite-plugin-pwa';
 export default defineConfig({
   server: {
     port: 4040,
+    watch: {
+      usePolling: true,
+    },
   },
   plugins: [
     react(),

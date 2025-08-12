@@ -32,9 +32,9 @@ export const useProfile = () => {
           lastName: updatedUser.last_name || '',
           role: updatedUser.role,
           isEmailVerified: updatedUser.verified,
-          isActive: true,
-          createdAt: updatedUser.createdAt,
-          updatedAt: updatedUser.updatedAt,
+          is_active: true,
+          created_at: updatedUser.created_at,
+          updated_at: updatedUser.updated_at,
         };
 
         // Update the auth store with new user data

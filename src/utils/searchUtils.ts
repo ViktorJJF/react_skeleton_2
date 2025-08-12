@@ -161,7 +161,7 @@ export const buildSearchQuery = (
   search?: string,
   page: number = 1,
   limit: number = 10,
-  sort: string = 'createdAt',
+  sort: string = 'created_at',
   order: 'asc' | 'desc' = 'desc',
   additionalParams?: Record<string, any>,
 ) => {

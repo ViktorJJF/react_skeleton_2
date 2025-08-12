@@ -59,6 +59,7 @@ import {
 import type { IBot } from '@/types/entities/bots';
 
 import Bots from '@/models/Bots';
+import { formatRelativeTime, formatTableDate } from '@/utils/dateUtils';
 
 const defaultItem: IBot = Bots() as IBot;
 
@@ -129,7 +130,7 @@ const BotsView = () => {
   };
 
   // --- Derived State ---
-  const formTitle = editedItem._id ? 'Editar Bot' : 'Crear Bot';
+  const formTitle = editedItem.id ? 'Editar Bot' : 'Crear Bot';
   const isMutating = isSaving || isDeleting || isBulkDeleting;
 
   // ===================================================================================
@@ -162,7 +163,7 @@ const BotsView = () => {
                   <Button
                     variant="ghost"
                     size="icon"
-                    aria-label="Actualizar"
+                    aria-label="Actualizar ahora"
                     onClick={() => refetch()}
                     disabled={isFetching}
                   >
@@ -243,6 +244,9 @@ const BotsView = () => {
                     Descripción
                   </TableHead>
                   <TableHead className="hidden sm:table-cell">Estado</TableHead>
+                  <TableHead className="hidden md:table-cell">
+                    Actualizado
+                  </TableHead>
                   <TableHead className="w-[120px] text-right">
                     Acciones
                   </TableHead>
@@ -251,27 +255,29 @@ const BotsView = () => {
               <TableBody>
                 {isLoading ? (
                   <TableRow>
-                    <TableCell colSpan={5} className="h-24 text-center">
+                    <TableCell colSpan={6} className="h-24 text-center">
                       Cargando datos...
                     </TableCell>
                   </TableRow>
                 ) : bots.length === 0 ? (
                   <TableRow>
-                    <TableCell colSpan={5} className="h-24 text-center">
+                    <TableCell colSpan={6} className="h-24 text-center">
                       No se encontraron bots.
                     </TableCell>
                   </TableRow>
                 ) : (
                   bots.map((bot) => (
                     <TableRow
-                      key={bot._id}
-                      data-state={selectedRows.includes(bot._id) && 'selected'}
+                      key={bot.id}
+                      data-state={
+                        selectedRows.includes(String(bot.id)) && 'selected'
+                      }
                     >
                       <TableCell>
                         <Checkbox
-                          checked={selectedRows.includes(bot._id)}
+                          checked={selectedRows.includes(String(bot.id))}
                           onCheckedChange={(checked) =>
-                            handleRowSelect(bot._id, !!checked)
+                            handleRowSelect(String(bot.id), !!checked)
                           }
                           aria-label={`Select row for ${bot.name}`}
                         />
@@ -283,13 +289,21 @@ const BotsView = () => {
                       <TableCell className="hidden sm:table-cell">
                         <span
                           className={`px-2 py-1 rounded-full text-xs font-medium ${
-                            bot.isActive
+                            bot.is_active
                               ? 'bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-400'
                               : 'bg-gray-100 text-gray-800 dark:bg-gray-800 dark:text-gray-300'
                           }`}
                         >
-                          {bot.isActive ? 'Activo' : 'Inactivo'}
+                          {bot.is_active ? 'Activo' : 'Inactivo'}
                         </span>
+                      </TableCell>
+                      <TableCell className="hidden md:table-cell">
+                        <div className="flex flex-col">
+                          <span>{formatTableDate(bot.updated_at)}</span>
+                          <span className="text-xs text-muted-foreground">
+                            {formatRelativeTime(bot.updated_at)}
+                          </span>
+                        </div>
                       </TableCell>
                       <TableCell className="text-right">
                         <div className="flex items-center justify-end gap-2">
@@ -341,7 +355,7 @@ const BotsView = () => {
                               <AlertDialogFooter>
                                 <AlertDialogCancel>Cancelar</AlertDialogCancel>
                                 <AlertDialogAction
-                                  onClick={() => deleteBot(bot._id)}
+                                  onClick={() => deleteBot(String(bot.id))}
                                   className="bg-destructive hover:bg-destructive/90"
                                 >
                                   {isDeleting ? (
@@ -436,16 +450,16 @@ const BotsView = () => {
             </div>
             <div className="flex items-center justify-between rounded-lg border p-3 shadow-sm">
               <div className="space-y-0.5">
-                <Label htmlFor="isActive">Estado Activo</Label>
+                <Label htmlFor="is_active">Estado Activo</Label>
                 <p className="text-xs text-muted-foreground">
                   Determina si el bot está actualmente operativo.
                 </p>
               </div>
               <Switch
-                id="isActive"
-                checked={editedItem.isActive}
+                id="is_active"
+                checked={editedItem.is_active}
                 onCheckedChange={(checked) =>
-                  setEditedItem({ ...editedItem, isActive: checked })
+                  setEditedItem({ ...editedItem, is_active: checked })
                 }
               />
             </div>

@@ -1,5 +1,5 @@
 export default () => ({
   name: '',
   description: '',
-  isActive: true,
+  is_active: true,
 });

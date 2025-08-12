@@ -198,7 +198,6 @@ const DashboardView = () => {
           </Card>
         ))}
       </div>
-
       {/* Main Charts */}
       <div className="grid gap-6 lg:grid-cols-3 mt-6">
         <Card className="lg:col-span-2">

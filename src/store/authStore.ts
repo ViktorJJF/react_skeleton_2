@@ -32,9 +32,9 @@ const normalizeApiUser = (apiUser: ApiUser): AuthUser => ({
   lastName: apiUser.last_name || '',
   role: apiUser.role,
   isEmailVerified: apiUser.verified,
-  isActive: true, // API doesn't provide this field, assume true
-  createdAt: apiUser.createdAt,
-  updatedAt: apiUser.updatedAt,
+  is_active: true, // API doesn't provide this field, assume true
+  created_at: apiUser.created_at,
+  updated_at: apiUser.updated_at,
 });
 
 const normalizeLoginUser = (loginUser: ApiLoginUser): Partial<AuthUser> => ({
@@ -42,12 +42,12 @@ const normalizeLoginUser = (loginUser: ApiLoginUser): Partial<AuthUser> => ({
   email: loginUser.email,
   role: loginUser.role,
   isEmailVerified: loginUser.verified,
-  isActive: true,
+  is_active: true,
   // firstName/lastName not provided in login response
   firstName: '',
   lastName: '',
-  createdAt: '',
-  updatedAt: '',
+  created_at: '',
+  updated_at: '',
 });
 
 export const useAuthStore = create(

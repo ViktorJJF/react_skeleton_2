@@ -15,8 +15,8 @@ export interface ApiUser {
   role: UserRole;
   verification: string;
   verified: boolean;
-  createdAt: string;
-  updatedAt: string;
+  created_at: string;
+  updated_at: string;
 }
 
 // Raw API user response from /login endpoint
@@ -36,9 +36,9 @@ export interface User {
   lastName: string;
   role: UserRole;
   isEmailVerified: boolean;
-  isActive: boolean;
-  createdAt: string;
-  updatedAt: string;
+  is_active: boolean;
+  created_at: string;
+  updated_at: string;
 }
 
 export type AuthUser = User;
