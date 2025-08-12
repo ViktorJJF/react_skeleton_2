@@ -1,8 +1,8 @@
 export type IBaseQueryParams = {
-  filters?: string;
+  filter?: string;
   fields?: string;
   sort?: string;
-  order?: "asc" | "desc";
+  order?: 'asc' | 'desc';
   page?: number;
   limit?: number;
   select?: string;

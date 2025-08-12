@@ -1,10 +1,10 @@
-import type { IApiResponse } from "@/types/api/response";
-import type { IPaginatedResponse } from "@/types/api/pagination";
-import type { IBaseQueryParams } from "@/types/api/queryParams";
+import type { IApiResponse } from '@/types/api/response';
+import type { IPaginatedResponse } from '@/types/api/pagination';
+import type { IBaseQueryParams } from '@/types/api/queryParams';
 
 // Base Bot interface matching the API response
 export interface IBot {
-  _id: string;
+  id: number;
   name: string;
   description?: string;
   isActive: boolean;
@@ -25,10 +25,6 @@ export interface IUpdateBotRequest {
   isActive?: boolean;
 }
 
-// API Response interfaces
-export type IBotListResponse = IPaginatedResponse<IBot>;
-export type IBotResponse = IApiResponse<IBot>;
-
 // Legacy types (keep for backward compatibility)
 export type IListBotsResponse = IPaginatedResponse<IBot>;
 export type IListOneBotResponse = IApiResponse<IBot>;
@@ -37,11 +33,11 @@ export type IUpdateBotResponse = IApiResponse<IBot>;
 export type IDeleteBotResponse = IApiResponse<IBot>;
 
 // Query parameters for list endpoint
-export interface IBotListQuery extends IBaseQueryParams {
+export interface IListBotQuery extends IBaseQueryParams {
   search?: string;
   isActive?: boolean;
-  sortBy?: string;
-  sortOrder?: "asc" | "desc";
+  sort?: string;
+  order?: 'asc' | 'desc';
 }
 
 // Bulk operations types
@@ -60,7 +56,7 @@ export type IBulkCreateBotsResponse = IApiResponse<{
 
 export interface IBulkUpdateBotsRequest {
   updates: Array<{
-    id: string;
+    id: number;
     data: {
       name?: string;
       description?: string;
@@ -75,7 +71,7 @@ export type IBulkUpdateBotsResponse = IApiResponse<{
 }>;
 
 export interface IBulkDeleteBotsRequest {
-  ids: string[];
+  ids: number[];
 }
 
 export type IBulkDeleteBotsResponse = IApiResponse<{

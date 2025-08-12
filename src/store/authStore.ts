@@ -26,7 +26,7 @@ interface AuthState {
 
 // Helper functions to normalize API responses to our internal format
 const normalizeApiUser = (apiUser: ApiUser): AuthUser => ({
-  _id: apiUser._id,
+  id: apiUser.id,
   email: apiUser.email,
   firstName: apiUser.first_name || '',
   lastName: apiUser.last_name || '',
@@ -38,7 +38,7 @@ const normalizeApiUser = (apiUser: ApiUser): AuthUser => ({
 });
 
 const normalizeLoginUser = (loginUser: ApiLoginUser): Partial<AuthUser> => ({
-  _id: loginUser._id,
+  id: loginUser.id,
   email: loginUser.email,
   role: loginUser.role,
   isEmailVerified: loginUser.verified,

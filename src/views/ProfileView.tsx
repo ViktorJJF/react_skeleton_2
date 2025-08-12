@@ -713,7 +713,7 @@ const ProfileView: React.FC = () => {
                   <Label className="text-sm font-medium text-muted-foreground">
                     {t('profile.accountId')}
                   </Label>
-                  <p className="text-sm">{user?._id}</p>
+                  <p className="text-sm">{user?.id}</p>
                 </div>
                 <div>
                   <Label className="text-sm font-medium text-muted-foreground">

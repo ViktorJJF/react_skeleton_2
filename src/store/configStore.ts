@@ -10,7 +10,7 @@ interface ConfigState extends AppConfig {
 }
 
 const defaultConfig: AppConfig = {
-  itemsPerPage: 2,
+  itemsPerPage: 15,
   pageSizeOptions: [5, 10, 20, 50],
   debounceDelayMs: 500,
 };

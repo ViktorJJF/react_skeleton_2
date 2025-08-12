@@ -26,7 +26,7 @@ export const useProfile = () => {
 
         // Normalize the updated user data
         const normalizedUser = {
-          _id: updatedUser._id,
+          id: updatedUser.id,
           email: updatedUser.email,
           firstName: updatedUser.first_name || '',
           lastName: updatedUser.last_name || '',

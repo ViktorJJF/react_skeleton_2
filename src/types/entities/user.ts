@@ -1,14 +1,14 @@
 export type UserRole =
-  | "USER"
-  | "ADMIN"
-  | "SUPERADMIN"
-  | "user"
-  | "admin"
-  | "superadmin";
+  | 'USER'
+  | 'ADMIN'
+  | 'SUPERADMIN'
+  | 'user'
+  | 'admin'
+  | 'superadmin';
 
 // Raw API user response from /me endpoint
 export interface ApiUser {
-  _id: string;
+  id: number;
   first_name: string;
   last_name: string;
   email: string;
@@ -21,7 +21,7 @@ export interface ApiUser {
 
 // Raw API user response from /login endpoint
 export interface ApiLoginUser {
-  _id: string;
+  id: number;
   email: string;
   role: UserRole;
   verified: boolean;
@@ -30,7 +30,7 @@ export interface ApiLoginUser {
 
 // Normalized user interface used internally
 export interface User {
-  _id: string;
+  id: number;
   email: string;
   firstName: string;
   lastName: string;

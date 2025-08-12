@@ -215,7 +215,7 @@ export function useDeleteEntityMutation<TListShape>(
 
       return { previousLists, id } as const;
     },
-    onError: (_err, _id, context) => {
+    onError: (_err, id, context) => {
       if (context?.previousLists) {
         context.previousLists.forEach(([key, data]) => {
           queryClient.setQueryData(key, data);

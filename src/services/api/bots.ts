@@ -1,7 +1,7 @@
 import { type AxiosPromise } from 'axios';
 import apiClient from '@/services/api/apiClient';
 import type {
-  IBotListQuery,
+  IListBotQuery,
   ICreateBotRequest,
   ICreateBotResponse,
   IDeleteBotResponse,
@@ -14,16 +14,16 @@ import type {
 } from '@/types/entities/bots';
 
 export default {
-  list(query: IBotListQuery = {}): AxiosPromise<IListBotsResponse> {
+  list(query: IListBotQuery = {}): AxiosPromise<IListBotsResponse> {
     return apiClient.get('/api/v1/bots', {
       params: query,
     });
   },
-  listOne(id: string): AxiosPromise<IListOneBotResponse> {
+  listOne(id: number): AxiosPromise<IListOneBotResponse> {
     return apiClient.get('/api/v1/bots/' + id);
   },
   update(
-    id: string,
+    id: number,
     payload: IUpdateBotRequest,
   ): AxiosPromise<IUpdateBotResponse> {
     return apiClient.put(`/api/v1/bots/${id}`, payload);
@@ -31,7 +31,7 @@ export default {
   create(payload: ICreateBotRequest): AxiosPromise<ICreateBotResponse> {
     return apiClient.post('/api/v1/bots', payload);
   },
-  delete(id: string): AxiosPromise<IDeleteBotResponse> {
+  delete(id: number): AxiosPromise<IDeleteBotResponse> {
     return apiClient.delete(`/api/v1/bots/${id}`);
   },
   bulkDelete(

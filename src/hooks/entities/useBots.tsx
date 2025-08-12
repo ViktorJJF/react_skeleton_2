@@ -3,8 +3,9 @@ import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { toast } from 'sonner';
 
 import botsService from '@/services/api/bots';
-import { usePagination } from '@/hooks/ui/usePagination'; // <-- Import the new hook
+import { usePagination } from '@/hooks/ui/usePagination';
 import type { IBot, IListBotsResponse } from '@/types/entities/bots';
+import type { IListBotQuery } from '@/types/entities/bots';
 
 const FIELDS_TO_SEARCH = ['name', 'description'];
 
@@ -22,14 +23,20 @@ export const useBots = () => {
 
   // 3. Data Fetching (Query) - now simpler.
   // We use the spread operator to cleanly get all query status flags.
-  const { data: botsData, ...queryInfo } = useQuery<IListBotsResponse>({
+  const {
+    data: botsData,
+    refetch,
+    ...queryInfo
+  } = useQuery<IListBotsResponse>({
     queryKey,
     queryFn: async () => {
-      const params = {
+      const params: IListBotQuery = {
         page,
         limit,
         fields: FIELDS_TO_SEARCH.join(','),
         filter: debouncedSearchTerm || undefined,
+        sort: 'created_at',
+        order: 'desc',
       };
       const response = await botsService.list(params);
       return response.data;
@@ -43,10 +50,10 @@ export const useBots = () => {
 
   const saveMutation = useMutation({
     mutationFn: (bot: IBot) =>
-      bot._id ? botsService.update(bot._id, bot) : botsService.create(bot),
+      bot.id ? botsService.update(bot.id, bot) : botsService.create(bot),
     onSuccess: (_, variables) => {
       toast.success(
-        `Bot ${variables._id ? 'updated' : 'created'} successfully.`,
+        `Bot ${variables.id ? 'updated' : 'created'} successfully.`,
       );
       invalidateBotsQuery();
     },
@@ -88,7 +95,7 @@ export const useBots = () => {
   // 6. Handlers for this specific entity
   const handleSelectAll = (checked: boolean) => {
     setSelectedRows(
-      checked ? botsData?.payload.map((bot) => bot._id) || [] : [],
+      checked ? botsData?.payload.map((bot) => bot.id) || [] : [],
     );
   };
 
@@ -127,5 +134,6 @@ export const useBots = () => {
     isDeleting: deleteMutation.isPending,
     bulkDeleteBots: bulkDeleteMutation.mutate,
     isBulkDeleting: bulkDeleteMutation.isPending,
+    refetch,
   };
 };

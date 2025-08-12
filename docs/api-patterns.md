@@ -66,7 +66,7 @@ export interface IListQuery {
 1. **Base Entity Interface**
 ```typescript
 export interface IBot {
-  _id: string;
+  id: number;
   name: string;
   description?: string;
   isActive: boolean;
