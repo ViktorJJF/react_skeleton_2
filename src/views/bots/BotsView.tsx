@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Toaster, toast } from 'sonner';
-import { PlusCircle, Loader2, Pencil, Trash2 } from 'lucide-react';
+import { PlusCircle, Loader2, Pencil, Trash2, RefreshCw } from 'lucide-react';
 
 // Custom Hooks
 import { useBots } from '@/hooks/entities/useBots';
@@ -75,6 +75,7 @@ const BotsView = () => {
     isLoading,
     isError,
     isFetching,
+    refetch,
     searchTerm,
     selectedRows,
     setSearchTerm,
@@ -156,6 +157,27 @@ const BotsView = () => {
               </CardDescription>
             </div>
             <div className="flex w-full items-center gap-2 sm:w-auto">
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <Button
+                    variant="ghost"
+                    size="icon"
+                    aria-label="Actualizar"
+                    onClick={() => refetch()}
+                    disabled={isFetching}
+                  >
+                    {isFetching ? (
+                      <Loader2 className="h-4 w-4 animate-spin" />
+                    ) : (
+                      <RefreshCw className="h-4 w-4" />
+                    )}
+                    <span className="sr-only">Actualizar</span>
+                  </Button>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Actualizar</p>
+                </TooltipContent>
+              </Tooltip>
               <Input
                 placeholder="Buscar por nombre..."
                 value={searchTerm}

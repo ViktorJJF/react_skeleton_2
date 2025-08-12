@@ -1,16 +1,16 @@
-import { useState, useEffect } from "react";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { toast } from "sonner";
+import { useState, useEffect } from 'react';
+import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
+import { toast } from 'sonner';
 
-import botsService from "@/services/api/bots";
-import { usePagination } from "@/hooks/ui/usePagination"; // <-- Import the new hook
-import type { IBot, IListBotsResponse } from "@/types/entities/bots";
+import botsService from '@/services/api/bots';
+import { usePagination } from '@/hooks/ui/usePagination'; // <-- Import the new hook
+import type { IBot, IListBotsResponse } from '@/types/entities/bots';
 
-const FIELDS_TO_SEARCH = ["name", "description"];
+const FIELDS_TO_SEARCH = ['name', 'description'];
 
 export const useBots = () => {
   // 1. Centralized pagination and search logic from the dedicated hook.
-  const paginationControls = usePagination({ initialLimit: 10 });
+  const paginationControls = usePagination();
   const { page, limit, debouncedSearchTerm } = paginationControls;
 
   // 2. Entity-specific state (selection).
@@ -18,7 +18,7 @@ export const useBots = () => {
 
   const queryClient = useQueryClient();
   // The queryKey now correctly includes all dependencies that trigger a refetch.
-  const queryKey = ["bots", page, limit, debouncedSearchTerm];
+  const queryKey = ['bots', page, limit, debouncedSearchTerm];
 
   // 3. Data Fetching (Query) - now simpler.
   // We use the spread operator to cleanly get all query status flags.
@@ -28,7 +28,7 @@ export const useBots = () => {
       const params = {
         page,
         limit,
-        fields: FIELDS_TO_SEARCH.join(","),
+        fields: FIELDS_TO_SEARCH.join(','),
         filter: debouncedSearchTerm || undefined,
       };
       const response = await botsService.list(params);
@@ -39,41 +39,44 @@ export const useBots = () => {
 
   // 4. Data Mutations - Invalidation is simpler and more robust.
   const invalidateBotsQuery = () =>
-    queryClient.invalidateQueries({ queryKey: ["bots"] });
+    queryClient.invalidateQueries({ queryKey: ['bots'] });
 
   const saveMutation = useMutation({
     mutationFn: (bot: IBot) =>
       bot._id ? botsService.update(bot._id, bot) : botsService.create(bot),
     onSuccess: (_, variables) => {
       toast.success(
-        `Bot ${variables._id ? "updated" : "created"} successfully.`
+        `Bot ${variables._id ? 'updated' : 'created'} successfully.`,
       );
       invalidateBotsQuery();
     },
-    onError: (error) => toast.error(error.message || "Failed to save bot."),
+    onError: (error) => toast.error(error.message || 'Failed to save bot.'),
   });
 
   const deleteMutation = useMutation({
     mutationFn: (id: string) => botsService.delete(id),
     onSuccess: () => {
-      toast.success("Bot deleted successfully.");
+      toast.success('Bot deleted successfully.');
       invalidateBotsQuery();
     },
-    onError: (error) => toast.error(error.message || "Failed to delete bot."),
+    onError: (error) => toast.error(error.message || 'Failed to delete bot.'),
   });
 
   const bulkDeleteMutation = useMutation({
     mutationFn: (ids: string[]) => botsService.bulkDelete({ ids }),
     onSuccess: (response) => {
-      const count = 'payload' in response.data ? response.data.payload.deleted : selectedRows.length;
+      const count =
+        'payload' in response.data
+          ? response.data.payload.deleted
+          : selectedRows.length;
       toast.success(
-        `${count} bot${count > 1 ? "s" : ""} deleted successfully.`
+        `${count} bot${count > 1 ? 's' : ''} deleted successfully.`,
       );
       invalidateBotsQuery();
       setSelectedRows([]); // Clear selection on success
     },
     onError: (error) =>
-      toast.error(error.message || "Failed to delete selected bots."),
+      toast.error(error.message || 'Failed to delete selected bots.'),
   });
 
   // 5. Effects - Logic is now more focused.
@@ -85,13 +88,13 @@ export const useBots = () => {
   // 6. Handlers for this specific entity
   const handleSelectAll = (checked: boolean) => {
     setSelectedRows(
-      checked ? botsData?.payload.map((bot) => bot._id) || [] : []
+      checked ? botsData?.payload.map((bot) => bot._id) || [] : [],
     );
   };
 
   const handleRowSelect = (id: string, checked: boolean) => {
     setSelectedRows((prev) =>
-      checked ? [...prev, id] : prev.filter((rowId) => rowId !== id)
+      checked ? [...prev, id] : prev.filter((rowId) => rowId !== id),
     );
   };
 

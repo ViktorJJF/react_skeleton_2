@@ -1,5 +1,6 @@
-import { useState, useEffect, useMemo, useCallback } from "react";
-import { useDebounce } from "@/hooks/useDebounce";
+import { useState, useEffect, useMemo, useCallback } from 'react';
+import { useDebounce } from '@/hooks/useDebounce';
+import { useConfigStore } from '@/store/configStore';
 
 interface UsePaginationOptions {
   initialPage?: number;
@@ -15,11 +16,12 @@ interface UsePaginationOptions {
  * @returns An object with state values and stable handlers.
  */
 export const usePagination = (options: UsePaginationOptions = {}) => {
+  const config = useConfigStore.getState();
   const {
     initialPage = 1,
-    initialLimit = 10,
-    initialSearchTerm = "",
-    debounceDelay = 500,
+    initialLimit = config.itemsPerPage,
+    initialSearchTerm = '',
+    debounceDelay = config.debounceDelayMs,
   } = options;
 
   const [page, setPage] = useState(initialPage);
@@ -40,7 +42,7 @@ export const usePagination = (options: UsePaginationOptions = {}) => {
   const goToNextPage = useCallback(() => setPage((p) => p + 1), []);
   const goToPreviousPage = useCallback(
     () => setPage((p) => Math.max(1, p - 1)),
-    []
+    [],
   );
 
   // useMemo ensures the entire returned object is stable unless its
@@ -68,6 +70,6 @@ export const usePagination = (options: UsePaginationOptions = {}) => {
       goToNextPage,
       goToPreviousPage,
       setLimit,
-    ]
+    ],
   );
 };
